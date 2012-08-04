@@ -34,6 +34,12 @@ Everything has:
 * id (+name/slug) -> use it for the URL
 * label/title -> use it in the interface
 
+## 6. Allow users to message using @{username}
+
+This arose from Twitter (prior art?) and is now being universally adopted (at least in more techhy circles? e.g. github, trello, ...)
+
+Combined with auto-complete it's a fast and easy way to reference and message a user.
+
 
 # Discussion
 
