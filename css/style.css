@@ -1,0 +1,67 @@
+body {
+  padding-top: 150px;
+  background: url('../img/pattern.png') repeat;
+  background-attachment: fixed;
+  color: white;
+}
+.navbar-fixed-top {
+  height: 95px;
+  padding: 10px 0;
+  background-color: rgba(247, 223, 30, 0.9);
+  border-bottom: 1px solid white;
+  box-shadow: 0 1px 0 black;
+  text-align: center;
+  box-shadow: 0 3px 20px black;
+}
+.footer {
+  color: #444;
+  padding: 10px 0;
+  text-align: center;
+}
+
+h1, .headerlink, h1 a {
+  font: normal 32px 'PT Sans Narrow', Helvetica, Arial, sans-serif;
+  color: #2f2e2d;
+  text-shadow: 1px 0 1px rgba(255, 255, 255, 0.6);
+  line-height: 25px;
+}
+h1 {
+  margin-top: 8px;
+}
+h1 small, h1 small a, .headerlink {
+  font-size: 18px;
+}
+h1 small a, h1 small a:hover {
+  color: #999;
+  text-decoration: none;
+}
+.headerlink {
+  font-size: 14px;
+  color: #9e8c09;
+}
+.headerlink:hover {
+  text-decoration: none;
+}
+
+h2,
+h3,
+h4 {
+  font-family: 'PT Sans Narrow', Helvetica, Arial, sans-serif;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+h2 {
+  color: #eee;
+  font-weight: normal;
+  font-size: 24px;
+  line-height: 30px;
+}
+
+h3 {
+  color: #efa121;
+  font-weight: bold;
+  font-size: 16px;
+  line-height: 18px;
+}

@@ -1,6 +1,7 @@
-Thoughts on UX patterns and collection of such patterns.
-
-# UX Patterns
+---
+layout: default
+title: Patterns - Home
+---
 
 ## 1. Images for everything
 

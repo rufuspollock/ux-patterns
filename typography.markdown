@@ -1,7 +1,12 @@
-A listing and discussion of typography and typographical layouts that make for
-good UX. Primarily a list of examples.
+---
+layout: default
+title: Patterns - Typography
+---
 
-## Suggestions
+This page lists typography and typographical layouts that make for good
+UX and great sites. Primarily a list of examples.
+
+## Typography Suggestions
 
 ### PT Sans Narrow
 
@@ -9,12 +14,12 @@ For (Primary) Headings is [PT Sans Narrow](http://www.google.com/webfonts/specim
 
 CSS example:
 
-  h1 {
-    font: normal 32px 'PT Sans Narrow', Helvetica, Arial, sans-serif;
-    color: #2f2e2d;
-    text-shadow: 1px 0 1px rgba(255, 255, 255, 0.6);
-    line-height: 25px;
-  }
+    h1 {
+      font: normal 32px 'PT Sans Narrow', Helvetica, Arial, sans-serif;
+      color: #2f2e2d;
+      text-shadow: 1px 0 1px rgba(255, 255, 255, 0.6);
+      line-height: 25px;
+    }
 
 In action: http://okfnlabs.org/ddc-resources/
 
@@ -34,16 +39,19 @@ CSS example (from [OpenSpending](http://openspending.org/):
 
 http://www.google.com/webfonts/specimen/Fanwood+Text
 
-## [Dive into HTML5][dive-into] by Mark Pilgrim
 
-Dive into HTML5 is a textbook-style site and, as such, heavily text-based and provides a great example of elegant typography and clean layout.
+### Ledger
 
-<img src="http://i.imgur.com/GxGHr.png" alt="" />
+[Ledger on Google Web Fonts](http://www.google.com/webfonts/specimen/Ledger)
 
-Key fonts:
+## Dive into HTML5 by Mark Pilgrim
+
+[Dive into HTML5][dive-into] is a textbook-style site and, as such, heavily text-based and provides a great example of elegant typography and clean layout. Key fonts:
 
 * Main text is [Linux Libertine](http://www.linuxlibertine.org/)
 * Headings (old looking font) is [Essays 1743](http://www.thibault.org/fonts/essays/)
+
+<img src="http://i.imgur.com/GxGHr.png" alt="" />
 
 [dive-into]: http://diveintohtml5.info/storage.html
 
