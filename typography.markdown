@@ -35,6 +35,12 @@ CSS example (from [OpenSpending](http://openspending.org/):
       letter-spacing: -0.06em;
     }
 
+### Alegreya
+
+A lovely [Argentinian typeface](http://www.huertatipografica.com.ar/tipografias/alegreya/ejemplos.html).
+
+[Alegreya on Google Webfonts](http://www.google.com/webfonts/specimen/Alegreya) and in [small caps version](http://www.google.com/webfonts/specimen/Alegreya+SC).
+
 ### Fanwood
 
 http://www.google.com/webfonts/specimen/Fanwood+Text
