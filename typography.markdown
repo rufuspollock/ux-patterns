@@ -8,7 +8,7 @@ UX and great sites. Primarily a list of examples.
 
 ## Typography Suggestions
 
-### PT Sans Narrow
+### PT Sans and PT Sans Narrow
 
 For (Primary) Headings is [PT Sans Narrow](http://www.google.com/webfonts/specimen/PT+Sans+Narrow)
 
@@ -22,6 +22,8 @@ CSS example:
     }
 
 In action: http://okfnlabs.org/ddc-resources/
+
+Also worth seeing [PT Sans (normal)](http://www.google.com/webfonts/specimen/PT+Sans).
 
 ### OpenSans
 
