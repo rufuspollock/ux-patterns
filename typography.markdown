@@ -15,11 +15,16 @@ For (Primary) Headings is [PT Sans Narrow](http://www.google.com/webfonts/specim
 CSS example:
 
     h1 {
-      font: normal 32px 'PT Sans Narrow', Helvetica, Arial, sans-serif;
+      font-family: 'PT Sans Narrow', Helvetica, Arial, sans-serif;
+      font-size: 32px;
       color: #2f2e2d;
       text-shadow: 1px 0 1px rgba(255, 255, 255, 0.6);
       line-height: 25px;
     }
+
+In the head of your page add:
+
+    <link href="http://fonts.googleapis.com/css?family=PT+Sans+Narrow" rel="stylesheet" type="text/css">
 
 In action: http://okfnlabs.org/ddc-resources/
 
