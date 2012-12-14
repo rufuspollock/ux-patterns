@@ -2,43 +2,37 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>{{title}} - UX Patterns I have Known</title>
-  <meta name="description" content="">
-  <meta name="author" content="Rufus Pollock, Open Knowledge Foundation">
+  <title>{{page.title}} - UX Patterns and Examples</title>
+  <meta name="author" content="Rufus Pollock">
 
-  <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
-  <!--[if lt IE 9]>
-    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-  <![endif]-->
-
-  <link href='http://fonts.googleapis.com/css?family=PT+Sans+Narrow' rel='stylesheet' type='text/css'>
-  <link href="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.1.1/css/bootstrap-combined.min.css" rel="stylesheet">
-  <link rel="stylesheet" type="text/css" href="css/style.css" media="all">
+  <link rel="stylesheet" type="text/css" href="http://rgrp.okfnlabs.org/css/style.css" media="all">
 </head>
 <body>
-  <div class="navbar navbar-fixed-top">
-    <h1>
-      UX Patterns and Examples
-      <br />
-      <small>
-        Opinionated collection of UX patterns and related examples
-      </small>
-    </h1>
-    <a href="http://rufuspollock.org/" target="_blank" title="Open Knowledge Foundation Labs" class="headerlink" >by Rufus Pollock</a>
-  </div>
+  <a href="http://github.com/rgrp/command-line-zen"><img style="position: absolute; top: 0; right: 0; border: 0;" src="http://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub" /></a>
 
   <div class="container">
-    {{content}}
-  </div>
+    <div class="page-header">
+      <h1>
+        UX Patterns and Examples
+        <br />
+        <small>
+          Opinionated collection of UX &quot;patterns&quot; and related examples &ndash; <em>from <a href="http://github.com/rgrp/">Rufus Pollock</a></em>
+        </small>
+      </h1>
+      <div class="nav">
+        <a href="./">Home</a>
+        |
+        <a href="typography.html">Typography</a>
+      </div>
+    </div>
 
-  <div class="footer">
-    <hr />
-    <p>
-      <a href="http://okfn.org/">
-        <img src="http://assets.okfn.org/p/okfn/img/logo_28x30.png" alt="Open Knowledge Foundation" style="height: 50px; margin: auto;" />
-      </a>
-    </p>
+    <div class="content">
+      {{content}}
+    </div>
+
+    <div class="footer">
+      Copy freely (public domain)
+    </div>
   </div>
 </body>
 </html>
-
