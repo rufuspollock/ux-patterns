@@ -6,7 +6,11 @@ title: Patterns - Typography
 This page lists typography and typographical layouts that make for good
 UX and great sites. Primarily a list of examples.
 
-## Typography Suggestions
+## Typography Suggestions for Web Text
+
+Other listings and recommendations include:
+
+* [EveryDay Type - Top 10 Webfonts for Text](http://www.everydaytype.com/2010/12/21/top-10-webfonts-for-text/)
 
 ### PT Sans and PT Sans Narrow
 
