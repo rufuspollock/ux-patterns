@@ -6,11 +6,30 @@ title: Patterns - Typography
 This page lists typography and typographical layouts that make for good
 UX and great sites. Primarily a list of examples.
 
-## Typography Suggestions for Web Text
+# Typography for Web Text
 
 Other listings and recommendations include:
 
 * [EveryDay Type - Top 10 Webfonts for Text](http://www.everydaytype.com/2010/12/21/top-10-webfonts-for-text/)
+
+## Headings
+
+### Yanone Kaffeesatz
+
+Beautiful, distinctive and easy to read.
+
+[Yanone Kaffeesatz on Google Webfonts](http://www.google.com/webfonts/specimen/Yanone+Kaffeesatz)
+
+### Volkor
+
+### Arvo
+
+But do not like the 's' ...
+
+
+## General
+
+### Cardo
 
 ### PT Sans and PT Sans Narrow
 
@@ -54,12 +73,14 @@ A lovely [Argentinian typeface](http://www.huertatipografica.com.ar/tipografias/
 
 ### Fanwood
 
-http://www.google.com/webfonts/specimen/Fanwood+Text
-
+[Fanwood on Google Webfonts](http://www.google.com/webfonts/specimen/Fanwood+Text)
 
 ### Ledger
 
 [Ledger on Google Web Fonts](http://www.google.com/webfonts/specimen/Ledger)
+
+
+----
 
 ## Dive into HTML5 by Mark Pilgrim
 
@@ -68,7 +89,7 @@ http://www.google.com/webfonts/specimen/Fanwood+Text
 * Main text is [Linux Libertine](http://www.linuxlibertine.org/)
 * Headings (old looking font) is [Essays 1743](http://www.thibault.org/fonts/essays/)
 
-<img src="http://i.imgur.com/GxGHr.png" alt="" />
+<img src="http://i.imgur.com/GxGHr.png" alt="" style="width: 100%" />
 
 [dive-into]: http://diveintohtml5.info/storage.html
 
