@@ -49,3 +49,9 @@ Combined with auto-complete it's a fast and easy way to reference and message a 
 * - only one at a time
 * + do not need to interfere with main page
 
+
+# Other Resources
+
+* http://uxporn.uxpin.com/ - lots of screenshots
+* http://ui-patterns.com/explore - library of patterns plus lots of illustrative screenshots
+

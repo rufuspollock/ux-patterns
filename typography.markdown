@@ -6,6 +6,8 @@ title: Patterns - Typography
 This page lists typography and typographical layouts that make for good
 UX and great sites. Primarily a list of examples.
 
+See also: <http://www.smashingmagazine.com/smashing-book-1/>
+
 # Typography for Web Text
 
 Other listings and recommendations include:
@@ -13,6 +15,11 @@ Other listings and recommendations include:
 * [EveryDay Type - Top 10 Webfonts for Text](http://www.everydaytype.com/2010/12/21/top-10-webfonts-for-text/)
 
 ## Headings
+
+
+* Fanwood - http://www.google.com/fonts/specimen/Fanwood+Text
+  * Clean and good for headings and main text
+  * Radley - http://www.google.com/fonts/specimen/Radley (less good alternative IMO)
 
 ### Yanone Kaffeesatz
 
