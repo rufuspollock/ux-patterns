@@ -24,3 +24,18 @@ Themes
 * CleanBlog - http://ironsummitmedia.github.io/startbootstrap-clean-blog/ - simple (medium-style) blog theme
 * Journal - http://bootswatch.com/journal/ - very basic tweaking. like the colours but not the typography
  
+# Jekyll
+
+See http://jekyllthemes.org/
+
+This is selection from https://github.com/jekyll/jekyll/wiki/Themes
+
+Some of these are also bootstrap
+
+* http://incorporated.sendtoinc.com/ - very nice, clean, 1 page suitable for general websites (not blog)
+* http://ironsummitmedia.github.io/startbootstrap-freelancer/ - freelancer (also a plain bootstrap i think)
+* http://jekyll.gtat.me/about/ - Balzac, simple and clean (blog focused)
+* http://dzerviniks.com/ - clean, big picture at top. Could be used for general sites though blog-focused.
+* https://mmistakes.github.io/skinny-bones-jekyll/ - a lot of space. not sure about layout of subpages.
+* http://ojs.xyz/solid-jekyll/ - bootstrap 3 theme too
+
