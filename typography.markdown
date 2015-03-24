@@ -6,7 +6,10 @@ title: Patterns - Typography
 This page lists typography and typographical layouts that make for good
 UX and great sites. Primarily a list of examples.
 
-See also: <http://www.smashingmagazine.com/smashing-book-1/>
+See also:
+
+* <http://www.typewolf.com/recommendations> - **really good**
+* <http://www.smashingmagazine.com/smashing-book-1/>
 
 # Typography for Web Text
 
