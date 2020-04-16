@@ -1,10 +1,4 @@
----
-layout: default
-title: Patterns - Typography
----
-
-This page lists typography and typographical layouts that make for good
-UX and great sites. Primarily a list of examples.
+This page lists typography and typographical layouts that make for good UX and great sites. Primarily a list of examples.
 
 See also:
 
