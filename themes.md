@@ -5,6 +5,8 @@ title: Themes
 
 This is a list of themes that I have liked.
 
+> NB: this theme list was last updated around 2015 so a little dated now!
+
 # Bootstrap
 
 Lists
@@ -24,7 +26,7 @@ Themes
 * CleanBlog - http://ironsummitmedia.github.io/startbootstrap-clean-blog/ - simple (medium-style) blog theme
 * Journal - http://bootswatch.com/journal/ - very basic tweaking. like the colours but not the typography
  
-# Jekyll
+# Jekyll
 
 See http://jekyllthemes.org/
 
