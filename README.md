@@ -1,6 +1,6 @@
 Thoughts on UX patterns plus collections of such patterns and related examples.
 
-[Themes](./themes.md) | [Typography](./typography.md)
+[Themes](./themes.md) | [Typography](./typography.md) | [Fonts](https://github.com/rufuspollock/ux-patterns/issues/3)
 
 # Patterns
 
