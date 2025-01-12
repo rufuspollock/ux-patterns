@@ -1,18 +1,14 @@
 # SpaceX vs Blue Origin Design
 
-Musk company design is so Apple level quality. So clean, smooth.
+SpaceX is emblematic of Musk companies' design. It's very Apple-esque in its approach and quality: clean, simple, elegant. So clean I can't even see a menu[^1]. The hero is just a simple beautiful picture (that turns into a video once properly loaded):
 
-To really see it worth comparing SpaceX to Blue Origin.
+![image](https://github.com/user-attachments/assets/a21d4cf2-b358-4ec9-903e-8e6c2c024692)
 
-Blue Origin  is, of course, Bezos' venture.
+To really see it, it's worth comparing SpaceX to Blue Origin. Blue Origin  is, of course, Bezos' venture. This makes this a very Apple to Amazon/Microsoft comparison. Amazon is all competence, low-cost, "no bells and whistles". Apple is all quality, design, sleekness. You can see this in the websites.
 
-This makes this very Apple vs Amazon/Microsoft. Amazon is all competence, low-cost, "no bells and whistles". Apple is all quality, design, sleekness.
 
 ![image](https://github.com/user-attachments/assets/40d7e35d-e5f8-4b2d-b239-77c6a3262289)
 
-SpaceX, so clean I can't even see a menu[^1]. A simple beautiful ~~picture~~ video:
-
-![image](https://github.com/user-attachments/assets/a21d4cf2-b358-4ec9-903e-8e6c2c024692)
 
 ## Commentary
 
