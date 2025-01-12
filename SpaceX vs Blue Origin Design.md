@@ -28,5 +28,9 @@ Look at how simple the Hero section is. Just one image. One statement. Two calls
 
 ![image](https://github.com/user-attachments/assets/0fb96e6f-88ba-442b-a4a1-d129f11f73b9)
 
+## Here's full SpaceX.com page
+
+![image](/assets/SpaceX.jpg)
+
 
 [^1]: the menu does eventually show up ... ![image](https://github.com/user-attachments/assets/ded9d24b-5e66-4515-a910-63dd7fdab7fb)
