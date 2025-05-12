@@ -33,8 +33,8 @@ Get rid of browse or list and replace with search
 
 Everything has:
 
-* id (+name/slug) -> use it for the URL
-* label/title -> use it in the interface
+* id (+name/slug) ... use it for the URL
+* label/title ... use it in the interface
 
 ## 6. Allow users to message using @{username}
 
@@ -68,4 +68,3 @@ Combined with auto-complete it's a fast and easy way to reference and message a 
 ### medium.com (2013)
 
 <img src="http://i.imgur.com/UhWtmGP.png" />
-
