@@ -1,0 +1,19 @@
+{
+  "title": "UX Patterns",
+  "showEditLink": true
+  "nav": {
+    "logo": "/assets/mobile-phone-emoji.png",
+    "social": [
+      {
+        "label": "github",
+        "name": "GitHub Profile",
+        "href": "https://github.com/rufuspollock/ux-patterns"
+      },
+      {
+        "label": "twitter",
+        "name": "Follow me on Twitter",
+        "href": "https://twitter.com/rufuspollock"
+      }
+    ]
+  }
+}
