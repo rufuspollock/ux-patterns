@@ -18,7 +18,9 @@ Dashboards are good. Every app should have a dashboard.
 
 ## 3. User centric structure (and urls)
 
-     http://site.com/{user-name}/...
+```
+http://site.com/{user-name}/...
+```
 
 Examples:
 
@@ -36,7 +38,7 @@ Everything has:
 * id (+name/slug) ... use it for the URL
 * label/title ... use it in the interface
 
-## 6. Allow users to message using @{username}
+## 6. Allow users to message using `@{username}`
 
 This arose from Twitter (prior art?) and is now being universally adopted (at least in more techhy circles? e.g. github, trello, ...)
 
