@@ -1,3 +1,5 @@
+# Alternatives to Claude.ai Copernicus font inspired by Plantin
+
 Claude.ai has this nice, friendly heading font (in separate post worth comparing with e.g. openai for the feel of it):
 
 ![image](https://github.com/user-attachments/assets/c351bfbe-8d18-4fa9-9820-99daaa2380ee)
