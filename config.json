@@ -1,6 +1,7 @@
 {
   "title": "UX Patterns",
   "showEditLink": true,
+  "showSidebar": true,
   "nav": {
     "title": "UX Patterns",
     "logo": "/assets/mobile-phone-emoji.png",
