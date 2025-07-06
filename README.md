@@ -1,4 +1,8 @@
-Thoughts on UX patterns plus collections of such patterns and related examples.
+# UX Patterns Digital Garden 🪴
+
+## Aka: fonts 🖌️, themes 🖼️ and designs 🎨 I have known and loved ❤️
+
+Thoughts on UX patterns plus collections of such patterns and related examples. Plus plenty of font and design stuff.
 
 [Themes](./themes.md) | [Typography](./typography.md) | [Fonts](https://github.com/rufuspollock/ux-patterns/issues/3)
 
