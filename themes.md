@@ -1,3 +1,5 @@
+# Themes
+
 A list of themes I have known (and sometimes liked).
 
 > NB: this theme list was last updated around 2015 so a little dated now!
