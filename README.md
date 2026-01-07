@@ -1,4 +1,8 @@
-Thoughts on UX patterns plus collections of such patterns and related examples.
+# UX Patterns Digital Garden 🪴
+
+## Aka: fonts 🖌️, themes 🖼️ and designs 🎨 I have known and loved ❤️
+
+Thoughts on UX patterns plus collections of such patterns and related examples. Plus plenty of font and design stuff.
 
 [Themes](./themes.md) | [Typography](./typography.md) | [Fonts](https://github.com/rufuspollock/ux-patterns/issues/3)
 
@@ -18,7 +22,9 @@ Dashboards are good. Every app should have a dashboard.
 
 ## 3. User centric structure (and urls)
 
-     http://site.com/{user-name}/...
+```
+http://site.com/{user-name}/...
+```
 
 Examples:
 
@@ -33,10 +39,10 @@ Get rid of browse or list and replace with search
 
 Everything has:
 
-* id (+name/slug) -> use it for the URL
-* label/title -> use it in the interface
+* id (+name/slug) ... use it for the URL
+* label/title ... use it in the interface
 
-## 6. Allow users to message using @{username}
+## 6. Allow users to message using `@{username}`
 
 This arose from Twitter (prior art?) and is now being universally adopted (at least in more techhy circles? e.g. github, trello, ...)
 
@@ -68,4 +74,3 @@ Combined with auto-complete it's a fast and easy way to reference and message a 
 ### medium.com (2013)
 
 <img src="http://i.imgur.com/UhWtmGP.png" />
-
