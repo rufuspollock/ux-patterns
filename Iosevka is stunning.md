@@ -1,7 +1,7 @@
 ---
 title: Iosevka
 source: https://typeof.net/Iosevka/
-author:
+author: Belleve Invis
 published:
 created: 2026-01-07
 description:
@@ -11,7 +11,9 @@ tags:
   - beautiful
   - monospace
 ---
-Absolutely stunning.
+Absolutely stunning font -- and website.
+
+https://typeof.net/Iosevka/
 ## About
 
 **Iosevka** is an *open-source*, *sans-serif*  +  *slab-serif*, *monospace*  +  *quasi‑proportional* typeface family, designed for *writing code*, using in *terminals*, and preparing *technical documents*.
