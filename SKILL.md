@@ -35,8 +35,10 @@ Brief note on what the site/product is and why it's interesting.
 ```
 
 ### Screenshot
-- Take with browser tool, save to `assets/site-name.jpg`
-- Embed with relative path: `../assets/site-name.jpg`
+- Use screenshotit.app (no binary in repo, stable external URL):
+  `![Description](https://screenshotit.app/https://example.com/)`
+- Modifiers: `@full` (full page), `@mobile`, `@refresh` (force refresh)
+- See: https://github.com/flowershow/screenshotit
 
 ### Steps
 1. Screenshot landing page → save to `assets/`
