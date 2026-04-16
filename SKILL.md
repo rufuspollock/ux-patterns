@@ -1,12 +1,17 @@
-# UX Patterns - Skill
+---
+name: ux-patterns
+description: "Add site entries to the UX patterns archive with screenshots via screenshotit.app, file naming by domain, and curated gallery indexing. Use when adding a website to the design archive, cataloguing UX inspiration, documenting site typography or themes, or updating the curated gallery index."
+---
 
-How to add entries to this repo.
+# UX Patterns
+
+Add and organize entries in the UX patterns archive — a curated collection of sites notable for design, elegance, or UX quality.
 
 ## Repo Structure
 
 ```
 ux-patterns/
-├── archive/          # Individual site/tool entries (one file per site)
+├── archive/          # Individual site entries (one file per site)
 ├── assets/           # Screenshots
 ├── journal/          # Dated notes
 ├── Website Inspiration.md  # Curated gallery index
@@ -15,43 +20,33 @@ ux-patterns/
 └── README.md
 ```
 
-## Adding a Site Entry (archive/)
+## Workflow
 
-Use `archive/` for individual sites worth noting for design, elegance, or UX quality.
+1. Pull latest changes: `git pull`
+2. Screenshot the landing page using screenshotit.app:
+   `![Description](https://screenshotit.app/https://example.com/)`
+   - Modifiers: `@full` (full page), `@mobile`, `@refresh` (force refresh)
+   - Reference: https://github.com/flowershow/screenshotit
+3. Save the screenshot to `assets/`
+4. Create `archive/<site-name>.md` following the entry format below
+5. If the site is a curated gallery or resource, add it to `Website Inspiration.md`
+6. Commit and push:
+   ```bash
+   git add archive/<site-name>.md assets/<site-name>.jpg
+   git commit -m "Add <site-name> — <one-line reason>"
+   git push
+   ```
 
-### File naming
-- Use the domain: `conductor.build.md`, `nan.fyi.md`
-- Or a descriptive title matching the repo style: `Dia Browser landing page is elegant.md`
+## Entry Format
 
-### Content format
+File naming: use the domain (`conductor.build.md`, `nan.fyi.md`) or a descriptive title matching the repo style (`Dia Browser landing page is elegant.md`).
+
 ```markdown
-One-line description of what makes it notable (design quality, aesthetic, etc).
+One-line description of what makes it notable.
 
 https://example.com
 
 ![Description](../assets/site-name.jpg)
 
 Brief note on what the site/product is and why it's interesting.
-```
-
-### Screenshot
-- Use screenshotit.app (no binary in repo, stable external URL):
-  `![Description](https://screenshotit.app/https://example.com/)`
-- Modifiers: `@full` (full page), `@mobile`, `@refresh` (force refresh)
-- See: https://github.com/flowershow/screenshotit
-
-### Steps
-1. Screenshot landing page → save to `assets/`
-2. Create `archive/site-name.md` with URL and screenshot
-3. If it's a curated gallery/resource, add to `Website Inspiration.md`
-4. Git add, commit, push
-
-## Git Workflow
-
-```bash
-cd ~/src/rufuspollock/ux-patterns
-git pull   # always pull first
-git add archive/site-name.md assets/site-name.jpg
-git commit -m "Add site-name.com to archive"
-git push
 ```
