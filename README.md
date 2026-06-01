@@ -4,7 +4,9 @@
 
 Thoughts on UX patterns plus collections of such patterns and related examples. Plus plenty of font and design stuff.
 
-[Themes](./themes.md) | [Typography](./typography.md) | [Fonts](https://github.com/rufuspollock/ux-patterns/issues/3)
+[Themes](./themes.md) | [Typography](./typography.md) | [Fonts](https://github.com/rufuspollock/ux-patterns/issues/3) | [Archive](./archive/) | [Report Inspirations](./report-inspirations/)
+
+Curated collections live in named root folders (e.g. `report-inspirations/`). Use `scripts/import_arena.py <channel-slug>` to import from Are.na.
 
 # Patterns
 
