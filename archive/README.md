@@ -28,6 +28,14 @@ A collection of websites with great design, interaction, or inspiration.
     </div>
   </div>
   <div class="rounded-lg overflow-hidden border border-gray-200 shadow-sm hover:shadow-md transition-shadow">
+    <a href="/archive/frankchimero.com"><img src="https://screenshotit.app/https://frankchimero.com/" alt="FrankChimero.com screenshot" class="w-full h-48 object-cover object-top" /></a>
+    <div class="p-4">
+      <h3 class="font-semibold text-base"><a href="/archive/frankchimero.com" class="hover:underline">FrankChimero.com</a></h3>
+      <p class="text-sm text-gray-600 mt-1">Beautifully plain personal site for a designer and writer, with a strong content-first structure.</p>
+      <a href="https://frankchimero.com" class="text-xs text-blue-500 mt-2 block">frankchimero.com →</a>
+    </div>
+  </div>
+  <div class="rounded-lg overflow-hidden border border-gray-200 shadow-sm hover:shadow-md transition-shadow">
     <a href="/archive/greptile.com"><img src="https://screenshotit.app/https://www.greptile.com/" alt="Greptile.com screenshot" class="w-full h-48 object-cover object-top" /></a>
     <div class="p-4">
       <h3 class="font-semibold text-base"><a href="/archive/greptile.com" class="hover:underline">Greptile.com</a></h3>
