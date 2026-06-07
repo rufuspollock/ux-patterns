@@ -60,7 +60,7 @@ A collection of websites with great design, interaction, or inspiration.
     </div>
   </div>
   <div class="rounded-lg overflow-hidden border border-gray-200 shadow-sm hover:shadow-md transition-shadow">
-    <a href="/archive/makingsoftware.com"><img src="https://screenshotit.app/www.makingsoftware.com" alt="MakingSoftware.com screenshot" class="w-full h-48 object-cover object-top" /></a>
+    <a href="/archive/makingsoftware.com"><img src="../assets/makingsoftware.com.jpg" alt="MakingSoftware.com screenshot" class="w-full h-48 object-cover object-top" /></a>
     <div class="p-4">
       <h3 class="font-semibold text-base"><a href="/archive/makingsoftware.com" class="hover:underline">MakingSoftware.com</a></h3>
       <p class="text-sm text-gray-600 mt-1">Really beautiful and elegant; software-geeky energy, but would also be good for writing papers.</p>
