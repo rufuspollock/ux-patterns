@@ -140,3 +140,26 @@ If you want to start right now, this single prompt does a lot of work:
 
 > *"I'm creating a design system for [describe your project in 2–3 sentences]. I don't have references yet. First, ask me 5 questions to understand the brand territory. Then give me a specific reference hunting list — designers, publications, cultural artifacts, specific eras — that I should collect images from. Finally, suggest the 3 most interesting aesthetic directions this could go, and explain what makes each one distinct and unexpected."*
 
+
+# Where to Store a Moodboard for AI Access
+
+There's no great solution yet. The human ideal (a visual canvas where you can see everything at once, drag and drop, and annotate) and the AI ideal (structured text or image files it can read directly) are currently in tension.
+
+## Option A: Simple AI-friendly approach
+
+Create a directory in this repo (e.g. `my-moodboard/`) with one `.md` file per reference, following the archive format: URL, screenshot via screenshotit.app, short note on why it's there. Claude can read these files directly, see the screenshots as images, and parse design DNA across the whole set.
+
+**Downside:** no visual canvas — you're editing markdown, not dragging images around.
+
+## Option B: Excalidraw
+
+Excalidraw gives you the human experience — visual canvas, drag and drop, annotations, everything visible at once. 
+
+**Downside for AI:** Excalidraw stores as JSON; Claude can't extract visual gestalt from it. To use it with AI you'd paste or drag the images directly into the conversation.
+
+**Obsidian + Excalidraw** partially bridges this: the plugin stores embedded images as PNGs in your vault's assets folder, so the image files exist and can be shared with Claude. Still requires a manual step to bring them into the conversation.
+
+## Practical takeaway
+
+Use whichever suits the moment. If you want AI to parse the moodboard, the simplest path is to paste 4–6 images directly into the conversation — no storage format required.
+
