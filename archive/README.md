@@ -28,6 +28,14 @@ A collection of websites with great design, interaction, or inspiration.
     </div>
   </div>
   <div class="rounded-lg overflow-hidden border border-gray-200 shadow-sm hover:shadow-md transition-shadow">
+    <a href="/archive/costarastrology.com"><img src="https://screenshotit.app/https://www.costarastrology.com/@full" alt="Co-Star screenshot" class="w-full h-48 object-cover object-top" /></a>
+    <div class="p-4">
+      <h3 class="font-semibold text-base"><a href="/archive/costarastrology.com" class="hover:underline">Co-Star (costarastrology.com)</a></h3>
+      <p class="text-sm text-gray-600 mt-1">Elegant, minimalist black-and-white astrology app site — monospace type, arty grayscale photography, and a sciencey edge.</p>
+      <a href="https://www.costarastrology.com" class="text-xs text-blue-500 mt-2 block">costarastrology.com →</a>
+    </div>
+  </div>
+  <div class="rounded-lg overflow-hidden border border-gray-200 shadow-sm hover:shadow-md transition-shadow">
     <a href="/archive/departuremono.com"><img src="https://screenshotit.app/departuremono.com" alt="DepartureMono.com screenshot" class="w-full h-48 object-cover object-top" /></a>
     <div class="p-4">
       <h3 class="font-semibold text-base"><a href="/archive/departuremono.com" class="hover:underline">DepartureMono.com</a></h3>
