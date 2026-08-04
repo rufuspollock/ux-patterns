@@ -2,7 +2,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from collect_candidates import parse_archive_file
+from collect_candidates import parse_archive_file, parse_card_grid
 
 
 class TestParseArchiveFile(unittest.TestCase):
@@ -34,6 +34,28 @@ class TestParseArchiveFile(unittest.TestCase):
             entry = parse_archive_file(path)
 
         self.assertIsNone(entry)
+
+
+class TestParseCardGrid(unittest.TestCase):
+    def test_parses_multiple_cards(self):
+        html = """
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+  <div class="rounded-lg overflow-hidden border border-gray-200 shadow-sm hover:shadow-md transition-shadow">
+    <a href="https://example.com"><img src="https://images.are.na/foo.png" alt="Example Site" class="w-full h-48 object-cover object-top" /></a>
+    <div class="p-4">
+      <h3 class="font-semibold text-base"><a href="https://example.com" class="hover:underline">Example Site</a></h3>
+      <p class="text-sm text-gray-600 mt-1">A description.</p>
+      <a href="https://example.com" class="text-xs text-blue-500 mt-2 block">example.com &rarr;</a>
+    </div>
+  </div>
+</div>
+"""
+        entries = parse_card_grid(html, source="report-inspirations/README.md")
+        self.assertEqual(len(entries), 1)
+        self.assertEqual(entries[0]["title"], "Example Site")
+        self.assertEqual(entries[0]["url"], "https://example.com")
+        self.assertEqual(entries[0]["screenshot"], "https://images.are.na/foo.png")
+        self.assertEqual(entries[0]["source"], "report-inspirations/README.md")
 
 
 if __name__ == "__main__":

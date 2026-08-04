@@ -44,12 +44,43 @@ def collect_archive_dir(dir_path: Path):
     return candidates
 
 
+CARD_RE = re.compile(
+    r'<a href="(?P<url>[^"]+)"><img src="(?P<img>[^"]+)"[^>]*alt="(?P<alt>[^"]*)"',
+    re.DOTALL,
+)
+
+
+def parse_card_grid(html: str, source: str):
+    entries = []
+    for match in CARD_RE.finditer(html):
+        entries.append({
+            "title": match.group("alt"),
+            "url": match.group("url"),
+            "screenshot": match.group("img"),
+            "source": source,
+        })
+    return entries
+
+
+def collect_card_grid_file(path: Path):
+    return parse_card_grid(path.read_text(), source=str(path))
+
+
 def main():
-    dirs = [Path(d) for d in sys.argv[1:]] or [Path("archive")]
+    dirs = [Path(d) for d in sys.argv[1:]] or [Path("archive"), Path("report-inspirations")]
     candidates = []
     for d in dirs:
-        if d.is_dir():
+        if not d.is_dir():
+            continue
+        if d.name == "archive":
+            # archive/ entries are covered per-file above; archive/README.md
+            # is a card-grid rendering of the same sites, so scanning it too
+            # would duplicate every entry.
             candidates.extend(collect_archive_dir(d))
+            continue
+        readme = d / "README.md"
+        if readme.exists():
+            candidates.extend(collect_card_grid_file(readme))
     json.dump(candidates, sys.stdout, indent=2)
     print()
 
