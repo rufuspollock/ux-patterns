@@ -57,6 +57,33 @@ class TestParseCardGrid(unittest.TestCase):
         self.assertEqual(entries[0]["screenshot"], "https://images.are.na/foo.png")
         self.assertEqual(entries[0]["source"], "report-inspirations/README.md")
 
+    def test_parses_agents_md_template_shape(self):
+        # AGENTS.md's documented card template (used by archive/README.md
+        # and research-sites/README.md): the first <a> wraps the screenshot
+        # with an *internal* link and an alt suffixed with " screenshot";
+        # the real external URL is in a later "domain.com &rarr;" anchor.
+        html = """
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+  <div class="rounded-lg overflow-hidden border border-gray-200 shadow-sm hover:shadow-md transition-shadow">
+    <a href="/research-sites/frankchimero.com"><img src="https://screenshotit.app/https://frankchimero.com/" alt="Frank Chimero screenshot" class="w-full h-48 object-cover object-top" /></a>
+    <div class="p-4">
+      <h3 class="font-semibold text-base"><a href="/research-sites/frankchimero.com" class="hover:underline">FrankChimero.com</a></h3>
+      <p class="text-sm text-gray-600 mt-1">Thoughtful restraint.</p>
+      <a href="https://frankchimero.com" class="text-xs text-blue-500 mt-2 block">frankchimero.com &rarr;</a>
+    </div>
+  </div>
+</div>
+"""
+        entries = parse_card_grid(html, source="research-sites/README.md")
+        self.assertEqual(len(entries), 1)
+        self.assertEqual(entries[0]["title"], "Frank Chimero")
+        self.assertEqual(entries[0]["url"], "https://frankchimero.com")
+        self.assertEqual(
+            entries[0]["screenshot"],
+            "https://screenshotit.app/https://frankchimero.com/",
+        )
+        self.assertEqual(entries[0]["source"], "research-sites/README.md")
+
 
 if __name__ == "__main__":
     unittest.main()

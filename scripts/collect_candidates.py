@@ -44,18 +44,39 @@ def collect_archive_dir(dir_path: Path):
     return candidates
 
 
+# Each card in the grid template (see AGENTS.md) has three anchors:
+#   1. `<a href="..."><img ... alt="...X..."></a>` wrapping the screenshot.
+#      In report-inspirations/README.md (Are.na import) this href is the
+#      real external URL. In archive/README.md and research-sites/README.md
+#      (AGENTS.md's documented template) it's an *internal* link like
+#      `/research-sites/slug`, and `alt` is suffixed with " screenshot".
+#   2. `<h3>` anchor — duplicate of (1), ignored here.
+#   3. `<a href="..." class="text-xs ...">domain.com &rarr;</a>` — the real
+#      external site link in the AGENTS.md template.
+# We capture both (1) and (3) and prefer (3) whenever (1) looks like an
+# internal path, so both shapes resolve to the correct external URL.
 CARD_RE = re.compile(
-    r'<a href="(?P<url>[^"]+)"><img src="(?P<img>[^"]+)"[^>]*alt="(?P<alt>[^"]*)"',
+    r'<a href="(?P<first_href>[^"]+)"><img src="(?P<img>[^"]+)"[^>]*alt="(?P<alt>[^"]*)"'
+    r'.*?'
+    r'<a href="(?P<real_href>[^"]+)" class="text-xs[^"]*">',
     re.DOTALL,
 )
+
+SCREENSHOT_ALT_SUFFIX = " screenshot"
 
 
 def parse_card_grid(html: str, source: str):
     entries = []
     for match in CARD_RE.finditer(html):
+        first_href = match.group("first_href")
+        real_href = match.group("real_href")
+        url = real_href if first_href.startswith("/") else first_href
+        alt = match.group("alt")
+        if alt.endswith(SCREENSHOT_ALT_SUFFIX):
+            alt = alt[: -len(SCREENSHOT_ALT_SUFFIX)]
         entries.append({
-            "title": match.group("alt"),
-            "url": match.group("url"),
+            "title": alt,
+            "url": url,
             "screenshot": match.group("img"),
             "source": source,
         })
@@ -72,11 +93,12 @@ def main():
     for d in dirs:
         if not d.is_dir():
             continue
-        if d.name == "archive":
-            # archive/ entries are covered per-file above; archive/README.md
-            # is a card-grid rendering of the same sites, so scanning it too
-            # would duplicate every entry.
-            candidates.extend(collect_archive_dir(d))
+        archive_entries = collect_archive_dir(d)
+        if archive_entries:
+            # This dir has per-file entries (e.g. archive/, research-sites/);
+            # its README.md, if any, is just a card-grid rendering of the
+            # same sites, so scanning it too would duplicate every entry.
+            candidates.extend(archive_entries)
             continue
         readme = d / "README.md"
         if readme.exists():
