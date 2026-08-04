@@ -89,7 +89,8 @@ render();
 def build_picker_html(candidates):
     if len(candidates) < 2:
         raise ValueError("Need at least 2 candidates to build a picker")
-    return PICKER_TEMPLATE.format(candidates_json=json.dumps(candidates))
+    candidates_json = json.dumps(candidates).replace("</", "<\\/")
+    return PICKER_TEMPLATE.format(candidates_json=candidates_json)
 
 
 def main():
