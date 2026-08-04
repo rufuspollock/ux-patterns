@@ -160,3 +160,19 @@ Excalidraw gives you the human experience — visual canvas, drag and drop, anno
 
 Use whichever suits the moment. If you want AI to parse the moodboard, the simplest path is to paste 4–6 images directly into the conversation — no storage format required.
 
+
+# Pairwise Picker Workflow
+
+A faster alternative to manually browsing for moodboard references: pick between pairs of already-curated sites instead of open-ended searching.
+
+1. `python3 scripts/collect_candidates.py archive report-inspirations > scratch/candidates.json`
+   Pulls every site already curated in this repo into a flat candidate list.
+2. `python3 scripts/build_picker.py scratch/candidates.json scratch/picker.html`
+   Generates a static picker page.
+3. `open scratch/picker.html` and click through pairs — as many rounds as it takes to feel converged (start with ~20-30).
+4. Click "Export picks.json" and save it somewhere durable (not `scratch/`, which is gitignored).
+5. Paste the winning screenshots (or the picks.json plus a request to fetch/describe them) into a Claude conversation and ask it to extract concrete shared traits — not adjectives, mechanics: type, colour behaviour, spacing, layout logic — into a moodboard constraint brief.
+6. Use that brief as the actual design moodboard, following the directory format in `AGENTS.md`.
+
+This reuses the curated candidate pool already built into `archive/` and `report-inspirations/` instead of scraping external galleries — v2 could add live scraping of Awwwards/One Page Love/Siteinspire if the existing pool proves too narrow.
+
