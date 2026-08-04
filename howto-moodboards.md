@@ -1,8 +1,5 @@
 # How to get Good Average ...
 
-
-# 
-
 > What I see is I am getting results from this that are ok but quite middle of the road without much real personality or distinctiveness. How would I get Claude to be really creative ? Perhaps we mood board first and can Claude do mood parsing in a meaningful way?
 
 This is a really sharp observation, and you're hitting on a real limitation in how most people prompt Claude for design work.
