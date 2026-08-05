@@ -131,4 +131,20 @@ A collection of websites with great design, interaction, or inspiration.
       <a href="https://infuse.univ-amu.fr" class="text-xs text-blue-500 mt-2 block">infuse.univ-amu.fr →</a>
     </div>
   </div>
+  <div class="rounded-lg overflow-hidden border border-gray-200 shadow-sm hover:shadow-md transition-shadow">
+    <a href="/archive/mozilla-knowledge-base-2012"><img src="http://i.imgur.com/e5pul.png" alt="Mozilla Knowledge Base screenshot" class="w-full h-48 object-cover object-top" /></a>
+    <div class="p-4">
+      <h3 class="font-semibold text-base"><a href="/archive/mozilla-knowledge-base-2012" class="hover:underline">Mozilla Knowledge Base (2012)</a></h3>
+      <p class="text-sm text-gray-600 mt-1">Text-oriented knowledge base layout, clean and scannable.</p>
+      <a href="https://support.mozilla.org/" class="text-xs text-blue-500 mt-2 block">support.mozilla.org →</a>
+    </div>
+  </div>
+  <div class="rounded-lg overflow-hidden border border-gray-200 shadow-sm hover:shadow-md transition-shadow">
+    <a href="/archive/medium-2013"><img src="http://i.imgur.com/UhWtmGP.png" alt="Medium screenshot" class="w-full h-48 object-cover object-top" /></a>
+    <div class="p-4">
+      <h3 class="font-semibold text-base"><a href="/archive/medium-2013" class="hover:underline">Medium (2013)</a></h3>
+      <p class="text-sm text-gray-600 mt-1">Text-oriented editorial layout that set the tone for a generation of publishing sites.</p>
+      <a href="https://medium.com/" class="text-xs text-blue-500 mt-2 block">medium.com →</a>
+    </div>
+  </div>
 </div>
