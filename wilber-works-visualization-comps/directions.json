@@ -1,0 +1,89 @@
+{
+  "title": "Choose the visual world for Wilber's works",
+  "question": "Which direction has the strongest shareable infographic idea without sacrificing the history?",
+  "options": [
+    {
+      "id": "assigned",
+      "label": "Evolutionary Atlas",
+      "kicker": "THE ROLL",
+      "lineage": "nineteenth-century scientific foldouts and phylogenetic plates",
+      "thesis": "Wilber's books become specimens in an evolving field of ideas, arrayed across real publication time.",
+      "palette": ["#EEE8D5", "#182B36", "#B84A32", "#6D8066", "#D4A94F"],
+      "materials": ["warm atlas paper", "engraved linework", "editorial annotation"],
+      "viewport": "A landscape foldout: forty works run left to right from 1977 to 2024, five soft phase strata pass behind them, and a few key books enlarge into annotated specimens whose conceptual descendants branch forward.",
+      "risk": "The scientific authority can overstate certainty unless inferred links and fuzzy phase boundaries remain visibly provisional.",
+      "raised": [
+        {"from": "Collider Event Display", "raise": "Confidence lives in line character: documented descent is solid, editorial inference is a faint ghost track."},
+        {"from": "Convention Catalog", "raise": "All forty works remain findable at overview scale instead of becoming decorative background."}
+      ],
+      "comp": "images/evolutionary-atlas.webp"
+    },
+    {
+      "id": "model-pick",
+      "label": "The Exhibition Wall",
+      "kicker": "IMPECCABLE’S PICK",
+      "lineage": "museum chronology walls and landmark exhibition graphics",
+      "thesis": "The complete body of work reads as one monumental exhibition wall with a strong editorial rhythm.",
+      "palette": ["#F2EFE7", "#161616", "#D64A34", "#315A76", "#C6A14A"],
+      "materials": ["painted gallery wall", "oversized dates", "real book covers"],
+      "viewport": "A panoramic 1977–2024 wall: every cover sits on the chronological baseline, key works break scale, and five large phase captions explain the intellectual turns in a sentence each.",
+      "risk": "It is the most immediately legible direction and therefore the most familiar; the editorial composition must be exceptional to feel ownable.",
+      "comp": "images/exhibition-wall.webp"
+    },
+    {
+      "id": "challenger-jacquard",
+      "label": "Thought Woven",
+      "verdict": "competitive",
+      "lineage": "Jacquard diagrams, woven brocade, and punched instruction cards",
+      "thesis": "Five intellectual threads cross, separate, and recombine until the books resolve into a single woven pattern.",
+      "palette": ["#08172D", "#D5AF55", "#E9DFC5", "#7593A2", "#B8573E"],
+      "materials": ["midnight textile", "gold thread", "punch-card notation"],
+      "viewport": "A dark horizontal tapestry: time is the warp, themes are the weft, books are woven labels, and the mature synthesis appears where the threads become densest around 1995–2006.",
+      "case": "It creates the strongest visual metaphor and a beautiful screenshot, while chronology and forty labels remain possible in a disciplined border ledger.",
+      "risk": "The metaphor can outrun the content, especially when edition relationships need precise labels rather than poetic threads.",
+      "comp": "images/thought-woven.webp",
+      "hero": "https://impeccable.style/worlds/cards/textiles-weave-drape-fashion-jacquard-punched-brocade-hero.webp"
+    },
+    {
+      "id": "challenger-catalog",
+      "label": "Forty Works, One Field",
+      "verdict": "competitive",
+      "lineage": "dense cultural catalogs and annotated field guides",
+      "thesis": "All forty works become a single collectible field: tiny, numbered, and impossible not to scan.",
+      "palette": ["#E9E3D4", "#171717", "#B9412F", "#687A6B"],
+      "materials": ["newsprint", "halftone covers", "red editorial marks"],
+      "viewport": "A poster-like chronological grid of all forty works, grouped by decade with phase bands cutting across it; red pencil routes circle the essential books and connect documented reworkings.",
+      "case": "It best solves the simple all-books artifact and invites zooming, counting, and sharing, but carries less intellectual drama than the atlas.",
+      "risk": "At social-feed size it may read as texture before it reads as Wilber unless the title and phase arc dominate.",
+      "comp": "images/forty-works-field.webp",
+      "hero": "https://impeccable.style/worlds/cards/pop-culture-shelf-doujin-event-catalog-hero.webp"
+    },
+    {
+      "id": "challenger-collider",
+      "label": "Kosmic Event Display",
+      "verdict": "declined",
+      "lineage": "particle-detector event displays",
+      "thesis": "Books radiate from successive theoretical breakthroughs like tracks from collisions.",
+      "palette": ["#07131D", "#FFD23F", "#35D0FF", "#FF4D4D"],
+      "materials": ["dark instrument screen", "signal tracks", "technical labels"],
+      "viewport": "Five conceptual events emit book tracks through concentric decades.",
+      "case": "Visually arresting, but concentric time obscures the chronological catalog and over-dramatizes a few turning points.",
+      "risk": "It can resemble a science-fiction dashboard more than intellectual history.",
+      "kept": "Use line weight and opacity to encode evidential confidence.",
+      "hero": "https://impeccable.style/worlds/cards/scientific-notation-particle-detector-event-display-hero.webp"
+    }
+  ],
+  "reroll": {"registers": ["safer", "bolder"]},
+  "buildPath": {"value": "comp", "toggle": true},
+  "canon": true,
+  "canonCard": {
+    "label": "The polished timeline",
+    "thesis": "A clean horizontal timeline with phase bands, cover thumbnails, filters, and detail panels.",
+    "palette": ["#FFFFFF", "#17212B", "#3B6E8F", "#D3A74A"],
+    "materials": ["clean editorial grid", "book-cover thumbnails"],
+    "viewport": "A responsive 1977–2024 axis with forty covers and a simple phase legend.",
+    "risk": "Clear and useful, but unlikely to become an image people remember independently of the site.",
+    "comp": "images/polished-timeline.webp"
+  },
+  "steer": true
+}
