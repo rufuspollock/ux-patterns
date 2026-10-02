@@ -1,10 +1,20 @@
 # Docs and Explainer Sites
 
+Screenshot gallery of the whole set: https://claude.ai/artifact/3yFuLuEBGzVquzbyCS2MLJ
+
 Documentation sites, visual essays and explainers that are light, well set and figure-led. Gathered 2026-10-02 for the brand work on [The Way of Markdown](https://wayofmarkdown.com), as reference for a site that teaches rather than sells.
 
 The taste filter: light not dark, serif or mono rather than default sans, one idea per screen, drawings that explain. Nothing corporate-SaaS, nothing busy, nothing that is just raw HTML.
 
 The first three groups came from a research pass; the last group is sites Rufus already liked and used to set the filter.
+
+## Verdicts
+
+Rufus reviewed the set on 2026-10-02. Each item file has his comment.
+
+Yes, or useful: Devouring Details (the most obvious alternative; the orange could be the link colour), Maggie Appleton (a definite possibility, garden-like), Sketchplanations (contender for a third direction), Apple HIG (beautiful, don't copy), Ink & Switch (love it, but research register), Stripe Press (lovely, catalogue-shaped), Teenage Engineering (home page, not us, worth referencing), Andy Matuschak (good also-ran, notebook sites), Distill (reports), US Graphics (datapressr, not here).
+
+No for this site: Stripe Docs, Linear, Raycast, Tailwind, Josh Comeau, The Pudding, Byrne's Euclid.
 
 ## Docs sites
 
