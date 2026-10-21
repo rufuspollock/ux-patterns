@@ -1,4 +1,8 @@
 {
+  "umami": {
+    "websiteId": "9f824c61-8246-49d5-b3f2-93837eeb261a",
+    "src": "https://umami.lifeitself.org/script.js"
+  },
   "title": "UX Patterns",
   "showEditLink": true,
   "showSidebar": true,
