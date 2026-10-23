@@ -10,7 +10,7 @@ In a Zoom chat (roughly square-ish card, image on top, title and description bel
 
 The raw `og:image` Luma serves (800×420, about 1.9:1):
 
-![Luma og:image, 800x420](./luma-og-800x420.jpg)
+![Luma og:image, 800x420](./images/luma-800x420.jpg)
 
 ## Why it works
 
