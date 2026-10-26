@@ -3,7 +3,7 @@
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400..700;1,8..60,400..600&family=Source+Sans+3:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Instrument+Sans:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400..600;1,6..72,400..500&family=Spectral:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&family=Spectral+SC:wght@500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400..700;1,8..60,400..600&family=Source+Sans+3:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Instrument+Sans:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400..600;1,6..72,400..500&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <style>
 /* Layout: one essay page, three registers (v2, polish pass). Same DOM restyled by [data-style]; responsive rules are container queries on the frame so the Phone view reflows like a phone. Light-only by choice: these are paper pages.
    Rhythm: every vertical space comes from the --s scale (multiples of the body line). Headings get more space above than below, so each belongs to what follows. */
@@ -28,9 +28,9 @@ img { max-width: 100%; display: block }
   --size: 19.5px; --lh: 1.62; --measure: 33em; --margin: 230px; --gap: 48px;
 }
 .frame[data-style="personal"] {
-  --bg: #f7f6f2; --ink: #23231f; --ink2: #3b3b35; --muted: #6d6c64; --rule: #dcdad1; --accent: #2f6a4b; --tint: #ecece4;
-  --text: "Spectral", Georgia, serif; --display: "Spectral", Georgia, serif; --ui: "IBM Plex Mono", ui-monospace, monospace;
-  --size: 20px; --lh: 1.6; --measure: 32em; --margin: 220px; --gap: 44px;
+  --bg: #f8f7f4; --ink: #252421; --ink2: #3d3b36; --muted: #706d66; --rule: #dedbd3; --accent: #b23a2c; --tint: #f3ede9;
+  --text: "EB Garamond", Garamond, Georgia, serif; --display: "EB Garamond", Garamond, Georgia, serif; --ui: "IBM Plex Mono", ui-monospace, monospace;
+  --size: 21px; --lh: 1.55; --measure: 31em; --margin: 220px; --gap: 44px;
 }
 
 /* ---------- Stage and frame ---------- */
@@ -106,7 +106,9 @@ img { max-width: 100%; display: block }
 .text h2.chapter { font-family: var(--display); font-weight: 600; line-height: 1.1; margin: var(--s6) 0 var(--s3); font-size: 1.75em; text-wrap: balance; scroll-margin-top: 70px }
 .text > h2.chapter:first-child, .text > .break:first-child + h2, .text > .fig.margin:first-child + h2 { margin-top: 0 }
 .text h2.chapter .num:empty { display: none }
-.text h2.chapter .num { color: var(--accent); margin-right: .3em; font-variant-numeric: lining-nums }
+/* chapter label above the title (Rufus's favourite, from Magazine): shared by all styles */
+.text h2.chapter .num { display: block; font-family: var(--ui); font-size: 11.5px; font-weight: 600; letter-spacing: .2em; text-transform: uppercase; color: var(--accent); margin: 0 0 var(--s2); font-variant-numeric: lining-nums }
+.text h2.chapter .num::before { content: "Chapter " }
 .text h3 { font-family: var(--display); font-weight: 600; font-size: 1.32em; line-height: 1.2; margin: var(--s5) 0 var(--s2); scroll-margin-top: 70px; text-wrap: balance }
 .text h4 { font-family: var(--display); font-weight: 600; font-size: 1.08em; line-height: 1.3; margin: var(--s4) 0 var(--s1) }
 .text h5 { font-family: var(--text); font-size: 1em; font-style: italic; font-weight: 500; margin: var(--s3) 0 var(--s1); line-height: 1.35 }
@@ -221,7 +223,6 @@ img { max-width: 100%; display: block }
 .frame[data-style="academic"] .keywords b { font-weight: 600; color: var(--ink2); margin-right: 4px }
 .frame[data-style="academic"] .sn-ref, .frame[data-style="academic"] .sn-n { font-family: var(--text); font-weight: 600 }
 .frame[data-style="academic"] .sn-note { font-family: var(--text); font-size: 14px }
-.frame[data-style="academic"] .text h2.chapter .num { color: var(--muted); font-weight: 400 }
 .frame[data-style="academic"] .text h4 { font-family: var(--text); font-style: normal; font-weight: 650; font-size: 1.12em }
 /* feature names as run-in heads */
 .frame[data-style="academic"] .text h5 { display: inline; font-family: var(--text); font-style: italic; font-weight: 600; font-size: 1em; margin: 0 .45em 0 0 }
@@ -243,8 +244,6 @@ img { max-width: 100%; display: block }
 @container page (min-width: 1080px) {
   .frame[data-style="academic"] .head .wrap { grid-template-columns: 180px minmax(0, var(--measure)) var(--margin) }
   .frame[data-style="academic"] .head .cover { width: 150px }
-  .frame[data-style="academic"] .text h2.chapter { position: relative }
-  .frame[data-style="academic"] .text h2.chapter .num { position: absolute; right: 100%; margin-right: .55em }
   .frame[data-style="academic"] .text h3 { position: relative }
 }
 
@@ -263,8 +262,6 @@ img { max-width: 100%; display: block }
 .frame[data-style="magazine"] .summary p.lead { font-size: 1.16em; line-height: 1.5 }
 /* chapter: label line, then a big centred title */
 .frame[data-style="magazine"] .text h2.chapter { text-align: center; font-weight: 600; font-size: 2.5em; line-height: 1.02; letter-spacing: -.01em }
-.frame[data-style="magazine"] .text h2.chapter .num { display: block; font-family: var(--ui); font-size: 11.5px; font-weight: 600; letter-spacing: .2em; text-transform: uppercase; margin: 0 0 var(--s2) }
-.frame[data-style="magazine"] .text h2.chapter .num::before { content: "Chapter " }
 /* section: display serif with red number */
 .frame[data-style="magazine"] .text h3 { font-weight: 600; font-size: 1.9em; line-height: 1.08 }
 /* subsection: small red label with a short rule */
@@ -308,7 +305,7 @@ img { max-width: 100%; display: block }
 .frame[data-style="personal"] .bar, .frame[data-style="personal"] .btn, .frame[data-style="personal"] .toc, .frame[data-style="personal"] .cite, .frame[data-style="personal"] .fig figcaption, .frame[data-style="personal"] .end details summary, .frame[data-style="personal"] .copy { font-family: var(--text); font-size: 14.5px }
 .frame[data-style="personal"] .series-fig ol, .frame[data-style="personal"] .rail .lab { font-family: var(--text) }
 .frame[data-style="personal"] .bar .progress { height: 1px }
-.frame[data-style="personal"] .byline .names { font-family: var(--text); font-size: 17px }
+.frame[data-style="personal"] .byline .names { font-family: var(--text); font-size: 18px }
 .frame[data-style="personal"] .btn { border-color: var(--rule); font-size: 12.5px; padding: 6px 11px }
 .frame[data-style="personal"] .btn.primary { background: transparent; color: var(--accent) !important; border-color: var(--accent) }
 .frame[data-style="personal"] .cover figcaption { display: none }
@@ -317,18 +314,11 @@ img { max-width: 100%; display: block }
 .frame[data-style="personal"] .summary p.lead { font-style: italic }
 .frame[data-style="personal"] .summary p.lead strong { font-weight: 600 }
 .frame[data-style="personal"] .lab, .frame[data-style="personal"] .end h2, .frame[data-style="personal"] .inbrief-label, .frame[data-style="personal"] .fignum, .frame[data-style="personal"] .rail .lab { text-transform: none; letter-spacing: 0; font-weight: 500 }
-/* book paragraphs: indents, no gaps */
-.frame[data-style="personal"] .text p { margin: 0 }
-.frame[data-style="personal"] .text p + p { text-indent: 1.4em }
-.frame[data-style="personal"] .text p + .sn-wrap, .frame[data-style="personal"] .text p.inbrief + p { text-indent: 0 }
-.frame[data-style="personal"] .text p:last-child, .frame[data-style="personal"] .text p + h3, .frame[data-style="personal"] .text p + h4, .frame[data-style="personal"] .text p + h5 { margin-bottom: 0 }
 .frame[data-style="personal"] .text .fig, .frame[data-style="personal"] .text .epigraph { margin-block: var(--s4) }
-.frame[data-style="personal"] .text h2.chapter { font-weight: 400; font-size: 1.95em; line-height: 1.1 }
-.frame[data-style="personal"] .text h2.chapter .num { display: block; font-family: "Spectral SC", var(--text); font-size: 15px; font-weight: 500; letter-spacing: .06em; color: var(--muted); margin: 0 0 var(--s1) }
-.frame[data-style="personal"] .text h2.chapter .num::before { content: "§ " }
+.frame[data-style="personal"] .text h2.chapter { font-weight: 400; font-size: 2em; line-height: 1.1 }
 .frame[data-style="personal"] .text h3 { font-weight: 500; font-size: 1.35em }
 .frame[data-style="personal"] .text h4 { font-weight: 500; font-style: italic; font-size: 1.1em }
-.frame[data-style="personal"] .text h5 { font-family: "Spectral SC", var(--text); font-style: normal; font-weight: 600; font-size: .92em; letter-spacing: .06em; text-transform: lowercase }
+.frame[data-style="personal"] .text h5 { font-style: normal; font-weight: 600; font-size: .95em; font-variant: small-caps; letter-spacing: .05em; text-transform: lowercase }
 .frame[data-style="personal"] .text p.first::first-line { font-variant: small-caps; letter-spacing: .03em }
 /* in brief: a marked note to self; quotes stay italic and plain */
 .frame[data-style="personal"] .inbrief { background: var(--tint); border-left: 2px solid var(--accent); padding: var(--s2) var(--s3) var(--s3); font-size: .98em }
@@ -339,14 +329,16 @@ img { max-width: 100%; display: block }
 .frame[data-style="personal"] .break { height: auto; text-align: center; margin: var(--s6) 0 0; color: var(--muted); font-size: 1em }
 .frame[data-style="personal"] .break::before { content: "✻" }
 .frame[data-style="personal"] .break + h2.chapter { margin-top: var(--s4) }
-.frame[data-style="personal"] .sn-note { font-family: var(--text); font-size: 14.5px }
+.frame[data-style="personal"] .sn-note { font-family: var(--text); font-size: 15px; line-height: 1.4; font-variant-numeric: oldstyle-nums }
+.frame[data-style="personal"] .sn-n { font-family: var(--text); font-size: .85em; font-variant-numeric: oldstyle-nums }
+.frame[data-style="personal"] .sn-ref { font-family: var(--text); font-size: .62em }
 .frame[data-style="personal"] .bar .series { display: none !important }
 .frame[data-style="personal"] .end h2 { font-family: var(--text); font-size: 1.15em; font-weight: 500; color: var(--ink) }
 @container page (min-width: 760px) {
   .frame[data-style="personal"] .head .wrap, .frame[data-style="personal"] .summary .wrap { grid-template-columns: minmax(0, 1fr); width: min(100%, calc(var(--measure) + var(--margin) + var(--gap) + 40px)); max-width: none; margin-left: auto; margin-right: auto }
   .frame[data-style="personal"] .head h1 { font-size: 48px }
   .frame[data-style="personal"] .cover { grid-row: 1; width: 104px }
-  .frame[data-style="personal"] .sn-note { font-size: 14px }
+  .frame[data-style="personal"] .sn-note { font-size: 14.5px }
 }
 @container page (min-width: 1080px) {
   .frame[data-style="personal"] .head .wrap, .frame[data-style="personal"] .summary .wrap, .frame[data-style="personal"] .end .wrap, .frame[data-style="personal"] .body .wrap { grid-template-columns: minmax(0, var(--measure)) var(--margin) }

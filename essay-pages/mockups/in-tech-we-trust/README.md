@@ -19,4 +19,11 @@ Changes after Rufus's review and a cold critique by a Fable subagent:
 - Personal: In brief is a marked panel, distinct from italic quotes; book paragraph indents; much less monospace; stronger chapter heads.
 - All: sidenotes 14px and darker; 17.5px body on phone; centred blocks go left on phone; end-matter notes in two columns.
 
+### Rufus's verdicts on v2 (2026-10-26)
+
+- Academic and Magazine have the most personality; their type weighting is better. Personal (Spectral) felt heavy.
+- Keep for the design system: the Magazine chapter heading (red "Chapter N" label above the title), now shared by all three styles; red as accent; Magazine drop caps (a little OTT, but liked).
+- Never indented paragraphs: always space between them. Footnotes and their numerals small.
+- Applied: Personal now uses EB Garamond, a red accent, spaced paragraphs and smaller notes.
+
 Next: pick a style (or mix), then extract tokens and components into a starter design system.
