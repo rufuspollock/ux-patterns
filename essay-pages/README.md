@@ -3,6 +3,8 @@
 How to make great pages for long-form essays, research papers and reports on the web: the long read itself, a paper's own page, and the index that holds a body of work.
 
 > **Start here: [the Essay and Paper Pages board](https://claude.ai/artifact/PVtWUxMDeaWh8bi15bBeW9)** — picks, registers, layout vs style, essay vs blog post, and a gallery of 43 pages with screenshots.
+>
+> **Mockup:** [In Tech We Trust in three styles](https://claude.ai/artifact/TdyivbY61BVeSmkKSieeEH) (academic, magazine, personal; desktop and phone). Source in [mockups/in-tech-we-trust](/essay-pages/mockups/in-tech-we-trust/).
 
 This collection is the one home for long-form page inspiration. It absorbed [Report Inspirations](/report-inspirations/) (the Are.na channel) on 2026-10-26; every item from there has its own page here, tagged `#report-inspirations`. Started 2026-10-23, widened 2026-10-24. Some notes come from the [SoR Papers moodboard](https://claude.ai/artifact/YUCyzZ1MotbHAV7rzj6rb4). Related: [Docs and Explainer Sites](/docs-and-explainer-sites/), [Research Sites](/research-sites/), [Typography](/typography).
 

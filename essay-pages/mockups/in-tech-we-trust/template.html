@@ -1,0 +1,486 @@
+<meta charset="utf-8">
+<title>In Tech We Trust Mockup</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400..700;1,8..60,400..600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..800;1,6..96,400..700&family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=Spectral:ital,wght@0,300;0,400;0,500;0,600;1,400;1,600&display=swap">
+<style>
+/* Layout: one essay page, three registers. The same DOM is restyled by [data-style]; every responsive rule is a container query on the frame, so the Phone view (a 390px frame) reflows exactly as a phone would. Light-only by choice: these are paper pages. */
+:root { color-scheme: light; --chrome-bg: #16171c; --chrome-ink: #f2f2f4; --chrome-muted: #9a9cab; --stage: #e6e6e1 }
+* { box-sizing: border-box }
+html, body { background: var(--stage) }
+body { margin: 0 }
+img { max-width: 100%; display: block }
+
+/* ---------- Style tokens ---------- */
+.frame[data-style="academic"] {
+  --bg: #ffffff; --ink: #1a1c22; --muted: #5d6270; --rule: #e1e3e9; --accent: #1f4fd1; --tint: #f3f5fa;
+  --text: "Source Serif 4", Georgia, serif; --display: "Source Serif 4", Georgia, serif; --ui: "IBM Plex Sans", system-ui, sans-serif;
+  --size: 19px; --lh: 1.6; --measure: 36em; --margin: 230px; --gap: 44px;
+}
+.frame[data-style="magazine"] {
+  --bg: #ffffff; --ink: #121212; --muted: #5f5b57; --rule: #e7e2dc; --accent: #d32a1f; --tint: #fbf1ef;
+  --text: "Libre Caslon Text", Georgia, serif; --display: "Bodoni Moda", "Didot", Georgia, serif; --ui: "IBM Plex Sans", system-ui, sans-serif;
+  --size: 18.5px; --lh: 1.7; --measure: 33em; --margin: 230px; --gap: 48px;
+}
+.frame[data-style="personal"] {
+  --bg: #f6f5f1; --ink: #23231f; --muted: #6b6a62; --rule: #dedcd3; --accent: #2f6a4b; --tint: #ecebe4;
+  --text: "Spectral", Georgia, serif; --display: "Spectral", Georgia, serif; --ui: "IBM Plex Mono", ui-monospace, monospace;
+  --size: 20px; --lh: 1.6; --measure: 32em; --margin: 220px; --gap: 44px;
+}
+
+/* ---------- Stage and frame ---------- */
+.stage { padding-block: 0 96px }
+.frame { container: page / inline-size; background: var(--bg); color: var(--ink); font-family: var(--text); font-size: var(--size); line-height: var(--lh); min-height: 100vh }
+.stage.phone { display: grid; justify-items: center; padding-block: 28px 110px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)) }
+.stage.phone .frame { width: min(390px, 100%); height: min(844px, calc(100vh - 150px)); min-height: 0; overflow-y: auto; overflow-x: hidden; border: 10px solid #111; border-radius: 40px; box-shadow: 0 30px 60px -30px rgb(0 0 0 / .5) }
+.page { position: relative }
+.frame a { color: var(--accent); text-decoration-thickness: 1px; text-underline-offset: 3px }
+.frame a:focus-visible, .frame button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px }
+.wrap { max-width: 1240px; margin: 0 auto; padding-left: max(20px, env(safe-area-inset-left, 0px)); padding-right: max(20px, env(safe-area-inset-right, 0px)) }
+
+/* ---------- Chapter bar ---------- */
+.bar { position: sticky; top: 0; z-index: 5; background: color-mix(in srgb, var(--bg) 94%, transparent); backdrop-filter: blur(6px); border-bottom: 1px solid var(--rule); font-family: var(--ui); font-size: 13px }
+.bar .wrap { display: flex; align-items: center; gap: 14px; min-height: 46px }
+.bar .series { color: var(--muted); white-space: nowrap; display: none }
+.bar .series b { color: var(--ink); font-weight: 600 }
+.bar .current { flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--ink) }
+.bar button, .bar a.pdf { font: inherit; font-size: 12.5px; border: 1px solid var(--rule); background: var(--bg); color: var(--ink); padding: 5px 10px; cursor: pointer; text-decoration: none; white-space: nowrap }
+.bar .progress { position: absolute; left: 0; bottom: -1px; height: 2px; width: 0; background: var(--accent) }
+.drawer { position: sticky; top: 47px; z-index: 4; background: var(--bg); border-bottom: 1px solid var(--rule); max-height: 60vh; overflow: auto; font-family: var(--ui); font-size: 15px }
+.drawer .wrap { padding-block: 14px 18px }
+
+/* ---------- Contents lists ---------- */
+.toc { list-style: none; margin: 0; padding: 0; display: grid; gap: 7px; font-family: var(--ui); font-size: 13.5px; line-height: 1.35 }
+.toc a { color: var(--ink); text-decoration: none }
+.toc a:hover { color: var(--accent) }
+.toc .l2 { padding-left: 14px; color: var(--muted) }
+.toc .l2 a { color: var(--muted) }
+.toc .off { color: var(--muted); opacity: .55 }
+.toc li.active > a { color: var(--accent); font-weight: 600 }
+
+/* ---------- Header ---------- */
+.head .wrap { display: grid; gap: 28px; padding-block: 36px 28px }
+.kicker { font-family: var(--ui); font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted) }
+.head h1 { font-family: var(--display); font-weight: 600; line-height: 1.04; margin: 10px 0 14px; text-wrap: balance; letter-spacing: -.01em; font-size: 40px }
+.subtitle { font-size: 1.08em; line-height: 1.4; color: var(--ink); max-width: 34em; margin: 0 0 18px; text-wrap: pretty }
+.byline { display: flex; flex-wrap: wrap; gap: 4px 18px; margin: 0 0 18px; font-family: var(--ui); font-size: 13.5px; line-height: 1.4 }
+.byline div { display: flex; gap: 6px }
+.byline dt { color: var(--muted) }
+.byline dd { margin: 0 }
+.actions { display: flex; flex-wrap: wrap; gap: 8px }
+.btn { font-family: var(--ui); font-size: 13.5px; font-weight: 500; padding: 8px 14px; border: 1px solid var(--ink); color: var(--ink) !important; text-decoration: none; background: transparent }
+.btn.primary { background: var(--ink); color: var(--bg) !important }
+.head .wrap { position: relative }
+.cover { margin: 0; position: absolute; top: 36px; right: max(20px, env(safe-area-inset-right, 0px)); width: 64px }
+.cover figcaption { display: none }
+.head .kicker, .head h1 { padding-right: 76px }
+.cover img { width: 100%; aspect-ratio: 707 / 1000; object-fit: cover; box-shadow: 0 24px 40px -26px rgb(0 0 0 / .55) }
+.cover figcaption { font-family: var(--ui); font-size: 11.5px; color: var(--muted); margin-top: 8px }
+
+/* ---------- Summary ---------- */
+.summary .wrap { padding-block: 0 8px }
+.summary .box { border-top: 2px solid var(--ink); padding-top: 14px; display: grid; gap: 10px; max-width: 44em }
+.summary .lab, .inbrief-label, .omitted .lab, .end h2, .fignum, .shift .lab { font-family: var(--ui); font-size: 11.5px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); font-weight: 500 }
+.summary p { margin: 0; text-wrap: pretty }
+.summary strong { font-weight: 700 }
+.keywords { display: none }
+.summary .facts { font-family: var(--ui); font-size: 13px; color: var(--muted) }
+
+/* ---------- Body grid ---------- */
+.body .wrap { display: grid; grid-template-columns: minmax(0, 1fr); padding-block: 24px 40px }
+.rail { display: none }
+.text { min-width: 0 }
+.text > * { max-width: var(--measure) }
+.text p { margin: 0 0 1em; hyphens: auto; text-wrap: pretty }
+.text h2.chapter { font-family: var(--display); font-weight: 600; line-height: 1.12; margin: 1.6em 0 .7em; font-size: 1.6em; text-wrap: balance; scroll-margin-top: 64px }
+.text h2.chapter .num:empty { display: none }
+.text h2.chapter .num { color: var(--accent); margin-right: .35em }
+.text h3 { font-family: var(--display); font-weight: 600; font-size: 1.22em; line-height: 1.2; margin: 1.6em 0 .6em; scroll-margin-top: 64px; text-wrap: balance }
+.text h4 { font-family: var(--ui); font-size: .8em; font-weight: 600; margin: 1.6em 0 .5em; letter-spacing: .01em }
+.text h5 { font-size: 1em; font-style: italic; font-weight: 400; margin: 1.1em 0 .2em }
+.inbrief { font-size: 1.06em; line-height: 1.5; margin: 0 0 1.2em !important }
+.inbrief-label { display: block; margin-bottom: 4px }
+.epigraph { margin: 1.4em 0; padding: 0 }
+.epigraph p { font-style: italic; margin: 0 0 .4em }
+.epigraph cite { font-family: var(--ui); font-style: normal; font-size: 13px; color: var(--muted) }
+.pull { display: none }
+.break { height: 0 }
+.omitted { border: 1px dashed var(--rule); padding: 14px 16px; margin: 2em 0; font-size: .85em; background: var(--tint) }
+.omitted p { margin: 4px 0 0 }
+
+/* Figure */
+.fig { margin: 1.8em 0 }
+.shifts { display: grid; gap: 10px }
+.shift { display: grid; grid-template-columns: minmax(0, 1fr); gap: 6px; border: 1px solid var(--rule); background: var(--bg) }
+.shift > div { padding: 12px 14px; font-size: .86em; line-height: 1.45 }
+.shift .from { color: var(--muted) }
+.shift .to { background: var(--tint) }
+.shift .lab { display: block; margin-bottom: 3px }
+.shift .root { display: block; font-size: .92em; font-style: italic }
+.shift .arrow { display: none }
+.fig.column ul { list-style: none; margin: 0 0 8px; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1px; background: var(--rule); border: 1px solid var(--rule) }
+.fig.column li { background: var(--bg); padding: 10px 12px; font-size: .82em; line-height: 1.3 }
+.series-fig ol { margin: 0 0 6px; padding-left: 1.4em; font-family: var(--ui); font-size: 12.5px; line-height: 1.5; color: var(--muted) }
+.series-fig li.here { color: var(--accent); font-weight: 600 }
+.fig.margin { border-top: 1px solid var(--rule); padding-top: 8px }
+.fig figcaption { font-family: var(--ui); font-size: 13px; color: var(--muted); line-height: 1.4 }
+.fignum { margin-right: 6px; color: var(--ink) }
+
+/* Sidenotes: inline toggles by default (phone) */
+/* keep note number with its word */
+.nw { white-space: nowrap }
+.nw .sn-note { white-space: normal }
+.sn-ref { font-family: var(--ui); font-size: .62em; font-weight: 600; vertical-align: super; line-height: 0; border: 0; background: none; color: var(--accent); padding: 0 1px; cursor: pointer }
+.sn-note { display: none; font-family: var(--ui); font-size: 13.5px; line-height: 1.45; color: var(--muted); background: var(--tint); padding: 10px 12px; margin: .5em 0; font-style: normal; font-weight: 400 }
+.sn.open .sn-note { display: block; white-space: normal; border-left: 2px solid var(--accent); margin: .35em 0 .45em }
+.sn-n { font-weight: 600; color: var(--accent); margin-right: 2px }
+.sn-note a { word-break: break-word }
+
+/* ---------- End matter ---------- */
+.end .wrap { padding-block: 24px 64px }
+.end .grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 28px; border-top: 2px solid var(--ink); padding-top: 22px; max-width: 980px }
+.end section { display: grid; gap: 8px; align-content: start; font-size: 15.5px; line-height: 1.5; min-width: 0 }
+.end h2 { margin: 0 }
+.end li, .end p { overflow-wrap: anywhere }
+.end .refs { list-style: none; padding-left: 1.5em; text-indent: -1.5em }
+.end ol, .end ul { margin: 0; padding-left: 1.2em; display: grid; gap: 6px }
+.end details summary { cursor: pointer; font-family: var(--ui); font-size: 14px; color: var(--accent) }
+.end details ol { margin-top: 10px; font-size: 14px }
+.cite { font-family: var(--ui); font-size: 13.5px; background: var(--tint); padding: 12px 14px; margin: 0; white-space: normal; word-break: break-word }
+.copy { justify-self: start; font-family: var(--ui); font-size: 13px; border: 1px solid var(--ink); background: transparent; color: var(--ink); padding: 6px 12px; cursor: pointer }
+.series-nav { display: grid; grid-template-columns: 1fr 1fr; gap: 12px }
+.series-nav a { display: grid; gap: 2px; border: 1px solid var(--rule); padding: 10px 12px; text-decoration: none; color: var(--ink) }
+.series-nav small { font-family: var(--ui); font-size: 11.5px; color: var(--muted); letter-spacing: .06em; text-transform: uppercase }
+.gather { color: var(--muted) }
+
+/* ---------- Container: medium (no rail, notes in margin) ---------- */
+@container page (min-width: 760px) {
+  .page { --margin: clamp(150px, 21cqi, 230px); --gap: 32px }
+  .bar .series { display: inline }
+  .cover { position: static; width: auto }
+  .cover figcaption { display: block }
+  .head .kicker, .head h1 { padding-right: 0 }
+  .fig.margin { float: right; clear: right; width: var(--margin); margin: .2em calc(-1 * (var(--margin) + var(--gap))) 1em 0 }
+  .head h1 { font-size: 52px }
+  .head .wrap { grid-template-columns: minmax(0, 1fr) 200px; align-items: end }
+  .body .wrap { grid-template-columns: minmax(0, var(--measure)) var(--margin); column-gap: var(--gap); justify-content: center }
+  .text > * { max-width: none }
+  .sn-ref { pointer-events: none }
+  .sn-note { display: block; float: right; clear: right; width: var(--margin); margin: .2em calc(-1 * (var(--margin) + var(--gap))) 1em 0; background: none; padding: 0; font-size: 12.5px }
+  .fig.wide { margin-right: calc(-1 * (var(--margin) + var(--gap))) }
+  .shift { grid-template-columns: minmax(0, 1fr) 36px minmax(0, 1fr); gap: 0 }
+  .shift .arrow { display: grid; place-items: center; color: var(--accent); font-size: 1.3em }
+  .end .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 48px }
+  .end .span { grid-column: 1 / -1 }
+}
+/* ---------- Container: wide (contents rail) ---------- */
+@container page (min-width: 1080px) {
+  .page { --margin: 230px; --gap: 44px }
+  .body .wrap, .head .wrap, .summary .wrap, .end .wrap { display: grid; grid-template-columns: 190px minmax(0, var(--measure)) var(--margin); column-gap: var(--gap); justify-content: center; max-width: none }
+  .head .head-text { grid-column: 2 }
+  .head .cover { grid-column: 3; width: 170px }
+  .summary .box { grid-column: 2 / 4; max-width: none }
+  .end .grid { grid-column: 2 / 4 }
+  .rail { display: block; grid-column: 1; position: sticky; top: 72px; align-self: start; max-height: calc(100vh - 100px); overflow: auto; padding-top: 4px }
+  .rail .lab { font-family: var(--ui); font-size: 11.5px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); display: block; margin-bottom: 10px }
+  .text { grid-column: 2 }
+  .bar .toggle { display: none }
+}
+
+/* ================= ACADEMIC ================= */
+.frame[data-style="academic"] .head h1 { font-weight: 600 }
+@container page (min-width: 760px) {
+  .frame[data-style="academic"] .head .wrap { grid-template-columns: minmax(0, 1fr) 150px; align-items: start }
+  .frame[data-style="academic"] .head h1 { font-size: 46px }
+  .frame[data-style="academic"] .byline { display: grid; grid-template-columns: repeat(auto-fit, minmax(9em, max-content)); gap: 6px 36px; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); padding: 12px 0 }
+  .frame[data-style="academic"] .byline div { display: grid; gap: 2px }
+  .frame[data-style="academic"] .byline dt { font-size: 11.5px; letter-spacing: .08em; text-transform: uppercase }
+}
+.frame[data-style="academic"] .kicker { font-family: var(--text); font-variant: all-small-caps; letter-spacing: .08em; font-size: 15px }
+.frame[data-style="academic"] .summary .lab, .frame[data-style="academic"] .end h2 { font-family: var(--text); font-variant: all-small-caps; letter-spacing: .08em; font-size: 15px; color: var(--ink) }
+.frame[data-style="academic"] .sn-ref, .frame[data-style="academic"] .sn-note, .frame[data-style="academic"] .sn-n { font-family: var(--text) }
+.frame[data-style="academic"] .sn-note { font-size: 14px }
+.frame[data-style="academic"] .text h2.chapter .num { color: var(--muted); font-weight: 400 }
+.frame[data-style="academic"] .keywords { display: block }
+@container page (min-width: 1080px) {
+  .frame[data-style="academic"] .head .wrap { grid-template-columns: 190px minmax(0, var(--measure)) var(--margin) }
+  .frame[data-style="academic"] .head .cover { width: 150px }
+  .frame[data-style="academic"] .text h2.chapter { position: relative }
+  .frame[data-style="academic"] .text h2.chapter .num { position: absolute; right: 100%; margin-right: .6em }
+}
+.frame[data-style="academic"] .inbrief { background: var(--tint); border-left: 3px solid var(--accent); padding: 12px 16px }
+.frame[data-style="academic"] .epigraph { border-left: 2px solid var(--rule); padding-left: 16px }
+.frame[data-style="academic"] .cover figcaption { display: none }
+
+/* ================= MAGAZINE ================= */
+.frame[data-style="magazine"] .kicker { color: var(--accent); font-weight: 600 }
+.frame[data-style="magazine"] .head h1 { font-weight: 500; font-size: 46px; line-height: .98; letter-spacing: 0; font-kerning: normal }
+.frame[data-style="magazine"] .subtitle { font-style: italic; font-size: 1.12em }
+.frame[data-style="magazine"] .byline dt { display: none }
+.frame[data-style="magazine"] .byline div:first-child dd::before { content: "By " }
+.frame[data-style="magazine"] .btn { border-radius: 999px }
+.frame[data-style="magazine"] .btn.primary { background: var(--accent); border-color: var(--accent); color: #fff !important }
+.frame[data-style="magazine"] .summary .box { border-top-color: var(--accent) }
+.frame[data-style="magazine"] .summary p:not(.facts) { font-size: 1.1em; line-height: 1.5 }
+.frame[data-style="magazine"] .text h2.chapter { text-align: center; font-weight: 500; font-size: 1.9em; margin-top: .6em }
+.frame[data-style="magazine"] .text h2.chapter .num { display: flex; align-items: center; gap: .6em; justify-content: center; font-size: .75em; line-height: 1; margin: 0 0 .5em; font-weight: 600; letter-spacing: .1em }
+.frame[data-style="magazine"] .text h2.chapter .num::before, .frame[data-style="magazine"] .text h2.chapter .num::after { content: ""; width: 2.5em; height: 1px; background: var(--accent) }
+.frame[data-style="magazine"] .text h2.chapter { margin-top: 2em }
+.frame[data-style="magazine"] .text h3 { font-weight: 500; font-style: italic }
+.frame[data-style="magazine"] .text h4 { font-family: var(--display); font-size: 1.05em; font-weight: 600; letter-spacing: 0 }
+.frame[data-style="magazine"] .text p.first::first-letter { font-family: var(--display); float: left; font-size: 4.4em; line-height: .82; padding: .06em .08em 0 0; color: var(--accent); font-weight: 500 }
+.frame[data-style="magazine"] .inbrief { text-align: center; font-style: italic; font-size: 1.12em }
+.frame[data-style="magazine"] .inbrief strong { font-weight: 400 }
+.frame[data-style="magazine"] .inbrief-label { display: none }
+.frame[data-style="magazine"] .epigraph { text-align: center; padding: 0 1em }
+.frame[data-style="magazine"] .epigraph p { font-size: 1.04em }
+.frame[data-style="magazine"] .text h4::before { content: "⁂"; display: block; text-align: center; color: var(--accent); margin: 0 0 .9em; font-size: 1.1em; letter-spacing: .2em }
+.frame[data-style="magazine"] .pull { display: block; margin: 1.4em 0; border-top: 2px solid var(--accent); border-bottom: 1px solid var(--rule); padding: 14px 0 }
+.frame[data-style="magazine"] .pull p { font-family: var(--display); font-style: italic; font-size: 1.45em; line-height: 1.2; margin: 0; color: var(--ink) }
+.frame[data-style="magazine"] .shift .to { background: var(--accent); color: #fff }
+.frame[data-style="magazine"] .shift .to .lab { color: #fff; opacity: .8 }
+@container page (min-width: 760px) {
+  .frame[data-style="magazine"] .head .wrap { grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); gap: 48px; align-items: center; padding-block: 48px 36px }
+  .frame[data-style="magazine"] .head h1 { font-size: 76px }
+  .frame[data-style="magazine"] .cover { justify-self: end; width: min(100%, 400px) }
+  .frame[data-style="magazine"] .pull { clear: right; float: right; width: calc(var(--margin) + 60px); margin: .3em calc(-1 * (var(--margin) + var(--gap))) 1em 1.2em }
+  .frame[data-style="magazine"] .pull p { font-size: 1.3em }
+  .frame[data-style="magazine"] .summary .box { max-width: 38em; margin: 0 auto; text-align: center }
+  .frame[data-style="magazine"] .cover { position: static }
+}
+
+/* ================= PERSONAL ================= */
+.frame[data-style="personal"] .kicker { text-transform: none; letter-spacing: 0; font-size: 13px }
+.frame[data-style="personal"] .head h1 { font-weight: 500; font-size: 38px; letter-spacing: -.005em }
+.frame[data-style="personal"] .subtitle { color: var(--muted) }
+.frame[data-style="personal"] .byline { font-size: 12.5px }
+.frame[data-style="personal"] .btn { border-color: var(--rule); font-size: 12.5px; padding: 6px 10px }
+.frame[data-style="personal"] .btn.primary { background: transparent; color: var(--accent) !important; border-color: var(--accent) }
+.frame[data-style="personal"] .cover { width: 92px }
+.frame[data-style="personal"] .cover figcaption { display: none }
+.frame[data-style="personal"] .summary .box { border-top: 1px solid var(--rule) }
+.frame[data-style="personal"] .summary .lab { display: none }
+.frame[data-style="personal"] .summary .box { max-width: var(--measure) }
+.frame[data-style="personal"] .summary p:not(.facts) { font-style: italic }
+.frame[data-style="personal"] .text h2.chapter { font-weight: 500; font-size: 1.45em }
+.frame[data-style="personal"] .text h2.chapter .num::before { content: "§ " ; font-weight: 400 }
+.frame[data-style="personal"] .text h3 { font-weight: 500; font-size: 1.15em }
+.frame[data-style="personal"] .text h4 { font-family: var(--display); font-size: 1em; font-weight: 600; letter-spacing: 0 }
+.frame[data-style="personal"] .text p.first::first-line { font-variant: small-caps; letter-spacing: .03em }
+.frame[data-style="personal"] .inbrief { font-style: italic }
+.frame[data-style="personal"] .inbrief strong { font-weight: 500 }
+.frame[data-style="personal"] .inbrief-label { display: none }
+.frame[data-style="personal"] .epigraph { padding-left: 1.4em }
+.frame[data-style="personal"] .break { height: auto; text-align: center; margin: 2.2em 0 1em; color: var(--muted) }
+.frame[data-style="personal"] .break::before { content: "✻" }
+.frame[data-style="personal"] .sn-note { font-family: var(--text); font-size: 15px }
+.frame[data-style="personal"] .bar .series { display: none }
+@container page (min-width: 760px) {
+  .frame[data-style="personal"] .head .wrap { grid-template-columns: minmax(0, 1fr); max-width: calc(32em * 20 / 16 + var(--margin) + var(--gap) + 40px); }
+  .frame[data-style="personal"] .head .wrap, .frame[data-style="personal"] .summary .wrap { max-width: none; width: min(100%, calc(var(--measure) + var(--margin) + var(--gap) + 40px)); margin-left: auto; margin-right: auto }
+  .frame[data-style="personal"] .head h1 { font-size: 46px }
+  .frame[data-style="personal"] .cover { grid-row: 1; width: 110px }
+  .frame[data-style="personal"] .sn-note { font-size: 14px }
+}
+@container page (min-width: 1080px) {
+  .frame[data-style="magazine"] .head .wrap { grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); max-width: 1240px; margin: 0 auto }
+  .frame[data-style="magazine"] .head .head-text, .frame[data-style="magazine"] .head .cover { grid-column: auto; width: min(100%, 400px) }
+  .frame[data-style="magazine"] .head .head-text { width: auto }
+  .frame[data-style="personal"] .head .wrap, .frame[data-style="personal"] .summary .wrap, .frame[data-style="personal"] .end .wrap { grid-template-columns: minmax(0, var(--measure)) var(--margin) }
+  .frame[data-style="personal"] .head .head-text, .frame[data-style="personal"] .summary .box { grid-column: 1 }
+  .frame[data-style="personal"] .head .cover { grid-column: 1; grid-row: 1; width: 110px }
+  .frame[data-style="personal"] .end .grid { grid-column: 1 / 3 }
+  .frame[data-style="personal"] .body .wrap { grid-template-columns: minmax(0, var(--measure)) var(--margin) }
+  .frame[data-style="personal"] .rail { display: none }
+  .frame[data-style="personal"] .text { grid-column: 1 }
+  .frame[data-style="personal"] .bar .toggle { display: inline-block }
+}
+
+/* ---------- Mockup chrome (not part of the page design) ---------- */
+.chrome { position: fixed; z-index: 50; left: 50%; transform: translateX(-50%); bottom: calc(14px + env(safe-area-inset-bottom, 0px)); display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 8px 14px; background: var(--chrome-bg); color: var(--chrome-ink); padding: 8px 12px; border-radius: 14px; font: 13px/1.2 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; box-shadow: 0 16px 40px -16px rgb(0 0 0 / .6); width: max-content; max-width: calc(100vw - 24px) }
+.chrome .t { color: var(--chrome-muted) }
+.seg { display: inline-flex; border: 1px solid #3a3c47; border-radius: 9px; overflow: hidden }
+.seg button { font: inherit; background: transparent; color: var(--chrome-ink); border: 0; padding: 6px 10px; cursor: pointer }
+.seg button[aria-pressed="true"] { background: var(--chrome-ink); color: var(--chrome-bg) }
+.seg button:focus-visible { outline: 2px solid #8fa2ff; outline-offset: -2px }
+@media (max-width: 520px) { .chrome .t.name { display: none } }
+@media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth } .frame { scroll-behavior: smooth } }
+</style>
+
+<div class="stage" id="stage">
+<div class="frame" id="frame" data-style="academic">
+<div class="page">
+
+  <div class="bar" id="bar">
+    <div class="wrap">
+      <span class="series"><b>Second Renaissance</b> · Paper 5</span>
+      <span class="current" id="current" aria-live="polite">In Tech We Trust</span>
+      <button type="button" class="toggle" id="toc-toggle" aria-expanded="false" aria-controls="drawer">Contents</button>
+      <a class="pdf" href="#cite">PDF</a>
+    </div>
+    <span class="progress" id="progress"></span>
+  </div>
+  <div class="drawer" id="drawer" hidden><div class="wrap"><ol class="toc">{{TOC}}</ol></div></div>
+
+  <header class="head">
+    <div class="wrap">
+      <div class="head-text">
+        <span class="kicker">Second Renaissance series · Paper 5 · Essay</span>
+        <h1>In Tech We Trust</h1>
+        <p class="subtitle">The god-like authority of technology in the modern age, and what it means to set a wiser course</p>
+        <dl class="byline">
+          <div><dt>Authors</dt><dd>Rufus Pollock, Rosie Bell, Sylvie Barbier</dd></div>
+          <div><dt>From</dt><dd>Life Itself Sensemaking Studio</dd></div>
+          <div><dt>Published</dt><dd>February 2026</dd></div>
+          <div><dt>Version</dt><dd>1.0 beta · 45 min read</dd></div>
+        </dl>
+        <div class="actions">
+          <a class="btn primary" href="#introduction">Read online</a>
+          <a class="btn" href="#cite">PDF</a>
+          <a class="btn" href="#cite">EPUB</a>
+          <a class="btn" href="#cite">Cite</a>
+        </div>
+      </div>
+      <figure class="cover"><img src="cover.jpg" alt="Cover of In Tech We Trust: the title in black capitals on a red ground"><figcaption>Cover · Paper 5</figcaption></figure>
+    </div>
+  </header>
+
+  <section class="summary" aria-label="Summary">
+    <div class="wrap"><div class="box">
+      <span class="lab">Summary</span>
+      <p>This essay explores our late-modern relationship with technology, and asks what inner shift might help a future society find a wiser path. <strong>Modern society now relates to technology as a surrogate god; to steer a wiser course we need collective restraint grounded in a sense of interbeing, and choices guided by a fuller picture of human nature.</strong></p>
+      <p class="facts keywords"><b>Keywords</b> technology · modernity · cultural paradigm · collective action · interbeing · AI</p>
+      <p class="facts">About 9,800 words · 43 notes · Part of a series on the Second Renaissance</p>
+    </div></div>
+  </section>
+
+  <div class="body">
+    <div class="wrap">
+      <nav class="rail" aria-label="Contents"><span class="lab">Contents</span><ol class="toc" id="rail-toc">{{TOC}}</ol></nav>
+      <article class="text" id="text">
+{{BODY}}
+      </article>
+    </div>
+  </div>
+
+  <footer class="end" id="end">
+    <div class="wrap"><div class="grid">
+      <section class="span">
+        <h2>Notes</h2>
+        <details open><summary>Notes in this mockup, in order</summary><ol>{{NOTES}}</ol></details>
+      </section>
+      <section id="cite">
+        <h2>Cite this paper</h2>
+        <p class="cite" id="cite-text">Pollock, R., Bell, R. and Barbier, S. (2026) ‘In Tech We Trust: The god-like authority of technology in the modern age, and what it means to set a wiser course’. Second Renaissance series, Paper 5, version 1.0 beta. Life Itself Sensemaking Studio.</p>
+        <button type="button" class="copy" id="copy">Copy citation</button>
+      </section>
+      <section>
+        <h2>Read it your way</h2>
+        <ul><li>PDF, for print and offline</li><li>EPUB, for e-readers</li><li>The launch webinar and recording</li></ul>
+        <p class="gather">Links are placeholders in this mockup.</p>
+      </section>
+      <section>
+        <h2>Versions</h2>
+        <ul><li>First draft · July 2024</li><li>First full draft · October 2024</li><li>1.0 alpha · June 2025</li><li>1.0 beta · February 2026 (this version)</li></ul>
+      </section>
+      <section>
+        <h2>Responses and discussion</h2>
+        <ul><li><a href="https://www.youtube.com/watch?v=NgIjGn3fWDU&amp;t=10s">In Tech We Trust launch webinar</a> (recording)</li></ul>
+        <p class="gather">Talks, reviews, responses and podcast episodes gather here as the paper lives on.</p>
+      </section>
+      <section class="span">
+        <h2>References</h2>
+        <ul class="refs">{{BIB}}</ul>
+        <p class="gather">8 of 43 references shown in this mockup.</p>
+      </section>
+      <section class="span">
+        <h2>In the series</h2>
+        <div class="series-nav">
+          <a href="#top"><small>Previous · Paper 4</small>Developmental Spaces</a>
+          <a href="#top"><small>Next · Paper 6</small>Wisdom</a>
+        </div>
+      </section>
+    </div></div>
+  </footer>
+
+</div>
+</div>
+</div>
+
+<div class="chrome" role="toolbar" aria-label="Mockup controls">
+  <span class="t name">Mockup</span>
+  <span class="seg" role="group" aria-label="Style">
+    <button type="button" data-style="academic" aria-pressed="true">Academic</button>
+    <button type="button" data-style="magazine" aria-pressed="false">Magazine</button>
+    <button type="button" data-style="personal" aria-pressed="false">Personal</button>
+  </span>
+  <span class="seg" role="group" aria-label="View">
+    <button type="button" data-view="desktop" aria-pressed="true">Desktop</button>
+    <button type="button" data-view="phone" aria-pressed="false">Phone</button>
+  </span>
+</div>
+
+<script>
+(function () {
+  var frame = document.getElementById('frame'), stage = document.getElementById('stage');
+  var current = document.getElementById('current'), progress = document.getElementById('progress');
+  var drawer = document.getElementById('drawer'), toggle = document.getElementById('toc-toggle');
+  var heads = Array.prototype.slice.call(document.querySelectorAll('#text h2[id], #text h3[id]'));
+  var styles = ['academic', 'magazine', 'personal'];
+
+  function setStyle(s) {
+    frame.setAttribute('data-style', s);
+    document.querySelectorAll('.seg [data-style]').forEach(function (b) { b.setAttribute('aria-pressed', String(b.dataset.style === s)); });
+  }
+  function isPhone() { return stage.classList.contains('phone'); }
+  function setView(v) {
+    stage.classList.toggle('phone', v === 'phone');
+    document.querySelectorAll('.seg [data-view]').forEach(function (b) { b.setAttribute('aria-pressed', String(b.dataset.view === v)); });
+    frame.scrollTop = 0; onScroll();
+  }
+  document.querySelectorAll('.seg [data-style]').forEach(function (b) { b.addEventListener('click', function () { setStyle(b.dataset.style); onScroll(); }); });
+  document.querySelectorAll('.seg [data-view]').forEach(function (b) { b.addEventListener('click', function () { setView(b.dataset.view); }); });
+  var h = (location.hash || '').slice(1);
+  if (styles.indexOf(h) >= 0) setStyle(h);
+
+  // Sidenote toggles (narrow widths)
+  document.querySelectorAll('.sn-ref').forEach(function (b) {
+    b.addEventListener('click', function () { var sn = b.parentNode; var open = sn.classList.toggle('open'); b.setAttribute('aria-expanded', String(open)); });
+  });
+  // Contents drawer
+  toggle.addEventListener('click', function () { var open = drawer.hidden; drawer.hidden = !open; toggle.setAttribute('aria-expanded', String(open)); });
+  drawer.addEventListener('click', function (e) { if (e.target.closest('a')) { drawer.hidden = true; toggle.setAttribute('aria-expanded', 'false'); } });
+  // In-page links inside the phone frame scroll the frame
+  document.querySelectorAll('.frame a[href^="#"]').forEach(function (a) {
+    a.addEventListener('click', function (e) {
+      var id = a.getAttribute('href').slice(1); var t = id && document.getElementById(id);
+      if (!t) return; e.preventDefault();
+      var barH = document.getElementById('bar').offsetHeight + 12;
+      if (isPhone()) { frame.scrollTop += t.getBoundingClientRect().top - frame.getBoundingClientRect().top - barH; }
+      else { window.scrollTo(0, window.scrollY + t.getBoundingClientRect().top - barH); }
+    });
+  });
+  // Current section and progress
+  function onScroll() {
+    var top = isPhone() ? frame.getBoundingClientRect().top : 0;
+    var line = top + 80, label = 'In Tech We Trust', id = null;
+    heads.forEach(function (el) { if (el.getBoundingClientRect().top < line) { label = el.textContent.replace(/^(\d+)/, '$1. ').replace(/\.\s+\./, '.'); id = el.id; } });
+    current.textContent = label;
+    document.querySelectorAll('.toc li').forEach(function (li) { var a = li.querySelector('a'); li.classList.toggle('active', !!a && a.getAttribute('href') === '#' + id); });
+    var text = document.getElementById('text'), r = text.getBoundingClientRect();
+    var vh = isPhone() ? frame.clientHeight : window.innerHeight;
+    var p = Math.min(1, Math.max(0, (line - r.top) / Math.max(1, r.height - vh / 2)));
+    progress.style.width = (p * 100) + '%';
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  frame.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+  // Copy citation
+  document.getElementById('copy').addEventListener('click', function () {
+    var btn = this, txt = document.getElementById('cite-text').textContent;
+    function done(ok) { btn.textContent = ok ? 'Copied' : 'Select and copy the text above'; }
+    try { navigator.clipboard.writeText(txt).then(function () { done(true); }, function () { done(false); }); } catch (e) { done(false); }
+  });
+})();
+</script>

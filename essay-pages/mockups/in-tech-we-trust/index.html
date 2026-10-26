@@ -1,0 +1,601 @@
+<meta charset="utf-8">
+<title>In Tech We Trust Mockup</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400..700;1,8..60,400..600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..800;1,6..96,400..700&family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=Spectral:ital,wght@0,300;0,400;0,500;0,600;1,400;1,600&display=swap">
+<style>
+/* Layout: one essay page, three registers. The same DOM is restyled by [data-style]; every responsive rule is a container query on the frame, so the Phone view (a 390px frame) reflows exactly as a phone would. Light-only by choice: these are paper pages. */
+:root { color-scheme: light; --chrome-bg: #16171c; --chrome-ink: #f2f2f4; --chrome-muted: #9a9cab; --stage: #e6e6e1 }
+* { box-sizing: border-box }
+html, body { background: var(--stage) }
+body { margin: 0 }
+img { max-width: 100%; display: block }
+
+/* ---------- Style tokens ---------- */
+.frame[data-style="academic"] {
+  --bg: #ffffff; --ink: #1a1c22; --muted: #5d6270; --rule: #e1e3e9; --accent: #1f4fd1; --tint: #f3f5fa;
+  --text: "Source Serif 4", Georgia, serif; --display: "Source Serif 4", Georgia, serif; --ui: "IBM Plex Sans", system-ui, sans-serif;
+  --size: 19px; --lh: 1.6; --measure: 36em; --margin: 230px; --gap: 44px;
+}
+.frame[data-style="magazine"] {
+  --bg: #ffffff; --ink: #121212; --muted: #5f5b57; --rule: #e7e2dc; --accent: #d32a1f; --tint: #fbf1ef;
+  --text: "Libre Caslon Text", Georgia, serif; --display: "Bodoni Moda", "Didot", Georgia, serif; --ui: "IBM Plex Sans", system-ui, sans-serif;
+  --size: 18.5px; --lh: 1.7; --measure: 33em; --margin: 230px; --gap: 48px;
+}
+.frame[data-style="personal"] {
+  --bg: #f6f5f1; --ink: #23231f; --muted: #6b6a62; --rule: #dedcd3; --accent: #2f6a4b; --tint: #ecebe4;
+  --text: "Spectral", Georgia, serif; --display: "Spectral", Georgia, serif; --ui: "IBM Plex Mono", ui-monospace, monospace;
+  --size: 20px; --lh: 1.6; --measure: 32em; --margin: 220px; --gap: 44px;
+}
+
+/* ---------- Stage and frame ---------- */
+.stage { padding-block: 0 96px }
+.frame { container: page / inline-size; background: var(--bg); color: var(--ink); font-family: var(--text); font-size: var(--size); line-height: var(--lh); min-height: 100vh }
+.stage.phone { display: grid; justify-items: center; padding-block: 28px 110px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)) }
+.stage.phone .frame { width: min(390px, 100%); height: min(844px, calc(100vh - 150px)); min-height: 0; overflow-y: auto; overflow-x: hidden; border: 10px solid #111; border-radius: 40px; box-shadow: 0 30px 60px -30px rgb(0 0 0 / .5) }
+.page { position: relative }
+.frame a { color: var(--accent); text-decoration-thickness: 1px; text-underline-offset: 3px }
+.frame a:focus-visible, .frame button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px }
+.wrap { max-width: 1240px; margin: 0 auto; padding-left: max(20px, env(safe-area-inset-left, 0px)); padding-right: max(20px, env(safe-area-inset-right, 0px)) }
+
+/* ---------- Chapter bar ---------- */
+.bar { position: sticky; top: 0; z-index: 5; background: color-mix(in srgb, var(--bg) 94%, transparent); backdrop-filter: blur(6px); border-bottom: 1px solid var(--rule); font-family: var(--ui); font-size: 13px }
+.bar .wrap { display: flex; align-items: center; gap: 14px; min-height: 46px }
+.bar .series { color: var(--muted); white-space: nowrap; display: none }
+.bar .series b { color: var(--ink); font-weight: 600 }
+.bar .current { flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--ink) }
+.bar button, .bar a.pdf { font: inherit; font-size: 12.5px; border: 1px solid var(--rule); background: var(--bg); color: var(--ink); padding: 5px 10px; cursor: pointer; text-decoration: none; white-space: nowrap }
+.bar .progress { position: absolute; left: 0; bottom: -1px; height: 2px; width: 0; background: var(--accent) }
+.drawer { position: sticky; top: 47px; z-index: 4; background: var(--bg); border-bottom: 1px solid var(--rule); max-height: 60vh; overflow: auto; font-family: var(--ui); font-size: 15px }
+.drawer .wrap { padding-block: 14px 18px }
+
+/* ---------- Contents lists ---------- */
+.toc { list-style: none; margin: 0; padding: 0; display: grid; gap: 7px; font-family: var(--ui); font-size: 13.5px; line-height: 1.35 }
+.toc a { color: var(--ink); text-decoration: none }
+.toc a:hover { color: var(--accent) }
+.toc .l2 { padding-left: 14px; color: var(--muted) }
+.toc .l2 a { color: var(--muted) }
+.toc .off { color: var(--muted); opacity: .55 }
+.toc li.active > a { color: var(--accent); font-weight: 600 }
+
+/* ---------- Header ---------- */
+.head .wrap { display: grid; gap: 28px; padding-block: 36px 28px }
+.kicker { font-family: var(--ui); font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted) }
+.head h1 { font-family: var(--display); font-weight: 600; line-height: 1.04; margin: 10px 0 14px; text-wrap: balance; letter-spacing: -.01em; font-size: 40px }
+.subtitle { font-size: 1.08em; line-height: 1.4; color: var(--ink); max-width: 34em; margin: 0 0 18px; text-wrap: pretty }
+.byline { display: flex; flex-wrap: wrap; gap: 4px 18px; margin: 0 0 18px; font-family: var(--ui); font-size: 13.5px; line-height: 1.4 }
+.byline div { display: flex; gap: 6px }
+.byline dt { color: var(--muted) }
+.byline dd { margin: 0 }
+.actions { display: flex; flex-wrap: wrap; gap: 8px }
+.btn { font-family: var(--ui); font-size: 13.5px; font-weight: 500; padding: 8px 14px; border: 1px solid var(--ink); color: var(--ink) !important; text-decoration: none; background: transparent }
+.btn.primary { background: var(--ink); color: var(--bg) !important }
+.head .wrap { position: relative }
+.cover { margin: 0; position: absolute; top: 36px; right: max(20px, env(safe-area-inset-right, 0px)); width: 64px }
+.cover figcaption { display: none }
+.head .kicker, .head h1 { padding-right: 76px }
+.cover img { width: 100%; aspect-ratio: 707 / 1000; object-fit: cover; box-shadow: 0 24px 40px -26px rgb(0 0 0 / .55) }
+.cover figcaption { font-family: var(--ui); font-size: 11.5px; color: var(--muted); margin-top: 8px }
+
+/* ---------- Summary ---------- */
+.summary .wrap { padding-block: 0 8px }
+.summary .box { border-top: 2px solid var(--ink); padding-top: 14px; display: grid; gap: 10px; max-width: 44em }
+.summary .lab, .inbrief-label, .omitted .lab, .end h2, .fignum, .shift .lab { font-family: var(--ui); font-size: 11.5px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); font-weight: 500 }
+.summary p { margin: 0; text-wrap: pretty }
+.summary strong { font-weight: 700 }
+.keywords { display: none }
+.summary .facts { font-family: var(--ui); font-size: 13px; color: var(--muted) }
+
+/* ---------- Body grid ---------- */
+.body .wrap { display: grid; grid-template-columns: minmax(0, 1fr); padding-block: 24px 40px }
+.rail { display: none }
+.text { min-width: 0 }
+.text > * { max-width: var(--measure) }
+.text p { margin: 0 0 1em; hyphens: auto; text-wrap: pretty }
+.text h2.chapter { font-family: var(--display); font-weight: 600; line-height: 1.12; margin: 1.6em 0 .7em; font-size: 1.6em; text-wrap: balance; scroll-margin-top: 64px }
+.text h2.chapter .num:empty { display: none }
+.text h2.chapter .num { color: var(--accent); margin-right: .35em }
+.text h3 { font-family: var(--display); font-weight: 600; font-size: 1.22em; line-height: 1.2; margin: 1.6em 0 .6em; scroll-margin-top: 64px; text-wrap: balance }
+.text h4 { font-family: var(--ui); font-size: .8em; font-weight: 600; margin: 1.6em 0 .5em; letter-spacing: .01em }
+.text h5 { font-size: 1em; font-style: italic; font-weight: 400; margin: 1.1em 0 .2em }
+.inbrief { font-size: 1.06em; line-height: 1.5; margin: 0 0 1.2em !important }
+.inbrief-label { display: block; margin-bottom: 4px }
+.epigraph { margin: 1.4em 0; padding: 0 }
+.epigraph p { font-style: italic; margin: 0 0 .4em }
+.epigraph cite { font-family: var(--ui); font-style: normal; font-size: 13px; color: var(--muted) }
+.pull { display: none }
+.break { height: 0 }
+.omitted { border: 1px dashed var(--rule); padding: 14px 16px; margin: 2em 0; font-size: .85em; background: var(--tint) }
+.omitted p { margin: 4px 0 0 }
+
+/* Figure */
+.fig { margin: 1.8em 0 }
+.shifts { display: grid; gap: 10px }
+.shift { display: grid; grid-template-columns: minmax(0, 1fr); gap: 6px; border: 1px solid var(--rule); background: var(--bg) }
+.shift > div { padding: 12px 14px; font-size: .86em; line-height: 1.45 }
+.shift .from { color: var(--muted) }
+.shift .to { background: var(--tint) }
+.shift .lab { display: block; margin-bottom: 3px }
+.shift .root { display: block; font-size: .92em; font-style: italic }
+.shift .arrow { display: none }
+.fig.column ul { list-style: none; margin: 0 0 8px; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1px; background: var(--rule); border: 1px solid var(--rule) }
+.fig.column li { background: var(--bg); padding: 10px 12px; font-size: .82em; line-height: 1.3 }
+.series-fig ol { margin: 0 0 6px; padding-left: 1.4em; font-family: var(--ui); font-size: 12.5px; line-height: 1.5; color: var(--muted) }
+.series-fig li.here { color: var(--accent); font-weight: 600 }
+.fig.margin { border-top: 1px solid var(--rule); padding-top: 8px }
+.fig figcaption { font-family: var(--ui); font-size: 13px; color: var(--muted); line-height: 1.4 }
+.fignum { margin-right: 6px; color: var(--ink) }
+
+/* Sidenotes: inline toggles by default (phone) */
+/* keep note number with its word */
+.nw { white-space: nowrap }
+.nw .sn-note { white-space: normal }
+.sn-ref { font-family: var(--ui); font-size: .62em; font-weight: 600; vertical-align: super; line-height: 0; border: 0; background: none; color: var(--accent); padding: 0 1px; cursor: pointer }
+.sn-note { display: none; font-family: var(--ui); font-size: 13.5px; line-height: 1.45; color: var(--muted); background: var(--tint); padding: 10px 12px; margin: .5em 0; font-style: normal; font-weight: 400 }
+.sn.open .sn-note { display: block; white-space: normal; border-left: 2px solid var(--accent); margin: .35em 0 .45em }
+.sn-n { font-weight: 600; color: var(--accent); margin-right: 2px }
+.sn-note a { word-break: break-word }
+
+/* ---------- End matter ---------- */
+.end .wrap { padding-block: 24px 64px }
+.end .grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 28px; border-top: 2px solid var(--ink); padding-top: 22px; max-width: 980px }
+.end section { display: grid; gap: 8px; align-content: start; font-size: 15.5px; line-height: 1.5; min-width: 0 }
+.end h2 { margin: 0 }
+.end li, .end p { overflow-wrap: anywhere }
+.end .refs { list-style: none; padding-left: 1.5em; text-indent: -1.5em }
+.end ol, .end ul { margin: 0; padding-left: 1.2em; display: grid; gap: 6px }
+.end details summary { cursor: pointer; font-family: var(--ui); font-size: 14px; color: var(--accent) }
+.end details ol { margin-top: 10px; font-size: 14px }
+.cite { font-family: var(--ui); font-size: 13.5px; background: var(--tint); padding: 12px 14px; margin: 0; white-space: normal; word-break: break-word }
+.copy { justify-self: start; font-family: var(--ui); font-size: 13px; border: 1px solid var(--ink); background: transparent; color: var(--ink); padding: 6px 12px; cursor: pointer }
+.series-nav { display: grid; grid-template-columns: 1fr 1fr; gap: 12px }
+.series-nav a { display: grid; gap: 2px; border: 1px solid var(--rule); padding: 10px 12px; text-decoration: none; color: var(--ink) }
+.series-nav small { font-family: var(--ui); font-size: 11.5px; color: var(--muted); letter-spacing: .06em; text-transform: uppercase }
+.gather { color: var(--muted) }
+
+/* ---------- Container: medium (no rail, notes in margin) ---------- */
+@container page (min-width: 760px) {
+  .page { --margin: clamp(150px, 21cqi, 230px); --gap: 32px }
+  .bar .series { display: inline }
+  .cover { position: static; width: auto }
+  .cover figcaption { display: block }
+  .head .kicker, .head h1 { padding-right: 0 }
+  .fig.margin { float: right; clear: right; width: var(--margin); margin: .2em calc(-1 * (var(--margin) + var(--gap))) 1em 0 }
+  .head h1 { font-size: 52px }
+  .head .wrap { grid-template-columns: minmax(0, 1fr) 200px; align-items: end }
+  .body .wrap { grid-template-columns: minmax(0, var(--measure)) var(--margin); column-gap: var(--gap); justify-content: center }
+  .text > * { max-width: none }
+  .sn-ref { pointer-events: none }
+  .sn-note { display: block; float: right; clear: right; width: var(--margin); margin: .2em calc(-1 * (var(--margin) + var(--gap))) 1em 0; background: none; padding: 0; font-size: 12.5px }
+  .fig.wide { margin-right: calc(-1 * (var(--margin) + var(--gap))) }
+  .shift { grid-template-columns: minmax(0, 1fr) 36px minmax(0, 1fr); gap: 0 }
+  .shift .arrow { display: grid; place-items: center; color: var(--accent); font-size: 1.3em }
+  .end .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 48px }
+  .end .span { grid-column: 1 / -1 }
+}
+/* ---------- Container: wide (contents rail) ---------- */
+@container page (min-width: 1080px) {
+  .page { --margin: 230px; --gap: 44px }
+  .body .wrap, .head .wrap, .summary .wrap, .end .wrap { display: grid; grid-template-columns: 190px minmax(0, var(--measure)) var(--margin); column-gap: var(--gap); justify-content: center; max-width: none }
+  .head .head-text { grid-column: 2 }
+  .head .cover { grid-column: 3; width: 170px }
+  .summary .box { grid-column: 2 / 4; max-width: none }
+  .end .grid { grid-column: 2 / 4 }
+  .rail { display: block; grid-column: 1; position: sticky; top: 72px; align-self: start; max-height: calc(100vh - 100px); overflow: auto; padding-top: 4px }
+  .rail .lab { font-family: var(--ui); font-size: 11.5px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); display: block; margin-bottom: 10px }
+  .text { grid-column: 2 }
+  .bar .toggle { display: none }
+}
+
+/* ================= ACADEMIC ================= */
+.frame[data-style="academic"] .head h1 { font-weight: 600 }
+@container page (min-width: 760px) {
+  .frame[data-style="academic"] .head .wrap { grid-template-columns: minmax(0, 1fr) 150px; align-items: start }
+  .frame[data-style="academic"] .head h1 { font-size: 46px }
+  .frame[data-style="academic"] .byline { display: grid; grid-template-columns: repeat(auto-fit, minmax(9em, max-content)); gap: 6px 36px; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); padding: 12px 0 }
+  .frame[data-style="academic"] .byline div { display: grid; gap: 2px }
+  .frame[data-style="academic"] .byline dt { font-size: 11.5px; letter-spacing: .08em; text-transform: uppercase }
+}
+.frame[data-style="academic"] .kicker { font-family: var(--text); font-variant: all-small-caps; letter-spacing: .08em; font-size: 15px }
+.frame[data-style="academic"] .summary .lab, .frame[data-style="academic"] .end h2 { font-family: var(--text); font-variant: all-small-caps; letter-spacing: .08em; font-size: 15px; color: var(--ink) }
+.frame[data-style="academic"] .sn-ref, .frame[data-style="academic"] .sn-note, .frame[data-style="academic"] .sn-n { font-family: var(--text) }
+.frame[data-style="academic"] .sn-note { font-size: 14px }
+.frame[data-style="academic"] .text h2.chapter .num { color: var(--muted); font-weight: 400 }
+.frame[data-style="academic"] .keywords { display: block }
+@container page (min-width: 1080px) {
+  .frame[data-style="academic"] .head .wrap { grid-template-columns: 190px minmax(0, var(--measure)) var(--margin) }
+  .frame[data-style="academic"] .head .cover { width: 150px }
+  .frame[data-style="academic"] .text h2.chapter { position: relative }
+  .frame[data-style="academic"] .text h2.chapter .num { position: absolute; right: 100%; margin-right: .6em }
+}
+.frame[data-style="academic"] .inbrief { background: var(--tint); border-left: 3px solid var(--accent); padding: 12px 16px }
+.frame[data-style="academic"] .epigraph { border-left: 2px solid var(--rule); padding-left: 16px }
+.frame[data-style="academic"] .cover figcaption { display: none }
+
+/* ================= MAGAZINE ================= */
+.frame[data-style="magazine"] .kicker { color: var(--accent); font-weight: 600 }
+.frame[data-style="magazine"] .head h1 { font-weight: 500; font-size: 46px; line-height: .98; letter-spacing: 0; font-kerning: normal }
+.frame[data-style="magazine"] .subtitle { font-style: italic; font-size: 1.12em }
+.frame[data-style="magazine"] .byline dt { display: none }
+.frame[data-style="magazine"] .byline div:first-child dd::before { content: "By " }
+.frame[data-style="magazine"] .btn { border-radius: 999px }
+.frame[data-style="magazine"] .btn.primary { background: var(--accent); border-color: var(--accent); color: #fff !important }
+.frame[data-style="magazine"] .summary .box { border-top-color: var(--accent) }
+.frame[data-style="magazine"] .summary p:not(.facts) { font-size: 1.1em; line-height: 1.5 }
+.frame[data-style="magazine"] .text h2.chapter { text-align: center; font-weight: 500; font-size: 1.9em; margin-top: .6em }
+.frame[data-style="magazine"] .text h2.chapter .num { display: flex; align-items: center; gap: .6em; justify-content: center; font-size: .75em; line-height: 1; margin: 0 0 .5em; font-weight: 600; letter-spacing: .1em }
+.frame[data-style="magazine"] .text h2.chapter .num::before, .frame[data-style="magazine"] .text h2.chapter .num::after { content: ""; width: 2.5em; height: 1px; background: var(--accent) }
+.frame[data-style="magazine"] .text h2.chapter { margin-top: 2em }
+.frame[data-style="magazine"] .text h3 { font-weight: 500; font-style: italic }
+.frame[data-style="magazine"] .text h4 { font-family: var(--display); font-size: 1.05em; font-weight: 600; letter-spacing: 0 }
+.frame[data-style="magazine"] .text p.first::first-letter { font-family: var(--display); float: left; font-size: 4.4em; line-height: .82; padding: .06em .08em 0 0; color: var(--accent); font-weight: 500 }
+.frame[data-style="magazine"] .inbrief { text-align: center; font-style: italic; font-size: 1.12em }
+.frame[data-style="magazine"] .inbrief strong { font-weight: 400 }
+.frame[data-style="magazine"] .inbrief-label { display: none }
+.frame[data-style="magazine"] .epigraph { text-align: center; padding: 0 1em }
+.frame[data-style="magazine"] .epigraph p { font-size: 1.04em }
+.frame[data-style="magazine"] .text h4::before { content: "⁂"; display: block; text-align: center; color: var(--accent); margin: 0 0 .9em; font-size: 1.1em; letter-spacing: .2em }
+.frame[data-style="magazine"] .pull { display: block; margin: 1.4em 0; border-top: 2px solid var(--accent); border-bottom: 1px solid var(--rule); padding: 14px 0 }
+.frame[data-style="magazine"] .pull p { font-family: var(--display); font-style: italic; font-size: 1.45em; line-height: 1.2; margin: 0; color: var(--ink) }
+.frame[data-style="magazine"] .shift .to { background: var(--accent); color: #fff }
+.frame[data-style="magazine"] .shift .to .lab { color: #fff; opacity: .8 }
+@container page (min-width: 760px) {
+  .frame[data-style="magazine"] .head .wrap { grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); gap: 48px; align-items: center; padding-block: 48px 36px }
+  .frame[data-style="magazine"] .head h1 { font-size: 76px }
+  .frame[data-style="magazine"] .cover { justify-self: end; width: min(100%, 400px) }
+  .frame[data-style="magazine"] .pull { clear: right; float: right; width: calc(var(--margin) + 60px); margin: .3em calc(-1 * (var(--margin) + var(--gap))) 1em 1.2em }
+  .frame[data-style="magazine"] .pull p { font-size: 1.3em }
+  .frame[data-style="magazine"] .summary .box { max-width: 38em; margin: 0 auto; text-align: center }
+  .frame[data-style="magazine"] .cover { position: static }
+}
+
+/* ================= PERSONAL ================= */
+.frame[data-style="personal"] .kicker { text-transform: none; letter-spacing: 0; font-size: 13px }
+.frame[data-style="personal"] .head h1 { font-weight: 500; font-size: 38px; letter-spacing: -.005em }
+.frame[data-style="personal"] .subtitle { color: var(--muted) }
+.frame[data-style="personal"] .byline { font-size: 12.5px }
+.frame[data-style="personal"] .btn { border-color: var(--rule); font-size: 12.5px; padding: 6px 10px }
+.frame[data-style="personal"] .btn.primary { background: transparent; color: var(--accent) !important; border-color: var(--accent) }
+.frame[data-style="personal"] .cover { width: 92px }
+.frame[data-style="personal"] .cover figcaption { display: none }
+.frame[data-style="personal"] .summary .box { border-top: 1px solid var(--rule) }
+.frame[data-style="personal"] .summary .lab { display: none }
+.frame[data-style="personal"] .summary .box { max-width: var(--measure) }
+.frame[data-style="personal"] .summary p:not(.facts) { font-style: italic }
+.frame[data-style="personal"] .text h2.chapter { font-weight: 500; font-size: 1.45em }
+.frame[data-style="personal"] .text h2.chapter .num::before { content: "§ " ; font-weight: 400 }
+.frame[data-style="personal"] .text h3 { font-weight: 500; font-size: 1.15em }
+.frame[data-style="personal"] .text h4 { font-family: var(--display); font-size: 1em; font-weight: 600; letter-spacing: 0 }
+.frame[data-style="personal"] .text p.first::first-line { font-variant: small-caps; letter-spacing: .03em }
+.frame[data-style="personal"] .inbrief { font-style: italic }
+.frame[data-style="personal"] .inbrief strong { font-weight: 500 }
+.frame[data-style="personal"] .inbrief-label { display: none }
+.frame[data-style="personal"] .epigraph { padding-left: 1.4em }
+.frame[data-style="personal"] .break { height: auto; text-align: center; margin: 2.2em 0 1em; color: var(--muted) }
+.frame[data-style="personal"] .break::before { content: "✻" }
+.frame[data-style="personal"] .sn-note { font-family: var(--text); font-size: 15px }
+.frame[data-style="personal"] .bar .series { display: none }
+@container page (min-width: 760px) {
+  .frame[data-style="personal"] .head .wrap { grid-template-columns: minmax(0, 1fr); max-width: calc(32em * 20 / 16 + var(--margin) + var(--gap) + 40px); }
+  .frame[data-style="personal"] .head .wrap, .frame[data-style="personal"] .summary .wrap { max-width: none; width: min(100%, calc(var(--measure) + var(--margin) + var(--gap) + 40px)); margin-left: auto; margin-right: auto }
+  .frame[data-style="personal"] .head h1 { font-size: 46px }
+  .frame[data-style="personal"] .cover { grid-row: 1; width: 110px }
+  .frame[data-style="personal"] .sn-note { font-size: 14px }
+}
+@container page (min-width: 1080px) {
+  .frame[data-style="magazine"] .head .wrap { grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); max-width: 1240px; margin: 0 auto }
+  .frame[data-style="magazine"] .head .head-text, .frame[data-style="magazine"] .head .cover { grid-column: auto; width: min(100%, 400px) }
+  .frame[data-style="magazine"] .head .head-text { width: auto }
+  .frame[data-style="personal"] .head .wrap, .frame[data-style="personal"] .summary .wrap, .frame[data-style="personal"] .end .wrap { grid-template-columns: minmax(0, var(--measure)) var(--margin) }
+  .frame[data-style="personal"] .head .head-text, .frame[data-style="personal"] .summary .box { grid-column: 1 }
+  .frame[data-style="personal"] .head .cover { grid-column: 1; grid-row: 1; width: 110px }
+  .frame[data-style="personal"] .end .grid { grid-column: 1 / 3 }
+  .frame[data-style="personal"] .body .wrap { grid-template-columns: minmax(0, var(--measure)) var(--margin) }
+  .frame[data-style="personal"] .rail { display: none }
+  .frame[data-style="personal"] .text { grid-column: 1 }
+  .frame[data-style="personal"] .bar .toggle { display: inline-block }
+}
+
+/* ---------- Mockup chrome (not part of the page design) ---------- */
+.chrome { position: fixed; z-index: 50; left: 50%; transform: translateX(-50%); bottom: calc(14px + env(safe-area-inset-bottom, 0px)); display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 8px 14px; background: var(--chrome-bg); color: var(--chrome-ink); padding: 8px 12px; border-radius: 14px; font: 13px/1.2 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; box-shadow: 0 16px 40px -16px rgb(0 0 0 / .6); width: max-content; max-width: calc(100vw - 24px) }
+.chrome .t { color: var(--chrome-muted) }
+.seg { display: inline-flex; border: 1px solid #3a3c47; border-radius: 9px; overflow: hidden }
+.seg button { font: inherit; background: transparent; color: var(--chrome-ink); border: 0; padding: 6px 10px; cursor: pointer }
+.seg button[aria-pressed="true"] { background: var(--chrome-ink); color: var(--chrome-bg) }
+.seg button:focus-visible { outline: 2px solid #8fa2ff; outline-offset: -2px }
+@media (max-width: 520px) { .chrome .t.name { display: none } }
+@media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth } .frame { scroll-behavior: smooth } }
+</style>
+
+<div class="stage" id="stage">
+<div class="frame" id="frame" data-style="academic">
+<div class="page">
+
+  <div class="bar" id="bar">
+    <div class="wrap">
+      <span class="series"><b>Second Renaissance</b> · Paper 5</span>
+      <span class="current" id="current" aria-live="polite">In Tech We Trust</span>
+      <button type="button" class="toggle" id="toc-toggle" aria-expanded="false" aria-controls="drawer">Contents</button>
+      <a class="pdf" href="#cite">PDF</a>
+    </div>
+    <span class="progress" id="progress"></span>
+  </div>
+  <div class="drawer" id="drawer" hidden><div class="wrap"><ol class="toc"><li class="l1"><a href="#introduction">Introduction</a></li>
+<li class="l1"><a href="#1-co-evolving-with-our-tools">1. Co-evolving with our tools</a></li>
+<li class="l1"><a href="#2-aspects-of-the-late-modern-relationshi">2. Aspects of the late-modern relationship with technology</a></li>
+<li class="l2"><a href="#2-1-technology-as-god">2.1 Technology as God</a></li>
+<li class="l2"><a href="#2-2-from-servant-to-master">2.2 From Servant to Master</a></li>
+<li class="l2 off"><span>2.2 (continued) Utility and the rational fallacy; Tech as creator</span></li>
+<li class="l2 off"><span>2.3 AI: the logical conclusion of modern attitudes to tech?</span></li>
+<li class="l1 off"><span>3. Tech in a future society: a wiser relationship?</span></li>
+<li class="l2 off"><span>3.1 Restoring agency: beyond collective action problems</span></li>
+<li class="l2 off"><span>3.2 Escaping the tyranny of tech</span></li>
+<li class="l1"><a href="#conclusion">Conclusion</a></li></ol></div></div>
+
+  <header class="head">
+    <div class="wrap">
+      <div class="head-text">
+        <span class="kicker">Second Renaissance series · Paper 5 · Essay</span>
+        <h1>In Tech We Trust</h1>
+        <p class="subtitle">The god-like authority of technology in the modern age, and what it means to set a wiser course</p>
+        <dl class="byline">
+          <div><dt>Authors</dt><dd>Rufus Pollock, Rosie Bell, Sylvie Barbier</dd></div>
+          <div><dt>From</dt><dd>Life Itself Sensemaking Studio</dd></div>
+          <div><dt>Published</dt><dd>February 2026</dd></div>
+          <div><dt>Version</dt><dd>1.0 beta · 45 min read</dd></div>
+        </dl>
+        <div class="actions">
+          <a class="btn primary" href="#introduction">Read online</a>
+          <a class="btn" href="#cite">PDF</a>
+          <a class="btn" href="#cite">EPUB</a>
+          <a class="btn" href="#cite">Cite</a>
+        </div>
+      </div>
+      <figure class="cover"><img src="cover.jpg" alt="Cover of In Tech We Trust: the title in black capitals on a red ground"><figcaption>Cover · Paper 5</figcaption></figure>
+    </div>
+  </header>
+
+  <section class="summary" aria-label="Summary">
+    <div class="wrap"><div class="box">
+      <span class="lab">Summary</span>
+      <p>This essay explores our late-modern relationship with technology, and asks what inner shift might help a future society find a wiser path. <strong>Modern society now relates to technology as a surrogate god; to steer a wiser course we need collective restraint grounded in a sense of interbeing, and choices guided by a fuller picture of human nature.</strong></p>
+      <p class="facts keywords"><b>Keywords</b> technology · modernity · cultural paradigm · collective action · interbeing · AI</p>
+      <p class="facts">About 9,800 words · 43 notes · Part of a series on the Second Renaissance</p>
+    </div></div>
+  </section>
+
+  <div class="body">
+    <div class="wrap">
+      <nav class="rail" aria-label="Contents"><span class="lab">Contents</span><ol class="toc" id="rail-toc"><li class="l1"><a href="#introduction">Introduction</a></li>
+<li class="l1"><a href="#1-co-evolving-with-our-tools">1. Co-evolving with our tools</a></li>
+<li class="l1"><a href="#2-aspects-of-the-late-modern-relationshi">2. Aspects of the late-modern relationship with technology</a></li>
+<li class="l2"><a href="#2-1-technology-as-god">2.1 Technology as God</a></li>
+<li class="l2"><a href="#2-2-from-servant-to-master">2.2 From Servant to Master</a></li>
+<li class="l2 off"><span>2.2 (continued) Utility and the rational fallacy; Tech as creator</span></li>
+<li class="l2 off"><span>2.3 AI: the logical conclusion of modern attitudes to tech?</span></li>
+<li class="l1 off"><span>3. Tech in a future society: a wiser relationship?</span></li>
+<li class="l2 off"><span>3.1 Restoring agency: beyond collective action problems</span></li>
+<li class="l2 off"><span>3.2 Escaping the tyranny of tech</span></li>
+<li class="l1"><a href="#conclusion">Conclusion</a></li></ol></nav>
+      <article class="text" id="text">
+<h2 id="introduction" class="chapter"><span class="num"></span><span class="name">Introduction</span></h2>
+<figure class="fig margin series-fig"><ol>
+  <li>What and Why</li><li>How</li><li>Polycrisis to Metacrisis</li><li>Developmental Spaces</li><li class="here">In Tech We Trust</li><li>Wisdom</li></ol>
+  <figcaption><span class="fignum">Figure 0</span> Where this paper sits in the series.</figcaption></figure>
+<p class="first">This essay is part of a series examining features of a globalised society in crisis, and exploring how a shift in fundamental views and values – a new cultural paradigm – might support a wiser, regenerative future.</p>
+<p>A <a href="https://secondrenaissance.net/papers">foundational paper</a> outlines the idea of a cultural paradigm shift or ‘<a href="https://secondrenaissance.net/">Second Renaissance</a><span class="nw">.’<span class="sn"><button type="button" class="sn-ref" aria-expanded="false" aria-controls="sn1" aria-label="Note 1">1</button><span class="sn-note" id="sn1" role="note"><span class="sn-n">1</span> <a href="https://secondrenaissance.net/papers">Barbier et al. (2024)</a></span></span></span>  Forthcoming essays will build on this inquiry, exploring its implications for specific areas of society – such as climate, decision-making, education, and more.</p>
+<p>We first address <strong>technology</strong> because it has become a special case: a force so powerful that it has shaped not only our material conditions, but also the deepest cultural foundations of our shared world; offering a lens through which many of our wider challenges can be understood. Since prehistory, humans have created, depended upon, and been shaped by technology – enabling our lives in countless ways. Yet this complex relationship has grown increasingly problematic. In recent decades, as climate breakdown escalates and AI accelerates, it has reached a crisis point.</p>
+<p>Beneath the surface, many of today’s global challenges can be traced to particular features of our shared worldview, anchored in the cultural paradigm of modernity. The structural and cultural features of our societies – including our relationship with technology – arise from foundational systems of beliefs: shared ways of seeing ourselves, each other, and the world. Elsewhere we’ve referred to these systems of views and values as ‘cultural paradigms.’</p>
+<p>The modern paradigm is unique, however, in that unprecedented technological advancement – and its profound effect on human power dynamics – has elevated technology to a primary metaphor within the cultural paradigm <span class="nw">itself.<span class="sn"><button type="button" class="sn-ref" aria-expanded="false" aria-controls="sn2" aria-label="Note 2">2</button><span class="sn-note" id="sn2" role="note"><span class="sn-n">2</span> Machine metaphors for life appeared before the modern age (see e.g. Riskin (2013)) however their dominance was entrenched by the industrial revolution, proliferating with each new wave of empowering tech (e.g. mind as computer.) See e.g. Mumford (1967).</span></span></span> Accelerated by the industrial revolution and further still in the digital age, technology is not just a tool of modernity, but one of its chief organising logics: reciprocally shaping how we view reality and imagine the human good. In what follows, we explore key features of late modernity’s increasingly dysfunctional relationship with technology, and consider the shifts in worldview and inner capacity that may be necessary to support wiser choice-making for the future.</p>
+<h4 id="key-features-of-the-modern-cultural-para">Key features of the modern cultural paradigm relating to technology</h4>
+<p>Throughout the essay we’ll discuss particular views and assumptions, core to the modern worldview, that shape or are shaped by our relationship with <span class="nw">technology.<span class="sn"><button type="button" class="sn-ref" aria-expanded="false" aria-controls="sn3" aria-label="Note 3">3</button><span class="sn-note" id="sn3" role="note"><span class="sn-n">3</span> <a href="https://drive.google.com/file/d/1GjJBXhS2hyvAf-uM9DbUTwE5Slh6MJel/view">Barbier et al. (2024)</a> offers a more general summary of views and values core to the modern cultural paradigm. See also <a href="https://www.ebsco.com/research-starters/social-sciences-and-humanities/characteristics-modernity">Walker (2021)</a>.</span></span></span> These include:</p>
+<figure class="fig column features"><ul>
+  <li>Material reality as paramount</li><li>The myth of progress</li><li>Technology as cosmological metaphor</li><li>Individualism</li><li>Rationalism and freedom</li><li>Homo economicus</li></ul>
+  <figcaption><span class="fignum">Figure 2</span> Six features of the modern cultural paradigm that shape, and are shaped by, our relationship with technology.</figcaption></figure>
+<h5>Material reality as paramount</h5>
+<p>Since the scientific revolution, modern society has limited ‘reality’ to that which can be seen and measured – grounding truth in the material and dismissing the subjective and spiritual as secondary or unreal.</p>
+<h5>The myth of progress</h5>
+<p>Enlightenment philosophers proposed that human history follows an inevitable trajectory towards <em>improvement</em> in both cultural and material <span class="nw">dimensions.<span class="sn"><button type="button" class="sn-ref" aria-expanded="false" aria-controls="sn4" aria-label="Note 4">4</button><span class="sn-note" id="sn4" role="note"><span class="sn-n">4</span> See e.g. <a href="https://philpapers.org/archive/KLEKHA.pdf">Kleingeld (1999)</a> on Kant</span></span></span> Influenced also by the Industrial Revolution, modern culture has particularly associated what’s better for humanity with increased comfort arising from economic growth and technological development – an ongoing teleology of improvement wherein more new technology is always better.</p>
+<h5>Technology as a primary cosmological metaphor</h5>
+<p>As increasingly powerful mechanisms have empowered humanity in countless ways, modern culture has come to view life and the cosmos as a complex machine; no more than the sum of separate material parts, and the smallest parts most fundamental. This mechanistic view has gradually supplanted older, relational and sacred views of life and reality, helping to cement reductive materialism as the dominant <span class="nw">view.<span class="sn"><button type="button" class="sn-ref" aria-expanded="false" aria-controls="sn5" aria-label="Note 5">5</button><span class="sn-note" id="sn5" role="note"><span class="sn-n">5</span> For expansion see Merchant (1980)</span></span></span></p>
+<h5>Individualism</h5>
+<p>A related, similarly reductive model characterises modernity’s dominant view of humanity: a collection of separate individuals, in competition for resources and dominance. Within secular modernity the individual is the locus of all meaning – with autonomy, self-interest, and personal success among our guiding values.</p>
+<h5>Rationalism and freedom</h5>
+<p>Modernity elevates reason and logic as the ultimate source of knowledge – and the defining quality of human nature. Governed by rationality (in contrast to e.g. emotion or faith), human beings are seen as free to choose what is best.  Furthermore, since the advent of computer technology, the metaphor of life-as-machine has taken on a new mantle: <em>mind-as-computer</em> – reinforcing rationalism as the obvious model of human nature.</p>
+<h5>Homo economicus</h5>
+<p>Modern economics – particularly in the form of neoliberal or market fundamentalism – rests on a view of human beings as rational, self-interested individuals who make decisions based on stable preferences and free choice in competitive <span class="nw">markets.<span class="sn"><button type="button" class="sn-ref" aria-expanded="false" aria-controls="sn6" aria-label="Note 6">6</button><span class="sn-note" id="sn6" role="note"><span class="sn-n">6</span> Kahneman (1979) is one early work that undermines the idea of Homo Economicus, the rational, self-interested decision-maker.</span></span></span></p>
+<h4 id="shifting-our-relationship-with-technolog">Shifting our relationship with technology for a wiser future</h4>
+<p>With these cultural views and values in mind, we’ll examine dysfunctional features of the late (post) modern relationship with technology and propose two deep shifts in this relationship that could be foundational to a healthy future society:</p>
+<figure class="fig wide shifts" id="fig-shifts">
+  <div class="shift"><div class="from"><span class="lab">From</span>Out-of-control tech, arising from collective action problems <span class="root">rooted in modern individualism and reductivism</span></div><div class="arrow" aria-hidden="true">→</div><div class="to"><span class="lab">To</span>Collective restraint, supported by a worldview of <b>interbeing</b></div></div>
+  <div class="shift"><div class="from"><span class="lab">From</span>A tyranny of technology, arising from a rationalist illusion of human agency and freedom</div><div class="arrow" aria-hidden="true">→</div><div class="to"><span class="lab">To</span>Wiser choice, founded on a holistic understanding of human nature and attunement to an <b>inner compass</b></div></div>
+  <figcaption><span class="fignum">Figure 1</span> The two shifts the essay proposes. Chapter 3 takes each in turn.</figcaption>
+</figure>
+<div class="break" aria-hidden="true"></div>
+<h2 id="1-co-evolving-with-our-tools" class="chapter"><span class="num">1</span><span class="name">Co-evolving with our tools</span></h2>
+<p class="inbrief"><span class="inbrief-label">In brief</span> Humans have co-evolved with technologies, which shape our bodies, behaviours, and societies. What feels different now is the speed, scale, and irreversibility of tech’s influence.</p>
+<p class="first">We commonly hear the complaint that “technology has taken over our lives”. However, humans have been creating technology for millennia. More than just creating – for almost as long, we have co-evolved with and depended upon the artefacts and processes that we have developed. Genetics, culture and technology interact to constitute humanity. Hundreds of thousands of years ago for example, our use of fire altered our digestion and social habits; our clothing altered group psychology and even our bodies; tools altered our capacity for creation and adaptation to new <span class="nw">niches.<span class="sn"><button type="button" class="sn-ref" aria-expanded="false" aria-controls="sn7" aria-label="Note 7">7</button><span class="sn-note" id="sn7" role="note"><span class="sn-n">7</span> See e.g. Wrangham (2009), Gilligan (2010)</span></span></span> Early communication technologies became fundamental to group dynamics, social stability and thus <span class="nw">survival.<span class="sn"><button type="button" class="sn-ref" aria-expanded="false" aria-controls="sn8" aria-label="Note 8">8</button><span class="sn-note" id="sn8" role="note"><span class="sn-n">8</span> See e.g. Lent (2017)</span></span></span></p>
+<p>In short, for as long as humans have used technology to enable our lives, we have to some extent been ‘cyborgs’ – technology necessarily alters our behaviours and psychology – even our bodies – becoming part of who and what we <span class="nw">are.<span class="sn"><button type="button" class="sn-ref" aria-expanded="false" aria-controls="sn9" aria-label="Note 9">9</button><span class="sn-note" id="sn9" role="note"><span class="sn-n">9</span> See e.g. Haraway (1991)</span></span></span></p>
+<p>Likewise, significant leaps in technology have often been greeted with suspicion and ridicule, at least by some – consider attitudes to the first automated vehicles. Throughout the history of technology, radical innovations have felt improbable and dangerous, generating resistance that appears futile with the benefit of hindsight. Yet intuitively it still feels as if something is different about the current age and its relationship with tech. The scale at which technology now shapes our being, the pace at which it changes, the readiness with which such change is adopted and perhaps most importantly, the <em>irreversibility</em> of certain changes are an increasing source of concern. As we’ll discuss, tech and technological priorities have come to drive our society to an unprecedented degree – perhaps even transforming from a tool that we create to a force that creates <em>us</em>.</p>
+<div class="break" aria-hidden="true"></div>
+<h2 id="2-aspects-of-the-late-modern-relationshi" class="chapter"><span class="num">2</span><span class="name">Aspects of the late-modern relationship with technology</span></h2>
+<h3 id="2-1-technology-as-god">2.1 Technology as God</h3>
+<p class="inbrief"><span class="inbrief-label">In brief</span> Modern society increasingly relates to technology as a surrogate god. We trust, revere, and submit to tech – while elevating technologists as cultural high priests shaping the fate of our world.</p>
+<p>From Galileo to Newton, the foundational thinkers of modern science did not set out to seed a secular worldview – seeking more to understand a divine cosmos than to erase <span class="nw">it.<span class="sn"><button type="button" class="sn-ref" aria-expanded="false" aria-controls="sn10" aria-label="Note 10">10</button><span class="sn-note" id="sn10" role="note"><span class="sn-n">10</span> Noble (1997) argues that religion and technology were never separate – technology in the secular age bearing imprints of a time when science and technology were seen as vessels of and routes to divine knowledge.</span></span></span> Nonetheless the march of rationalism, empirical science and industrialisation since the 17th century fundamentally redirected western epistemology: from religion as the sole origin of truth and authority, to the material world and human reason as primary loci of admissible facts and knowledge. Religion was not extinguished, but gradually lost its central status as a source of sense-making for all society.</p>
+<p>Nonetheless, the need for something-like-religion as a organising principle and locus of devotion never went away. As a source of power, transformation and significant awe and mystery, science and technology became natural successors. In our secular, late modern age, with the rise of advanced digital tech, humanity relates to technology ever more as to a god.</p>
+<p>If the suggestion that we have come to worship technology seems a little sensational, it’s worth considering the surprising number of divine functions that have found a material surrogate in late modernity. We both revere and defer to the forces unleashed by technology and capitalism; allowing them to run our world, and to shape our being.</p>
+<h4 id="tech-as-divine-mystery">Tech as divine mystery</h4>
+<p>Since the 19th century, the rise of evolutionary theory has largely supplanted creationism as a dominant narrative in secular societies. Nonetheless, even while dismissing the supernatural, modern humanity is devoted to tech as to a divine force. And tech more than lives up to the hype. After all, we fly in aeroplanes. We access a world of knowledge from the smartphones in our pockets. We navigate by satellite and look at scans of the inside of our bodies, to perform lifesaving operations using robot arms. Our computers can listen to our conversations and write us a speech. And most of us certainly can’t comprehend <em>how</em>. It’s all so mysterious, it might as well be <span class="nw">magic.<span class="sn"><button type="button" class="sn-ref" aria-expanded="false" aria-controls="sn11" aria-label="Note 11">11</button><span class="sn-note" id="sn11" role="note"><span class="sn-n">11</span> As Clarke’s third law has it, “Any sufficiently advanced technology is indistinguishable from magic.” See also Davis (1998)</span></span></span> Understandably, we are awe-struck, in ways that resemble our former relationship with the church and the power of prayer. From where I’m standing, there’s no discernible difference between the internet and an omniscient being – except that the former answers questions with a higher degree of reliability. I don’t ask how it works. I just switch it on and <span class="nw">trust.<span class="sn"><button type="button" class="sn-ref" aria-expanded="false" aria-controls="sn12" aria-label="Note 12">12</button><span class="sn-note" id="sn12" role="note"><span class="sn-n">12</span> Harari, (2016) suggests that humanism is being replaced by ‘dataism’ – a new religion  that treats life as information processing and algorithms as objects of faith.</span></span></span></p>
+<aside class="pull" aria-hidden="true"><p>“There’s no discernible difference between the internet and an omniscient being – except that the former answers questions with a higher degree of reliability.”</p></aside>
+<h4 id="in-tech-we-trust">In tech we trust</h4>
+<p>We allow technology God-like permission to shape our lives, psychologically and physically, often without question. Consider computerised capitalism, managing global markets – and our meek submission to digital market forces. We have normalised addiction to our smartphones; and ‘consume’ our world through social media, trusting the precious resource of our attention to aggressive, algorithmic data-driven <span class="nw">advertising.<span class="sn"><button type="button" class="sn-ref" aria-expanded="false" aria-controls="sn13" aria-label="Note 13">13</button><span class="sn-note" id="sn13" role="note"><span class="sn-n">13</span> See e.g. Howard (2021)</span></span></span></p>
+<p>Trust in technology extends beyond quotidian choicemaking – even shaping our collective response to existential threat. For example, at the highest levels of climate policy and planning, leading emissions scenarios increasingly rely on assumptions of future technological breakthroughs – especially in carbon removal – to meet global targets; amounting to blind faith in technology in a crisis of apocalyptic <span class="nw">dimensions.<span class="sn"><button type="button" class="sn-ref" aria-expanded="false" aria-controls="sn14" aria-label="Note 14">14</button><span class="sn-note" id="sn14" role="note"><span class="sn-n">14</span> See e.g. <a href="https://theconversation.com/why-we-cant-rely-on-negative-emissions-technologies-to-save-the-climate-158747">Dyke et. al (2021)</a></span></span></span></p>
+<h4 id="salvation-in-tech">Salvation in tech</h4>
+<p>The transcendental hopes that once energised mass worship – including the possibility of eternal life – have also acquired a new, technological basis in late modernity. Companies have begun offering cryopreservation at death, in expectation that when the tech matures, their clients’ consciousness can be electronically revived. Transhumanists consider this imagined silicon future an upgrade: go-faster life, requiring less energy. A super-human technology that replaces human being in hosting human <span class="nw">consciousness.<span class="sn"><button type="button" class="sn-ref" aria-expanded="false" aria-controls="sn15" aria-label="Note 15">15</button><span class="sn-note" id="sn15" role="note"><span class="sn-n">15</span> Well before AI or cryonics became an imminent prospect, Noble (1997) drew links between a tech obsessed society and a religious transcendence of mortal life.  <a href="https://news.lifeitself.org/p/zak-stein-on-reconstructing-value">Zak Stein (2024)</a>  discusses the alarming implications of transhumanism.</span></span></span> Ideas that were once science fiction are drawing closer to reality: the idea of cryopreservation has evolved <a href="https://www.theguardian.com/science/article/2024/jul/10/billionaires-freezing-cryopreservation-riches-lawyers-life">“from crackpot to merely eccentric.”</a><span class="nw"><span class="sn"><button type="button" class="sn-ref" aria-expanded="false" aria-controls="sn16" aria-label="Note 16">16</button><span class="sn-note" id="sn16" role="note"><span class="sn-n">16</span> <a href="https://www.theguardian.com/science/article/2024/jul/10/billionaires-freezing-cryopreservation-riches-lawyers-life">Howard (2024)</a></span></span></span></p>
+<h4 id="the-divine-right-of-technologists">The divine right of technologists</h4>
+<p>Nothing demonstrates the priorities of a society like the profile of the people they deify – and look to for answers. For the current society, the big men of tech often fulfil this role. From Steve Jobs to Elon Musk, the most famous people in the world are tech founders and, alive or dead, their opinion is thought relevant in every matter. Prestige, respect and intellectual prowess are attached to tech like no other sector. It’s perhaps no coincidence that (High Priest) Elon Musk leans strongly towards libertarianism, disliking the suggestion of any limits being applied to power, and using that power to transform politics towards reduced state <span class="nw">intervention.<span class="sn"><button type="button" class="sn-ref" aria-expanded="false" aria-controls="sn17" aria-label="Note 17">17</button><span class="sn-note" id="sn17" role="note"><span class="sn-n">17</span> This essay was drafted several months before the second Trump Administration appointed Musk to lead ‘DOGE’ (Department of Government Efficiency), handing the technologist unfettered access to agency computer systems and significant control over federal government spending.</span></span></span></p>
+<h3 id="2-2-from-servant-to-master">2.2 From Servant to Master</h3>
+<p class="inbrief"><span class="inbrief-label">In brief</span> Traditionally a powerful servant, improving comfort, health, and connection, technology has today grown into a dominant ideology – often eclipsing human values and becoming more master than servant.</p>
+<blockquote class="epigraph"><p>“There is a Zen story about a person sitting on a horse, galloping very quickly. At a crossroads, a friend of his shouts, “Where are you going?” The man says, “I don’t know, ask the horse!” This is our situation. The horse is technology. It carries us and we cannot control it. So we have to begin with intention, asking ourselves, what do we want?</p><cite>Zen Master Thich Nhat <span class="nw">Hanh<span class="sn"><button type="button" class="sn-ref" aria-expanded="false" aria-controls="sn18" aria-label="Note 18">18</button><span class="sn-note" id="sn18" role="note"><span class="sn-n">18</span> <a href="https://www.youtube.com/watch?v=a9GG4JtX8t4">Thich nhat Hanh (2013)</a></span></span></span></cite></blockquote>
+<blockquote class="epigraph"><p>The simple fact that physicists split the atom without any hesitations the very moment they knew how to do it, although they realized full well the enormous destructive potentialities of their operation, demonstrates that the scientist qua scientist does not even care about the survival of the human race on earth or, for that matter, about the survival of the planet itself.</p><cite>Hannah Arendt (1993)</cite></blockquote>
+<p>Technology is a tremendous servant. Many of us benefit from it in myriad ways: we heat and cool our homes, have enough food and medicine, use transport, communicate at a distance, and enjoy extraordinary entertainment. As such, in the modern west, we generally expect more technology to improve our lives – a stance reflected in the choices we make at a societal level. When leaders, politicians and managers promote ‘innovation’,  the term often functions as shorthand for technological tools and fixes; effectively sidelining other the human good in a great deal of civic decision-making. Innovation agendas centre around problems amenable to technological intervention – leaving far less room for inquiries into how we might innovate in ways that deepen qualities such as kindness or empathy.</p>
+<p>Conversely, <em>restriction</em> of technology is often frowned upon in policy and in discourse. To question technological progress is still an attitude considered, if not taboo, then at least rather naïve – and <span class="nw">futile.<span class="sn"><button type="button" class="sn-ref" aria-expanded="false" aria-controls="sn19" aria-label="Note 19">19</button><span class="sn-note" id="sn19" role="note"><span class="sn-n">19</span> See e.g. Zuboff (2019).</span></span></span> ‘Capital T’ Technology has become a whole dominant ideology, often without the human dimensions essential to any desirable political <span class="nw">programme<span class="sn"><button type="button" class="sn-ref" aria-expanded="false" aria-controls="sn20" aria-label="Note 20">20</button><span class="sn-note" id="sn20" role="note"><span class="sn-n">20</span> As Hannah Arendt (1993) observed, modern politics increasingly treats factual–scientific truth as authoritative while displacing the value-laden realm of human judgement, with profound consequences for political responsibility and freedom.</span></span></span> – increasingly crossing the line from servant to master.</p>
+<p>The flaws in this attitude are writ large in current planetary crises. Technological capitalism is pushing ecological systems towards collapse, virtually unchecked. The solutions deemed acceptable within high-level climate policymaking (such as at COP) anticipate more technology that can reverse the harm that existing technology <span class="nw">creates.<span class="sn"><button type="button" class="sn-ref" aria-expanded="false" aria-controls="sn21" aria-label="Note 21">21</button><span class="sn-note" id="sn21" role="note"><span class="sn-n">21</span> See e.g. <a href="https://theconversation.com/why-we-cant-rely-on-negative-emissions-technologies-to-save-the-climate-158747">Dyke et. al (2021).</a></span></span></span> From climate to AI, nuclear proliferation and more, even as the disastrous consequences become clearly visible, we still allow technology and technologists above all others to make our decisions.</p>
+<div class="omitted" role="note"><span class="lab">Not in this mockup</span><p>The rest of 2.2, section 2.3 and chapter 3 (about 6,000 words) are left out to keep the mockup light. The full text is in <code>2rbook/tech/essay.md</code>.</p></div>
+<div class="break" aria-hidden="true"></div>
+<h2 id="conclusion" class="chapter"><span class="num"></span><span class="name">Conclusion</span></h2>
+<p class="first">The godlike status of technology has become a vicious circle throughout the modern age. The more machines empowers us, the more willingly we defer to them; reducing ourselves, our values and our world to a mechanistic, material logic and thereby rendering ourselves less and less capable of resisting technological momentum. So confident have we felt in our own rational agency that we have gradually outsourced responsibility for our decision-making to an unconscious entity. So firmly have we believed that more technology is the best thing for us, that we have dismissed warnings of excess and destroyed much of real value in our world. As such, restoring wise relationship with technology first requires transforming our impoverished, computational view of what it means to be human.</p>
+<p>If humanity is to avoid self-annihilation, we must urgently reassess our capacity to choose the technologies we adopt – on the basis of a more fully dimensional understanding of ourselves: unpredictable, emotional, and rarely strictly rational in the reductive sense. But this assessment need not lead us to despair. In fact, it directs us toward the very root of wiser choice: by restoring value to the subtle, intuitive and unmeasurable dimensions of human knowing – long sidelined by reductive rationalism – we begin to resuscitate neglected capacities essential to wise decision-making.</p>
+<p>The revolution that we require does not begin and end with inner capacities. At their root, the tech-entangled rivalries that threaten us with annihilation point to a fundamental misunderstanding of reality – and of our relationship to one another and the living world. Among renewed ethical, spiritual, and philosophical views that can re-humanise our sense of what matters and restore neglected dimensions of value, a worldview alive to interbeing appears indispensable if we are to survive collective action problems. For people living isolated lives in a hyper-individualised, fragmented modern society, this may well sound like a distant ideal. However, understanding of radical interdependency will be foundational to any future culture that can escape today’s existential dilemmas –  and restore technology as a servant to that which is most human, most relational, and most conducive to life.</p>
+      </article>
+    </div>
+  </div>
+
+  <footer class="end" id="end">
+    <div class="wrap"><div class="grid">
+      <section class="span">
+        <h2>Notes</h2>
+        <details open><summary>Notes in this mockup, in order</summary><ol><li value="1"><a href="https://secondrenaissance.net/papers">Barbier et al. (2024)</a></li>
+<li value="2">Machine metaphors for life appeared before the modern age (see e.g. Riskin (2013)) however their dominance was entrenched by the industrial revolution, proliferating with each new wave of empowering tech (e.g. mind as computer.) See e.g. Mumford (1967).</li>
+<li value="3"><a href="https://drive.google.com/file/d/1GjJBXhS2hyvAf-uM9DbUTwE5Slh6MJel/view">Barbier et al. (2024)</a> offers a more general summary of views and values core to the modern cultural paradigm. See also <a href="https://www.ebsco.com/research-starters/social-sciences-and-humanities/characteristics-modernity">Walker (2021)</a>.</li>
+<li value="4">See e.g. <a href="https://philpapers.org/archive/KLEKHA.pdf">Kleingeld (1999)</a> on Kant</li>
+<li value="5">For expansion see Merchant (1980)</li>
+<li value="6">Kahneman (1979) is one early work that undermines the idea of Homo Economicus, the rational, self-interested decision-maker.</li>
+<li value="7">See e.g. Wrangham (2009), Gilligan (2010)</li>
+<li value="8">See e.g. Lent (2017)</li>
+<li value="9">See e.g. Haraway (1991)</li>
+<li value="10">Noble (1997) argues that religion and technology were never separate – technology in the secular age bearing imprints of a time when science and technology were seen as vessels of and routes to divine knowledge.</li>
+<li value="11">As Clarke’s third law has it, “Any sufficiently advanced technology is indistinguishable from magic.” See also Davis (1998)</li>
+<li value="12">Harari, (2016) suggests that humanism is being replaced by ‘dataism’ – a new religion  that treats life as information processing and algorithms as objects of faith.</li>
+<li value="13">See e.g. Howard (2021)</li>
+<li value="14">See e.g. <a href="https://theconversation.com/why-we-cant-rely-on-negative-emissions-technologies-to-save-the-climate-158747">Dyke et. al (2021)</a></li>
+<li value="15">Well before AI or cryonics became an imminent prospect, Noble (1997) drew links between a tech obsessed society and a religious transcendence of mortal life.  <a href="https://news.lifeitself.org/p/zak-stein-on-reconstructing-value">Zak Stein (2024)</a>  discusses the alarming implications of transhumanism.</li>
+<li value="16"><a href="https://www.theguardian.com/science/article/2024/jul/10/billionaires-freezing-cryopreservation-riches-lawyers-life">Howard (2024)</a></li>
+<li value="17">This essay was drafted several months before the second Trump Administration appointed Musk to lead ‘DOGE’ (Department of Government Efficiency), handing the technologist unfettered access to agency computer systems and significant control over federal government spending.</li>
+<li value="18"><a href="https://www.youtube.com/watch?v=a9GG4JtX8t4">Thich nhat Hanh (2013)</a></li>
+<li value="19">See e.g. Zuboff (2019).</li>
+<li value="20">As Hannah Arendt (1993) observed, modern politics increasingly treats factual–scientific truth as authoritative while displacing the value-laden realm of human judgement, with profound consequences for political responsibility and freedom.</li>
+<li value="21">See e.g. <a href="https://theconversation.com/why-we-cant-rely-on-negative-emissions-technologies-to-save-the-climate-158747">Dyke et. al (2021).</a></li></ol></details>
+      </section>
+      <section id="cite">
+        <h2>Cite this paper</h2>
+        <p class="cite" id="cite-text">Pollock, R., Bell, R. and Barbier, S. (2026) ‘In Tech We Trust: The god-like authority of technology in the modern age, and what it means to set a wiser course’. Second Renaissance series, Paper 5, version 1.0 beta. Life Itself Sensemaking Studio.</p>
+        <button type="button" class="copy" id="copy">Copy citation</button>
+      </section>
+      <section>
+        <h2>Read it your way</h2>
+        <ul><li>PDF, for print and offline</li><li>EPUB, for e-readers</li><li>The launch webinar and recording</li></ul>
+        <p class="gather">Links are placeholders in this mockup.</p>
+      </section>
+      <section>
+        <h2>Versions</h2>
+        <ul><li>First draft · July 2024</li><li>First full draft · October 2024</li><li>1.0 alpha · June 2025</li><li>1.0 beta · February 2026 (this version)</li></ul>
+      </section>
+      <section>
+        <h2>Responses and discussion</h2>
+        <ul><li><a href="https://www.youtube.com/watch?v=NgIjGn3fWDU&amp;t=10s">In Tech We Trust launch webinar</a> (recording)</li></ul>
+        <p class="gather">Talks, reviews, responses and podcast episodes gather here as the paper lives on.</p>
+      </section>
+      <section class="span">
+        <h2>References</h2>
+        <ul class="refs"><li>Amodei, D. (2026) <em>The Adolescence of Technology: Confronting and Overcoming the Risks of Powerful AI</em>. Available at <a href="https://www.darioamodei.com/essay/the-adolescence-of-technology?utm_source=chatgpt.com">https://www.darioamodei.com/essay/the-adolescence-of-technology</a></li>
+<li>Arendt, H. (1993). <em>Truth and Politics. In Between Past and Future: Eight Exercises in Political Thought.</em> Penguin Books.</li>
+<li>Bostrom, N. (2014) <em>Superintelligence: Paths, Dangers, Strategies.</em> Oxford: Oxford University Press.</li>
+<li>Barbier, S.  Pollock, R, Bell, R. (2024) ‘Second Renaissance; A time of civilizational crisis and awakening.’ Life Itself. Available at: <a href="https://drive.google.com/file/d/1GjJBXhS2hyvAf-uM9DbUTwE5Slh6MJel/view">https://drive.google.com/file/d/1GjJBXhS2hyvAf-uM9DbUTwE5Slh6MJel/view</a></li>
+<li>Cadwallr, Carol (2025) ‘The Great AI Bubble’. <em>Substack.</em> Available at: <a href="https://broligarchy.substack.com/p/the-great-ai-bubble">https://broligarchy.substack.com/p/the-great-ai-bubble</a></li>
+<li>Carr, N. (2011) <em>The Shallows.</em> New York, NY: WW Norton.</li>
+<li>Darwin, C. (1871) The Descent of Man, and Selection in Relation to Sex. London: John Murray.</li>
+<li>Davis, E. (1998) <em>TechGnosis: Myth, Magic and Mysticism in the Age of Information</em>. New York: Harmony Books.</li></ul>
+        <p class="gather">8 of 43 references shown in this mockup.</p>
+      </section>
+      <section class="span">
+        <h2>In the series</h2>
+        <div class="series-nav">
+          <a href="#top"><small>Previous · Paper 4</small>Developmental Spaces</a>
+          <a href="#top"><small>Next · Paper 6</small>Wisdom</a>
+        </div>
+      </section>
+    </div></div>
+  </footer>
+
+</div>
+</div>
+</div>
+
+<div class="chrome" role="toolbar" aria-label="Mockup controls">
+  <span class="t name">Mockup</span>
+  <span class="seg" role="group" aria-label="Style">
+    <button type="button" data-style="academic" aria-pressed="true">Academic</button>
+    <button type="button" data-style="magazine" aria-pressed="false">Magazine</button>
+    <button type="button" data-style="personal" aria-pressed="false">Personal</button>
+  </span>
+  <span class="seg" role="group" aria-label="View">
+    <button type="button" data-view="desktop" aria-pressed="true">Desktop</button>
+    <button type="button" data-view="phone" aria-pressed="false">Phone</button>
+  </span>
+</div>
+
+<script>
+(function () {
+  var frame = document.getElementById('frame'), stage = document.getElementById('stage');
+  var current = document.getElementById('current'), progress = document.getElementById('progress');
+  var drawer = document.getElementById('drawer'), toggle = document.getElementById('toc-toggle');
+  var heads = Array.prototype.slice.call(document.querySelectorAll('#text h2[id], #text h3[id]'));
+  var styles = ['academic', 'magazine', 'personal'];
+
+  function setStyle(s) {
+    frame.setAttribute('data-style', s);
+    document.querySelectorAll('.seg [data-style]').forEach(function (b) { b.setAttribute('aria-pressed', String(b.dataset.style === s)); });
+  }
+  function isPhone() { return stage.classList.contains('phone'); }
+  function setView(v) {
+    stage.classList.toggle('phone', v === 'phone');
+    document.querySelectorAll('.seg [data-view]').forEach(function (b) { b.setAttribute('aria-pressed', String(b.dataset.view === v)); });
+    frame.scrollTop = 0; onScroll();
+  }
+  document.querySelectorAll('.seg [data-style]').forEach(function (b) { b.addEventListener('click', function () { setStyle(b.dataset.style); onScroll(); }); });
+  document.querySelectorAll('.seg [data-view]').forEach(function (b) { b.addEventListener('click', function () { setView(b.dataset.view); }); });
+  var h = (location.hash || '').slice(1);
+  if (styles.indexOf(h) >= 0) setStyle(h);
+
+  // Sidenote toggles (narrow widths)
+  document.querySelectorAll('.sn-ref').forEach(function (b) {
+    b.addEventListener('click', function () { var sn = b.parentNode; var open = sn.classList.toggle('open'); b.setAttribute('aria-expanded', String(open)); });
+  });
+  // Contents drawer
+  toggle.addEventListener('click', function () { var open = drawer.hidden; drawer.hidden = !open; toggle.setAttribute('aria-expanded', String(open)); });
+  drawer.addEventListener('click', function (e) { if (e.target.closest('a')) { drawer.hidden = true; toggle.setAttribute('aria-expanded', 'false'); } });
+  // In-page links inside the phone frame scroll the frame
+  document.querySelectorAll('.frame a[href^="#"]').forEach(function (a) {
+    a.addEventListener('click', function (e) {
+      var id = a.getAttribute('href').slice(1); var t = id && document.getElementById(id);
+      if (!t) return; e.preventDefault();
+      var barH = document.getElementById('bar').offsetHeight + 12;
+      if (isPhone()) { frame.scrollTop += t.getBoundingClientRect().top - frame.getBoundingClientRect().top - barH; }
+      else { window.scrollTo(0, window.scrollY + t.getBoundingClientRect().top - barH); }
+    });
+  });
+  // Current section and progress
+  function onScroll() {
+    var top = isPhone() ? frame.getBoundingClientRect().top : 0;
+    var line = top + 80, label = 'In Tech We Trust', id = null;
+    heads.forEach(function (el) { if (el.getBoundingClientRect().top < line) { label = el.textContent.replace(/^(\d+)/, '$1. ').replace(/\.\s+\./, '.'); id = el.id; } });
+    current.textContent = label;
+    document.querySelectorAll('.toc li').forEach(function (li) { var a = li.querySelector('a'); li.classList.toggle('active', !!a && a.getAttribute('href') === '#' + id); });
+    var text = document.getElementById('text'), r = text.getBoundingClientRect();
+    var vh = isPhone() ? frame.clientHeight : window.innerHeight;
+    var p = Math.min(1, Math.max(0, (line - r.top) / Math.max(1, r.height - vh / 2)));
+    progress.style.width = (p * 100) + '%';
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  frame.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+  // Copy citation
+  document.getElementById('copy').addEventListener('click', function () {
+    var btn = this, txt = document.getElementById('cite-text').textContent;
+    function done(ok) { btn.textContent = ok ? 'Copied' : 'Select and copy the text above'; }
+    try { navigator.clipboard.writeText(txt).then(function () { done(true); }, function () { done(false); }); } catch (e) { done(false); }
+  });
+})();
+</script>
