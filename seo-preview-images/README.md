@@ -4,6 +4,8 @@ Map of content and moodboard for link previews: the image, title and description
 
 The images here are each site's actual `og:image`, fetched 2026-10-23. Started from [Luma](./luma.com-event.md), whose event previews look great in Zoom chat:
 
+**See also: [How previews vary from page to page](./per-page-variation.md)**, the same question asked of blog posts, docs pages and wiki notes on 26 sites, with what it means for Flowershow.
+
 <img src="./luma-zoom-chat-preview.png" alt="Luma link preview in Zoom chat" class="w-72 rounded-lg" />
 
 ## What makes a good one
