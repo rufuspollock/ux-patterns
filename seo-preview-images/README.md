@@ -4,6 +4,8 @@ Map of content and moodboard for link previews: the image, title and description
 
 The images here are each site's actual `og:image`, fetched 2026-10-23. Started from [Luma](./luma.com-event.md), whose event previews look great in Zoom chat:
 
+**Start here if you're building previews: [Design brief](./design-brief.md)**, reusable patterns for any project.
+
 **See also: [How previews vary from page to page](./per-page-variation.md)**, the same question asked of blog posts, docs pages and wiki notes on 26 sites, with what it means for Flowershow.
 
 <img src="./luma-zoom-chat-preview.png" alt="Luma link preview in Zoom chat" class="w-72 rounded-lg" />
@@ -252,7 +254,7 @@ What to avoid.
     <img src="./images/vercel-post.jpg" alt="Vercel blog post link preview image" class="w-full" />
     <div class="p-4">
       <h3 class="font-semibold text-base">Vercel blog post</h3>
-      <p class="text-sm text-gray-600 mt-1">The post falls back to the site-wide triangle, so every post looks the same. Missed chance.</p>
+      <p class="text-sm text-gray-600 mt-1">This (older) post falls back to the site-wide triangle. Recent Vercel posts do get their own art ([per-page study](./per-page-variation.md)), so it's an inconsistency, not a policy.</p>
       <a href="https://vercel.com/blog" class="text-xs text-blue-500 mt-2 block">vercel.com →</a>
     </div>
   </div>
