@@ -16,6 +16,6 @@ Roboto and Roboto Mono; dense coloured diagrams on white.
 
 Interactive figures as the core evidence.
 
-From the Are.na report channel.
+Also in the Are.na report inspirations channel: "Beautifully presented technical research."
 
 #paper #essay-pages

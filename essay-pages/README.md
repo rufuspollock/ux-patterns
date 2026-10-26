@@ -2,7 +2,9 @@
 
 How to make great pages for long-form essays, research papers and reports on the web: the long read itself, a paper's own page, and the index that holds a body of work.
 
-Started 2026-10-23, widened 2026-10-24. **Board with picks and insights:** [Essay and Paper Pages board](https://claude.ai/artifact/PVtWUxMDeaWh8bi15bBeW9) (layout vs style, registers, essay vs blog post, a gallery of 43 pages). Several items and notes come from the [SoR Papers moodboard](https://claude.ai/artifact/YUCyzZ1MotbHAV7rzj6rb4) made for the Seeds of Renaissance papers. Related: [Docs and Explainer Sites](/docs-and-explainer-sites/), [Report Inspirations](/report-inspirations/), [Research Sites](/research-sites/), [Typography](/typography).
+> **Start here: [the Essay and Paper Pages board](https://claude.ai/artifact/PVtWUxMDeaWh8bi15bBeW9)** — picks, registers, layout vs style, essay vs blog post, and a gallery of 43 pages with screenshots.
+
+This collection is the one home for long-form page inspiration. It absorbed [Report Inspirations](/report-inspirations/) (the Are.na channel) on 2026-10-26; every item from there has its own page here, tagged `#report-inspirations`. Started 2026-10-23, widened 2026-10-24. Some notes come from the [SoR Papers moodboard](https://claude.ai/artifact/YUCyzZ1MotbHAV7rzj6rb4). Related: [Docs and Explainer Sites](/docs-and-explainer-sites/), [Research Sites](/research-sites/), [Typography](/typography).
 
 ## What makes a great essay page
 
@@ -23,7 +25,7 @@ Not length. A piece is an essay if it stands alone without the feed, argues one 
 
 ## Also in this repo
 
-- [Report Inspirations](/report-inspirations/) (imported from Are.na): reports as PDFs (CRI Reality Check, Mindfulness Initiative, PCI Planetary Futures, Life-Ennobling Economics) and web research pages (Epoch AI, Ink & Switch Embark, Forethought). Transformer Circuits and Distill's Activation Atlas from that channel are here too.
+- [Meaning Alignment Institute](/research-sites/meaningalignment.org) (from the Are.na channel) lives in Research Sites: it is an organisation's site, not a long read.
 - Archive: [infuse.univ-amu.fr](/archive/infuse.univ-amu.fr) (academic article layout), [Medium 2013](/archive/medium-2013) (the text-first editorial layout that set the tone), [nan.fyi](/archive/nan.fyi) (clean black-and-white blog).
 - Journal: [Substack's ultra-simplicity](/journal/2025-01-29%20ultra%20simplicity%20of%20substack).
 
@@ -54,6 +56,22 @@ Scholarly and figure-led: byline grid, abstract, numbered figures, cite block.
       <h3 class="font-semibold text-base"><a href="/essay-pages/elifesciences.org-respiration" class="hover:underline">eLife · Respiration brain network</a></h3>
       <p class="text-sm text-gray-600 mt-1">Research paper. Peer review and figures-and-data as tabs.</p>
       <a href="https://elifesciences.org/articles/83654" class="text-xs text-blue-500 mt-2 block">elifesciences.org →</a>
+    </div>
+  </div>
+  <div class="rounded-lg overflow-hidden border border-gray-200 shadow-sm hover:shadow-md transition-shadow">
+    <a href="/essay-pages/epoch.ai-benchmark-predictability"><img src="https://screenshotit.app/https://epoch.ai/blog/how-predictable-is-language-model-benchmark-performance" alt="Epoch AI · How predictable is LM benchmark performance? screenshot" class="w-full h-48 object-cover object-top" /></a>
+    <div class="p-4">
+      <h3 class="font-semibold text-base"><a href="/essay-pages/epoch.ai-benchmark-predictability" class="hover:underline">Epoch AI · How predictable is LM benchmark performance?</a></h3>
+      <p class="text-sm text-gray-600 mt-1">Compute-focused extrapolations as a way to forecast AI capabilities: a research report as a web page.</p>
+      <a href="https://epoch.ai/blog/how-predictable-is-language-model-benchmark-performance" class="text-xs text-blue-500 mt-2 block">epoch.ai →</a>
+    </div>
+  </div>
+  <div class="rounded-lg overflow-hidden border border-gray-200 shadow-sm hover:shadow-md transition-shadow">
+    <a href="/essay-pages/inkandswitch.com-embark"><img src="https://screenshotit.app/https://www.inkandswitch.com/embark/" alt="Ink & Switch · Embark screenshot" class="w-full h-48 object-cover object-top" /></a>
+    <div class="p-4">
+      <h3 class="font-semibold text-base"><a href="/essay-pages/inkandswitch.com-embark" class="hover:underline">Ink & Switch · Embark</a></h3>
+      <p class="text-sm text-gray-600 mt-1">Gradually enriching a text outline with interactive planning tools: a vision for living documents.</p>
+      <a href="https://www.inkandswitch.com/embark/" class="text-xs text-blue-500 mt-2 block">inkandswitch.com →</a>
     </div>
   </div>
   <div class="rounded-lg overflow-hidden border border-gray-200 shadow-sm hover:shadow-md transition-shadow">
@@ -117,6 +135,14 @@ Institutional and chaptered: summary first, sections, PDF twin, revision history
       <h3 class="font-semibold text-base"><a href="/essay-pages/ember-energy.org-global-electricity-review" class="hover:underline">Ember · Global Electricity Review 2025</a></h3>
       <p class="text-sm text-gray-600 mt-1">Report. Chapter paging for a long report. Headline stat tiles.</p>
       <a href="https://ember-energy.org/latest-insights/global-electricity-review-2025/" class="text-xs text-blue-500 mt-2 block">ember-energy.org →</a>
+    </div>
+  </div>
+  <div class="rounded-lg overflow-hidden border border-gray-200 shadow-sm hover:shadow-md transition-shadow">
+    <a href="/essay-pages/forethought.org-ai-enabled-coups"><img src="https://screenshotit.app/https://www.forethought.org/research/ai-enabled-coups-how-a-small-group-could-use-ai-to-seize-power" alt="Forethought · AI-enabled coups screenshot" class="w-full h-48 object-cover object-top" /></a>
+    <div class="p-4">
+      <h3 class="font-semibold text-base"><a href="/essay-pages/forethought.org-ai-enabled-coups" class="hover:underline">Forethought · AI-enabled coups</a></h3>
+      <p class="text-sm text-gray-600 mt-1">How a small group could use AI to seize power: a serious policy research report as a web page.</p>
+      <a href="https://www.forethought.org/research/ai-enabled-coups-how-a-small-group-could-use-ai-to-seize-power" class="text-xs text-blue-500 mt-2 block">forethought.org →</a>
     </div>
   </div>
   <div class="rounded-lg overflow-hidden border border-gray-200 shadow-sm hover:shadow-md transition-shadow">
@@ -394,6 +420,45 @@ One voice, quiet craft: good type, one signature device, a real end.
       <h3 class="font-semibold text-base"><a href="/essay-pages/situational-awareness.ai" class="hover:underline">Situational Awareness</a></h3>
       <p class="text-sm text-gray-600 mt-1">A long essay as a series of chapters: the parts run across the top of every chapter, with the full series as a PDF.</p>
       <a href="https://situational-awareness.ai/" class="text-xs text-blue-500 mt-2 block">situational-awareness.ai →</a>
+    </div>
+  </div>
+</div>
+
+## Reports as PDFs
+
+Designed print reports: the PDF twin a web report should feel like. Mostly from the Are.na report inspirations channel.
+
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+  <div class="rounded-lg overflow-hidden border border-gray-200 shadow-sm hover:shadow-md transition-shadow">
+    <a href="/essay-pages/civilizationresearchinstitute.org-reality-check"><img src="https://screenshotit.app/https://civilizationresearchinstitute.org/wp-content/uploads/2025/01/CRI-RealityCheck-1.pdf" alt="CRI Reality Check (PDF) screenshot" class="w-full h-48 object-cover object-top" /></a>
+    <div class="p-4">
+      <h3 class="font-semibold text-base"><a href="/essay-pages/civilizationresearchinstitute.org-reality-check" class="hover:underline">CRI Reality Check (PDF)</a></h3>
+      <p class="text-sm text-gray-600 mt-1">Civilization Research Institute's first Reality Check: a serious report on civilisational trends.</p>
+      <a href="https://civilizationresearchinstitute.org/wp-content/uploads/2025/01/CRI-RealityCheck-1.pdf" class="text-xs text-blue-500 mt-2 block">civilizationresearchinstitute.org →</a>
+    </div>
+  </div>
+  <div class="rounded-lg overflow-hidden border border-gray-200 shadow-sm hover:shadow-md transition-shadow">
+    <a href="/essay-pages/life-itself-life-ennobling-economics"><img src="https://screenshotit.app/https://drive.google.com/file/d/1B3x9hYWM3n0zqyTnFzetGDSdlnspRzOr/view" alt="Life-Ennobling Economics (PDF) screenshot" class="w-full h-48 object-cover object-top" /></a>
+    <div class="p-4">
+      <h3 class="font-semibold text-base"><a href="/essay-pages/life-itself-life-ennobling-economics" class="hover:underline">Life-Ennobling Economics (PDF)</a></h3>
+      <p class="text-sm text-gray-600 mt-1">Introduction to Life-Ennobling Economics: a framework for an economy that serves human flourishing.</p>
+      <a href="https://drive.google.com/file/d/1B3x9hYWM3n0zqyTnFzetGDSdlnspRzOr/view" class="text-xs text-blue-500 mt-2 block">drive.google.com →</a>
+    </div>
+  </div>
+  <div class="rounded-lg overflow-hidden border border-gray-200 shadow-sm hover:shadow-md transition-shadow">
+    <a href="/essay-pages/pci-new-framework-for-planetary-futures"><img src="https://screenshotit.app/https://cdn.prod.website-files.com/668400197070c499d03bb489/67124296cf139c5400cf85d8_PCI_PositionPaper_A%20New%20Framework%20for%20Planetary%20Futures%20(2).pdf" alt="PCI · A New Framework for Planetary Futures (PDF) screenshot" class="w-full h-48 object-cover object-top" /></a>
+    <div class="p-4">
+      <h3 class="font-semibold text-base"><a href="/essay-pages/pci-new-framework-for-planetary-futures" class="hover:underline">PCI · A New Framework for Planetary Futures (PDF)</a></h3>
+      <p class="text-sm text-gray-600 mt-1">Position paper proposing a framework for thinking about planetary-scale futures.</p>
+      <a href="https://cdn.prod.website-files.com/668400197070c499d03bb489/67124296cf139c5400cf85d8_PCI_PositionPaper_A%20New%20Framework%20for%20Planetary%20Futures%20(2).pdf" class="text-xs text-blue-500 mt-2 block">cdn.prod.website-files.com →</a>
+    </div>
+  </div>
+  <div class="rounded-lg overflow-hidden border border-gray-200 shadow-sm hover:shadow-md transition-shadow">
+    <a href="/essay-pages/themindfulnessinitiative.org-report"><img src="https://screenshotit.app/https://www.themindfulnessinitiative.org/Handlers/Download.ashx?IDMF=8d56bcb4-15a0-4b39-9236-064eb302ef99" alt="The Mindfulness Initiative report (PDF) screenshot" class="w-full h-48 object-cover object-top" /></a>
+    <div class="p-4">
+      <h3 class="font-semibold text-base"><a href="/essay-pages/themindfulnessinitiative.org-report" class="hover:underline">The Mindfulness Initiative report (PDF)</a></h3>
+      <p class="text-sm text-gray-600 mt-1">Policy-oriented research bridging contemplative practice and public life.</p>
+      <a href="https://www.themindfulnessinitiative.org/Handlers/Download.ashx?IDMF=8d56bcb4-15a0-4b39-9236-064eb302ef99" class="text-xs text-blue-500 mt-2 block">themindfulnessinitiative.org →</a>
     </div>
   </div>
 </div>

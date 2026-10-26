@@ -16,6 +16,6 @@ Georgia text, system sans labels, one zoomable image map.
 
 One big figure the whole essay orbits.
 
-From the Are.na report channel.
+Also in the Are.na report inspirations channel: "Exemplary interactive data essay."
 
 #explorable #essay-pages

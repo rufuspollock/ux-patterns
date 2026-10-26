@@ -69,7 +69,7 @@ Use a **local asset** (`../assets/slug.jpg`) only when you need a specific crop 
 
 A moodboard is a named, themed collection of sites — same structure as `archive/` but with its own theme/focus.
 
-> Note: `report-inspirations/` is a special case — it was bulk-imported from Are.na so everything lives in one README. New moodboards follow the archive pattern below.
+> Note: `report-inspirations/` was merged into `essay-pages/` (2026-10-26) and is now a pointer page. New moodboards follow the archive pattern below.
 
 ### 1. Create a directory
 
