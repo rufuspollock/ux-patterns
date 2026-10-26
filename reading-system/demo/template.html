@@ -1,0 +1,201 @@
+<meta charset="utf-8">
+<title>Reading System Demo</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<!-- Fonts for all three themes; a real page loads only its theme's line (see README) -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400..700;1,8..60,400..600&family=Source+Sans+3:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400..600;1,6..72,400..500&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=Instrument+Sans:wght@400;500;600&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="{{PREFIX}}reading.css">
+<style>
+/* Demo only: the stage, the phone frame, the control bar, and three figures specific to this essay. Light-only by choice. */
+:root { color-scheme: light }
+html, body { margin: 0; background: #e4e3de }
+.stage { padding-block: 0 110px }
+.stage.phone { display: grid; justify-items: center; padding-block: 28px 120px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)) }
+.stage.phone .rs { width: min(390px, 100%); height: min(844px, calc(100vh - 160px)); overflow-y: auto; overflow-x: hidden; border: 10px solid #111; border-radius: 40px; box-shadow: 0 30px 60px -30px rgb(0 0 0 / .5) }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0) }
+
+/* figures specific to this essay, built from the system's tokens */
+.demo-series ol { margin: 0; padding-left: 1.4em; font-family: var(--rs-ui); font-size: 12.5px; line-height: 1.55; color: var(--rs-muted); font-variant-numeric: lining-nums }
+.demo-series li.here { color: var(--rs-accent); font-weight: 600 }
+.demo-features ul { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1px; background: var(--rs-rule); border: 1px solid var(--rs-rule); counter-reset: f }
+.demo-features li { background: var(--rs-bg); padding: var(--rs-s2) var(--rs-s3); font-size: .84em; line-height: 1.3; counter-increment: f; margin: 0 }
+.demo-features li::before { content: counter(f); display: block; font-family: var(--rs-ui); font-size: 11px; font-weight: 600; color: var(--rs-accent); margin-bottom: 2px; font-variant-numeric: lining-nums }
+.demo-shifts { display: grid; gap: var(--rs-s2) }
+.demo-shifts .shift { display: grid; grid-template-columns: minmax(0, 1fr); border: 1px solid var(--rs-rule); background: var(--rs-bg) }
+.demo-shifts .shift > div { padding: var(--rs-s2) var(--rs-s3); font-size: .86em; line-height: 1.45 }
+.demo-shifts .from { color: var(--rs-ink2) }
+.demo-shifts .to { background: var(--rs-tint) }
+.demo-shifts .rs-label { display: block; margin-bottom: 4px }
+.demo-shifts .root { display: block; font-size: .92em; font-style: italic; color: var(--rs-muted) }
+.demo-shifts .arrow { display: none }
+.rs[data-rs-theme="magazine"] .demo-shifts .to { background: var(--rs-accent); color: var(--rs-on-accent) }
+.rs[data-rs-theme="magazine"] .demo-shifts .to .rs-label { color: var(--rs-on-accent); opacity: .85 }
+@container rs (min-width: 760px) { .demo-shifts .shift { grid-template-columns: minmax(0, 1fr) 40px minmax(0, 1fr) } .demo-shifts .arrow { display: grid; place-items: center; color: var(--rs-accent); font-size: 1.3em; padding: 0 } }
+@container rs (max-width: 480px) { .demo-features ul { grid-template-columns: minmax(0, 1fr) } }
+.demo-omitted { border: 1px dashed var(--rs-rule); padding: var(--rs-s2) var(--rs-s3); margin: var(--rs-s5) 0; font-size: .85em; background: var(--rs-tint) }
+.demo-omitted p { margin: var(--rs-s1) 0 0 }
+
+/* control bar (not part of the system) */
+.ctl { position: fixed; z-index: 50; left: 50%; transform: translateX(-50%); bottom: calc(12px + env(safe-area-inset-bottom, 0px)); display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 8px 12px; background: #16171c; color: #f2f2f4; padding: 8px 12px; border-radius: 14px; font: 13px/1.2 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; box-shadow: 0 16px 40px -16px rgb(0 0 0 / .6); width: max-content; max-width: calc(100vw - 24px) }
+.ctl .t { color: #9a9cab }
+.seg { display: inline-flex; border: 1px solid #3a3c47; border-radius: 9px; overflow: hidden }
+.seg button { font: inherit; background: transparent; color: #f2f2f4; border: 0; padding: 6px 10px; cursor: pointer }
+.seg button[aria-pressed="true"] { background: #f2f2f4; color: #16171c }
+.seg button:focus-visible, .sw:focus-visible { outline: 2px solid #8fa2ff; outline-offset: -2px }
+.sws { display: inline-flex; gap: 6px; align-items: center }
+.sw { width: 20px; height: 20px; border-radius: 50%; border: 2px solid transparent; cursor: pointer; padding: 0 }
+.sw[aria-pressed="true"] { border-color: #f2f2f4; box-shadow: 0 0 0 2px #16171c inset }
+.sw.def { background: conic-gradient(#c8281e 0 33%, #2346b8 0 66%, #b23a2c 0) }
+@media (max-width: 640px) { .ctl .t { display: none } .ctl { gap: 6px 8px } }
+</style>
+
+<div class="stage" id="stage">
+<div class="rs" id="rs" data-rs-theme="magazine" data-rs-rail="on" data-rs-dropcap="on">
+
+  <div class="rs-bar">
+    <div class="rs-wrap">
+      <span class="rs-bar-series"><b>Second Renaissance</b> · Paper 5</span>
+      <span class="rs-bar-current">In Tech We Trust</span>
+      <button type="button" class="rs-bar-toggle" aria-expanded="false" aria-controls="drawer">Contents</button>
+      <a href="#cite">PDF</a>
+    </div>
+    <span class="rs-progress"></span>
+  </div>
+  <div class="rs-drawer" id="drawer" hidden><div class="rs-wrap"><ol class="rs-toc">{{TOC}}</ol></div></div>
+
+  <header class="rs-head">
+    <div class="rs-wrap">
+      <div class="rs-head-text">
+        <span class="rs-kicker">Second Renaissance series · Paper 5 · Essay</span>
+        <h1>In Tech We Trust</h1>
+        <p class="rs-subtitle">The god-like authority of technology in the modern age, and what it means to set a wiser course</p>
+        <dl class="rs-byline">
+          <div><dt>Authors</dt><dd class="rs-names">Rufus Pollock, Rosie Bell, Sylvie Barbier</dd></div>
+          <div><dt>From</dt><dd>Life Itself Sensemaking Studio</dd></div>
+          <div><dt>Published</dt><dd>February 2026</dd></div>
+          <div><dt>Version</dt><dd>1.0 beta · 45 min read</dd></div>
+        </dl>
+        <div class="rs-actions">
+          <a class="rs-btn rs-primary" href="#introduction">Read online</a>
+          <a class="rs-btn" href="#cite">PDF</a>
+          <a class="rs-btn" href="#cite">EPUB</a>
+          <a class="rs-btn" href="#cite">Cite</a>
+        </div>
+      </div>
+      <figure class="rs-cover"><img src="cover.jpg" alt="Cover of In Tech We Trust: the title in black capitals on a red ground"><figcaption>Cover · Paper 5</figcaption></figure>
+    </div>
+  </header>
+
+  <section class="rs-summary" aria-label="Summary">
+    <div class="rs-wrap"><div class="rs-summary-box">
+      <span class="rs-label">Summary</span>
+      <p class="rs-lead">This essay explores our late-modern relationship with technology, and asks what inner shift might help a future society find a wiser path. <strong>Modern society now relates to technology as a surrogate god; to steer a wiser course we need collective restraint grounded in a sense of interbeing, and choices guided by a fuller picture of human nature.</strong></p>
+      <p class="rs-facts rs-keywords"><b>Keywords</b> technology · modernity · cultural paradigm · collective action · interbeing · AI</p>
+      <p class="rs-facts">About 9,800 words · 43 notes · Part of a series on the Second Renaissance</p>
+    </div></div>
+  </section>
+
+  <div class="rs-body">
+    <div class="rs-wrap">
+      <nav class="rs-rail" aria-label="Contents"><span class="rs-rail-label">Contents</span><ol class="rs-toc">{{TOC}}</ol></nav>
+      <article class="rs-text">
+{{BODY}}
+      </article>
+    </div>
+  </div>
+
+  <footer class="rs-end">
+    <div class="rs-wrap"><div class="rs-end-grid">
+      <section class="rs-span">
+        <h2>Notes</h2>
+        <details open><summary>Notes in this demo, in order</summary><div data-rs-notes-slot></div></details>
+      </section>
+      <section id="cite">
+        <h2>Cite this paper</h2>
+        <p class="rs-cite" id="cite-text">Pollock, R., Bell, R. and Barbier, S. (2026) ‘In Tech We Trust: The god-like authority of technology in the modern age, and what it means to set a wiser course’. Second Renaissance series, Paper 5, version 1.0 beta. Life Itself Sensemaking Studio.</p>
+        <button type="button" class="rs-copy" data-rs-copy="#cite-text">Copy citation</button>
+      </section>
+      <section>
+        <h2>Versions</h2>
+        <ul><li>First draft · July 2024</li><li>First full draft · October 2024</li><li>1.0 alpha · June 2025</li><li>1.0 beta · February 2026 (this version)</li></ul>
+      </section>
+      <section>
+        <h2>Responses and discussion</h2>
+        <ul><li><a href="https://www.youtube.com/watch?v=NgIjGn3fWDU&amp;t=10s">In Tech We Trust launch webinar</a> (recording)</li></ul>
+        <p class="rs-quiet">Talks, reviews and responses gather here as the paper lives on.</p>
+      </section>
+      <section>
+        <h2>Read it your way</h2>
+        <ul><li>PDF, for print and offline</li><li>EPUB, for e-readers</li></ul>
+        <p class="rs-quiet">Links are placeholders in this demo.</p>
+      </section>
+      <section class="rs-span">
+        <h2>References</h2>
+        <ul class="rs-refs">{{BIB}}</ul>
+        <p class="rs-quiet">8 of 43 references shown in this demo.</p>
+      </section>
+      <section class="rs-span">
+        <h2>In the series</h2>
+        <div class="rs-series-nav">
+          <a href="#introduction"><small>Previous · Paper 4</small>Developmental Spaces</a>
+          <a href="#introduction"><small>Next · Paper 6</small>Wisdom</a>
+        </div>
+      </section>
+    </div></div>
+  </footer>
+</div>
+</div>
+
+<div class="ctl" role="toolbar" aria-label="Demo controls">
+  <span class="t">Theme</span>
+  <span class="seg" role="group" aria-label="Theme">
+    <button type="button" data-theme-btn="academic" aria-pressed="false">Academic</button>
+    <button type="button" data-theme-btn="magazine" aria-pressed="true">Magazine</button>
+    <button type="button" data-theme-btn="personal" aria-pressed="false">Personal</button>
+  </span>
+  <span class="sws" role="group" aria-label="Accent colour">
+    <button type="button" class="sw def" data-accent="" aria-pressed="true" aria-label="Theme default accent"></button>
+    <button type="button" class="sw" data-accent="#c8281e" style="background:#c8281e" aria-pressed="false" aria-label="Red accent"></button>
+    <button type="button" class="sw" data-accent="#1f5aa6" style="background:#1f5aa6" aria-pressed="false" aria-label="Blue accent"></button>
+    <button type="button" class="sw" data-accent="#b5762a" style="background:#b5762a" aria-pressed="false" aria-label="Ochre accent"></button>
+    <button type="button" class="sw" data-accent="#1a1a1a" style="background:#1a1a1a" aria-pressed="false" aria-label="Ink accent"></button>
+  </span>
+  <span class="seg" role="group" aria-label="Options">
+    <button type="button" data-opt="rail" aria-pressed="true">Contents rail</button>
+    <button type="button" data-opt="dropcap" aria-pressed="true">Drop caps</button>
+  </span>
+  <span class="seg" role="group" aria-label="View">
+    <button type="button" data-view="desktop" aria-pressed="true">Desktop</button>
+    <button type="button" data-view="phone" aria-pressed="false">Phone</button>
+  </span>
+</div>
+
+<script src="{{PREFIX}}reading.js"></script>
+<script>
+(function () {
+  var rs = document.getElementById('rs'), stage = document.getElementById('stage');
+  var DEFAULTS = { academic: { rail: 'on', dropcap: 'off' }, magazine: { rail: 'on', dropcap: 'on' }, personal: { rail: 'off', dropcap: 'off' } };
+  function press(sel, test) { document.querySelectorAll(sel).forEach(function (b) { b.setAttribute('aria-pressed', String(test(b))); }); }
+  function setOpt(k, v) { rs.setAttribute('data-rs-' + k, v); press('[data-opt="' + k + '"]', function () { return v === 'on'; }); }
+  function setTheme(t) {
+    rs.setAttribute('data-rs-theme', t);
+    press('[data-theme-btn]', function (b) { return b.dataset.themeBtn === t; });
+    setOpt('rail', DEFAULTS[t].rail); setOpt('dropcap', DEFAULTS[t].dropcap);
+  }
+  document.querySelectorAll('[data-theme-btn]').forEach(function (b) { b.addEventListener('click', function () { setTheme(b.dataset.themeBtn); }); });
+  document.querySelectorAll('[data-opt]').forEach(function (b) { b.addEventListener('click', function () { var k = b.dataset.opt; setOpt(k, rs.getAttribute('data-rs-' + k) === 'on' ? 'off' : 'on'); }); });
+  document.querySelectorAll('[data-accent]').forEach(function (b) { b.addEventListener('click', function () {
+    if (b.dataset.accent) rs.style.setProperty('--rs-accent', b.dataset.accent); else rs.style.removeProperty('--rs-accent');
+    press('[data-accent]', function (x) { return x === b; });
+  }); });
+  document.querySelectorAll('[data-view]').forEach(function (b) { b.addEventListener('click', function () {
+    stage.classList.toggle('phone', b.dataset.view === 'phone');
+    press('[data-view]', function (x) { return x === b; });
+    rs.scrollTop = 0; window.ReadingSystem && ReadingSystem.refresh();
+  }); });
+  var h = (location.hash || '').slice(1);
+  setTheme(DEFAULTS[h] ? h : 'magazine');
+})();
+</script>

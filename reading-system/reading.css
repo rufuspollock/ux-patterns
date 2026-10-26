@@ -1,0 +1,350 @@
+/* ==========================================================================
+   Reading System v0.1: long-form essay and paper pages
+   https://github.com/rufuspollock/ux-patterns/tree/main/reading-system
+
+   Wrap a page in <div class="rs" data-rs-theme="magazine">. Everything is
+   scoped to .rs, so it can sit inside any site. Responsive rules are
+   container queries on .rs, so it reflows to its own width, not the window.
+
+   Themes:   data-rs-theme = "academic" | "magazine" | "personal"
+   Options:  data-rs-rail     = "on" | "off"      contents rail on wide screens
+             data-rs-dropcap  = "on" | "off"      drop cap on chapter openings
+             data-rs-cover    = "beside" | "small" | "none"
+             data-rs-chapters = "auto"            number <h2>s with a counter
+   Accent:   style="--rs-accent: #1f5aa6" (any colour)
+
+   Fonts are not bundled. Load the theme's Google Fonts (see README).
+   ========================================================================== */
+
+/* ---------- 1. Tokens ---------- */
+.rs {
+  /* rhythm: every vertical space comes from this scale */
+  --rs-s1: .375rem; --rs-s2: .75rem; --rs-s3: 1.25rem; --rs-s4: 2rem; --rs-s5: 3.25rem; --rs-s6: 5rem;
+  /* colour */
+  --rs-bg: #ffffff; --rs-ink: #191b21; --rs-ink2: #3a3d47; --rs-muted: #636876; --rs-rule: #e3e5ea;
+  --rs-accent: #c8281e; --rs-on-accent: #ffffff;
+  --rs-tint: color-mix(in srgb, var(--rs-accent) 6%, var(--rs-bg));
+  /* type */
+  --rs-text: "Source Serif 4", Georgia, serif;
+  --rs-display: "Newsreader", Georgia, serif;
+  --rs-ui: "Source Sans 3", system-ui, sans-serif;
+  --rs-size: 19px; --rs-size-phone: 17.5px; --rs-lh: 1.62;
+  /* layout */
+  --rs-measure: 35em; --rs-margin: 230px; --rs-gap: 48px; --rs-rail-w: 180px; --rs-max: 1240px;
+  --rs-sticky-top: 0px; /* set this if your site has its own sticky header */
+}
+
+/* ---------- 2. Themes ---------- */
+.rs[data-rs-theme="academic"] {
+  --rs-accent: #2346b8;
+  --rs-text: "Source Serif 4", Georgia, serif; --rs-display: "Newsreader", Georgia, serif; --rs-ui: "Source Sans 3", system-ui, sans-serif;
+  --rs-size: 19px; --rs-lh: 1.62; --rs-measure: 35em;
+}
+.rs[data-rs-theme="magazine"] {
+  --rs-ink: #141414; --rs-ink2: #333333; --rs-muted: #6a645e; --rs-rule: #e8e3dd;
+  --rs-text: "Newsreader", Georgia, serif; --rs-display: "Cormorant Garamond", Garamond, Georgia, serif; --rs-ui: "Instrument Sans", system-ui, sans-serif;
+  --rs-size: 19.5px; --rs-lh: 1.62; --rs-measure: 33em;
+}
+.rs[data-rs-theme="personal"] {
+  --rs-bg: #f8f7f4; --rs-ink: #252421; --rs-ink2: #3d3b36; --rs-muted: #706d66; --rs-rule: #dedbd3; --rs-accent: #b23a2c;
+  --rs-text: "EB Garamond", Garamond, Georgia, serif; --rs-display: "EB Garamond", Garamond, Georgia, serif; --rs-ui: "IBM Plex Mono", ui-monospace, monospace;
+  --rs-size: 21px; --rs-size-phone: 18.5px; --rs-lh: 1.55; --rs-measure: 31em; --rs-margin: 220px;
+}
+
+/* ---------- 3. Base ---------- */
+.rs { container: rs / inline-size; background: var(--rs-bg); color: var(--rs-ink); font-family: var(--rs-text); font-size: var(--rs-size); line-height: var(--rs-lh); font-variant-numeric: oldstyle-nums proportional-nums; font-kerning: normal; -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; position: relative }
+.rs *, .rs *::before, .rs *::after { box-sizing: border-box }
+.rs img { max-width: 100%; display: block; height: auto }
+.rs ::selection { background: color-mix(in srgb, var(--rs-accent) 18%, transparent) }
+.rs a { color: var(--rs-accent); text-decoration-line: underline; text-decoration-thickness: 1px; text-underline-offset: .18em; text-decoration-color: color-mix(in srgb, var(--rs-accent) 35%, transparent) }
+.rs a:hover { text-decoration-color: currentColor }
+.rs a:focus-visible, .rs button:focus-visible, .rs summary:focus-visible { outline: 2px solid var(--rs-accent); outline-offset: 2px }
+.rs-wrap { max-width: var(--rs-max); margin: 0 auto; padding-left: max(20px, env(safe-area-inset-left, 0px)); padding-right: max(20px, env(safe-area-inset-right, 0px)) }
+.rs-label, .rs-kicker, .rs-byline dt, .rs-rail-label, .rs-end h2, .rs-inbrief-label, .rs figcaption .rs-fignum { font-family: var(--rs-ui); font-size: 11.5px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--rs-muted); font-variant-numeric: lining-nums }
+@container rs (max-width: 480px) { .rs-body, .rs-head, .rs-summary { font-size: var(--rs-size-phone) } }
+
+/* ---------- 4. Chapter bar ---------- */
+.rs-bar { position: sticky; top: var(--rs-sticky-top); z-index: 5; background: color-mix(in srgb, var(--rs-bg) 92%, transparent); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); border-bottom: 1px solid var(--rs-rule); font-family: var(--rs-ui); font-size: 13px; font-variant-numeric: lining-nums }
+.rs-bar .rs-wrap { display: flex; align-items: center; gap: 14px; min-height: 48px }
+.rs-bar-series { color: var(--rs-muted); white-space: nowrap; display: none }
+.rs-bar-series b { color: var(--rs-ink); font-weight: 600 }
+.rs-bar-current { flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--rs-ink); font-weight: 500 }
+.rs-bar button, .rs-bar a { font: inherit; font-size: 12.5px; font-weight: 500; border: 1px solid var(--rs-rule); background: transparent; color: var(--rs-ink); padding: 5px 11px; cursor: pointer; text-decoration: none; white-space: nowrap; border-radius: 3px }
+.rs-progress { position: absolute; left: 0; bottom: -1px; height: 2px; width: 0; background: var(--rs-accent) }
+.rs-drawer { position: sticky; top: calc(var(--rs-sticky-top) + 49px); z-index: 4; background: var(--rs-bg); border-bottom: 1px solid var(--rs-rule); max-height: 60vh; overflow: auto }
+.rs-drawer .rs-wrap { padding-block: var(--rs-s3) var(--rs-s4) }
+
+/* ---------- 5. Contents ---------- */
+.rs-toc { list-style: none; margin: 0; padding: 0; display: grid; gap: 9px; font-family: var(--rs-ui); font-size: 13.5px; line-height: 1.35; font-variant-numeric: lining-nums }
+.rs-toc a { color: var(--rs-ink2); text-decoration: none }
+.rs-toc a:hover { color: var(--rs-accent) }
+.rs-toc .rs-l3 { padding-left: 14px }
+.rs-toc .rs-l3 a, .rs-toc .rs-l3 span { color: var(--rs-muted); font-size: 13px }
+.rs-toc .rs-off { opacity: .75; color: var(--rs-muted) }
+.rs-toc li.rs-active > a { color: var(--rs-accent); font-weight: 600 }
+.rs-rail { display: none }
+
+/* ---------- 6. Header ---------- */
+.rs-head .rs-wrap { display: flex; flex-direction: column; gap: var(--rs-s4); padding-block: var(--rs-s5) var(--rs-s4) }
+.rs-head h1 { font-family: var(--rs-display); font-weight: 500; line-height: 1.02; margin: var(--rs-s2) 0; text-wrap: balance; letter-spacing: -.012em; font-size: 42px }
+.rs-subtitle { font-size: 1.12em; line-height: 1.38; color: var(--rs-ink2); max-width: 30em; margin: 0 0 var(--rs-s4); text-wrap: balance }
+.rs-byline { display: flex; flex-wrap: wrap; gap: var(--rs-s1) var(--rs-s3); margin: 0 0 var(--rs-s3); line-height: 1.35 }
+.rs-byline div { display: flex; gap: 8px; align-items: baseline }
+.rs-byline dd { margin: 0; font-size: 16px }
+.rs-byline .rs-names { font-size: 17px; color: var(--rs-ink) }
+.rs-actions { display: flex; flex-wrap: wrap; gap: 8px }
+.rs-btn { font-family: var(--rs-ui); font-size: 14px; font-weight: 500; padding: 9px 16px; border: 1px solid var(--rs-ink); color: var(--rs-ink) !important; text-decoration: none !important; background: transparent; border-radius: 3px; line-height: 1.2 }
+.rs-btn.rs-primary { background: var(--rs-ink); color: var(--rs-bg) !important }
+.rs-cover { margin: 0; width: 60px; order: -1; margin-bottom: calc(-1 * var(--rs-s3)) }
+.rs-cover img { width: 100%; aspect-ratio: 707 / 1000; object-fit: cover; box-shadow: 0 1px 2px rgb(0 0 0 / .12), 0 24px 40px -26px rgb(0 0 0 / .5) }
+.rs-cover figcaption { display: none; font-family: var(--rs-ui); font-size: 12px; color: var(--rs-muted); margin-top: 10px }
+.rs[data-rs-cover="none"] .rs-cover { display: none }
+
+/* ---------- 7. Summary ---------- */
+.rs-summary .rs-wrap { padding-block: 0 var(--rs-s3) }
+.rs-summary-box { border-top: 2px solid var(--rs-ink); padding-top: var(--rs-s3); display: grid; gap: var(--rs-s2); max-width: 42em }
+.rs-summary p { margin: 0; text-wrap: pretty }
+.rs-summary .rs-lead { font-size: 1.06em; line-height: 1.55 }
+.rs-summary strong { font-weight: 650 }
+.rs-facts { font-family: var(--rs-ui); font-size: 13.5px; color: var(--rs-muted); font-variant-numeric: lining-nums }
+.rs-keywords { display: none }
+
+/* ---------- 8. Prose (works on plain Markdown output inside .rs-text) ---------- */
+.rs-body .rs-wrap { display: grid; grid-template-columns: minmax(0, 1fr); padding-block: var(--rs-s5) }
+.rs-text { min-width: 0; counter-reset: rs-ch }
+.rs-text > * { max-width: var(--rs-measure) }
+.rs-text p { margin: 0 0 var(--rs-s3); hyphens: auto; -webkit-hyphens: auto; text-wrap: pretty; hanging-punctuation: first }
+.rs-text strong { font-weight: 650 }
+.rs-text ul, .rs-text ol { margin: 0 0 var(--rs-s3); padding-left: 1.3em }
+.rs-text li { margin-bottom: var(--rs-s1) }
+.rs-text hr { border: 0; height: auto; margin: var(--rs-s5) 0; text-align: center; color: var(--rs-muted); overflow: visible }
+.rs-text hr::before { content: "⁂"; letter-spacing: .3em }
+
+.rs-text h2 { font-family: var(--rs-display); font-weight: 500; line-height: 1.1; margin: var(--rs-s6) 0 var(--rs-s3); font-size: 1.9em; text-wrap: balance; scroll-margin-top: calc(var(--rs-sticky-top) + 70px) }
+.rs-text > h2:first-child, .rs-text > figure:first-child + h2 { margin-top: 0 }
+/* chapter label above the title: explicit <span class="rs-num">2</span>, or automatic */
+.rs-num, .rs[data-rs-chapters="auto"] .rs-text h2:not(.rs-unnumbered)::before { display: block; font-family: var(--rs-ui); font-size: 11.5px; font-weight: 600; letter-spacing: .2em; text-transform: uppercase; color: var(--rs-accent); margin: 0 0 var(--rs-s2); font-variant-numeric: lining-nums }
+.rs-num:empty { display: none }
+.rs-num::before { content: "Chapter " }
+.rs[data-rs-chapters="auto"] .rs-text h2:not(.rs-unnumbered) { counter-increment: rs-ch }
+.rs-text :is(.footnotes, [data-footnotes]) h2 { counter-increment: none !important; font-size: 1em; margin: var(--rs-s4) 0 var(--rs-s2) }
+.rs-text :is(.footnotes, [data-footnotes]) h2::before { content: none !important }
+.rs[data-rs-chapters="auto"] .rs-text h2:not(.rs-unnumbered)::before { content: "Chapter " counter(rs-ch) }
+.rs-text h3 { font-family: var(--rs-display); font-weight: 500; font-size: 1.4em; line-height: 1.2; margin: var(--rs-s5) 0 var(--rs-s2); scroll-margin-top: calc(var(--rs-sticky-top) + 70px); text-wrap: balance }
+.rs-text h4 { font-family: var(--rs-text); font-weight: 650; font-size: 1.12em; line-height: 1.3; margin: var(--rs-s4) 0 var(--rs-s1) }
+.rs-text h5 { font-family: var(--rs-text); font-size: 1em; font-style: italic; font-weight: 500; margin: var(--rs-s3) 0 var(--rs-s1); line-height: 1.35 }
+.rs-text h3 + p, .rs-text h4 + p, .rs-text h5 + p { margin-top: 0 }
+
+/* In brief: the chapter's claim. <p class="rs-inbrief"><span class="rs-inbrief-label">In brief</span> ...</p> */
+.rs-inbrief { margin: 0 0 var(--rs-s4) !important; font-size: 1.04em; line-height: 1.5; background: var(--rs-tint); border-left: 3px solid var(--rs-accent); padding: var(--rs-s2) var(--rs-s3) var(--rs-s3) }
+.rs-inbrief-label { display: block; margin-bottom: var(--rs-s1); color: var(--rs-accent) }
+/* Epigraphs and quotations: a Markdown blockquote. Attribution in <cite> or a last line starting with "— ". */
+.rs-text blockquote { margin: var(--rs-s4) 0; padding: 0 var(--rs-s3) 0 var(--rs-s4) }
+.rs-text blockquote p { font-style: italic; margin: 0 0 var(--rs-s1); font-size: .94em; line-height: 1.55; color: var(--rs-ink2) }
+.rs-text blockquote em { font-style: normal }
+.rs-text blockquote cite { display: block; font-family: var(--rs-ui); font-style: normal; font-size: 12.5px; letter-spacing: .02em; color: var(--rs-muted); font-variant-numeric: lining-nums }
+.rs-text blockquote cite::before { content: "— " }
+.rs-text blockquote + blockquote { margin-top: calc(-1 * var(--rs-s2)) }
+/* Pull quote: <aside class="rs-pull"><p>...</p></aside> */
+.rs-pull { margin: var(--rs-s5) 0; padding: var(--rs-s3) 0; border-block: 1px solid var(--rs-rule) }
+.rs-pull p { font-family: var(--rs-display); font-style: italic; font-weight: 500; font-size: 1.5em; line-height: 1.18; margin: 0; color: var(--rs-ink); text-indent: -.35em }
+.rs[data-rs-pull="off"] .rs-pull { display: none }
+
+/* Figures: <figure class="rs-margin | rs-column | rs-wide"> with <figcaption><span class="rs-fignum">Figure 1</span> ...</figcaption> */
+.rs-text figure { margin: var(--rs-s4) 0 }
+.rs-text figcaption { font-family: var(--rs-ui); font-size: 13px; color: var(--rs-muted); line-height: 1.45; margin-top: var(--rs-s2); font-variant-numeric: lining-nums }
+.rs-text figcaption .rs-fignum { margin-right: 6px; color: var(--rs-ink); font-size: 11px }
+.rs-text figure.rs-margin { border-top: 1px solid var(--rs-rule); padding-top: var(--rs-s2) }
+
+/* Footnotes (GFM output) before reading.js turns them into sidenotes */
+.rs-text sup a[data-footnote-ref], .rs-text sup a.footnote-ref { font-family: var(--rs-ui); font-size: .78em; font-weight: 600; text-decoration: none; padding: 0 1px }
+.rs-footnotes, .rs .footnotes { font-size: 15px; line-height: 1.5; color: var(--rs-ink2) }
+@media screen { .rs [data-rs-sidenoted] { display: none } }
+/* Sidenotes (made by reading.js): inline toggles on phones */
+.rs-nw { white-space: nowrap }
+.rs-nw .rs-sn-note { white-space: normal }
+.rs-sn-ref { font-family: var(--rs-ui); font-size: .6em; font-weight: 600; vertical-align: .55em; line-height: 0; border: 0; background: none; color: var(--rs-accent); padding: 0 1px 0 2px; cursor: pointer; font-variant-numeric: lining-nums }
+.rs-sn-note { display: none; font-family: var(--rs-ui); font-size: 13.5px; line-height: 1.5; color: var(--rs-ink2); background: var(--rs-tint); padding: var(--rs-s2) var(--rs-s2) var(--rs-s2) var(--rs-s3); margin: var(--rs-s1) 0 var(--rs-s2); font-style: normal; font-weight: 400; border-left: 2px solid var(--rs-accent); text-indent: 0; letter-spacing: 0; text-transform: none; text-align: left }
+.rs-sn.rs-open .rs-sn-note { display: block }
+.rs-sn-n { font-weight: 600; color: var(--rs-accent); margin-right: 4px; font-variant-numeric: lining-nums }
+.rs-sn-note a { word-break: break-word }
+
+/* ---------- 9. End matter ---------- */
+.rs-end .rs-wrap { padding-block: var(--rs-s4) var(--rs-s6) }
+.rs-end-grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--rs-s4); border-top: 2px solid var(--rs-ink); padding-top: var(--rs-s4); max-width: 980px }
+.rs-end section { display: grid; gap: var(--rs-s2); align-content: start; font-size: 15.5px; line-height: 1.55; min-width: 0 }
+.rs-end h2 { margin: 0 0 var(--rs-s1); color: var(--rs-ink) }
+.rs-end li, .rs-end p { overflow-wrap: anywhere }
+.rs-end ol, .rs-end ul { margin: 0; padding-left: 1.2em; display: grid; gap: var(--rs-s1) }
+.rs-end .rs-notes { columns: 2 22em; column-gap: var(--rs-s5); display: block; font-size: 14.5px }
+.rs-end .rs-notes li { break-inside: avoid; margin-bottom: var(--rs-s1) }
+.rs-refs { max-width: 42em; list-style: none; padding-left: 1.6em !important; text-indent: -1.6em; gap: var(--rs-s2) !important }
+.rs-end details summary { cursor: pointer; font-family: var(--rs-ui); font-size: 14px; color: var(--rs-accent) }
+.rs-end details > :not(summary) { margin-top: var(--rs-s2) }
+.rs-cite { font-family: var(--rs-ui); font-size: 14px; background: var(--rs-tint); padding: var(--rs-s2) var(--rs-s3); margin: 0; word-break: break-word; line-height: 1.5; font-variant-numeric: lining-nums }
+.rs-copy { justify-self: start; font-family: var(--rs-ui); font-size: 13px; border: 1px solid var(--rs-ink); background: transparent; color: var(--rs-ink); padding: 6px 12px; cursor: pointer; border-radius: 3px }
+.rs-series-nav { display: grid; grid-template-columns: 1fr 1fr; gap: var(--rs-s2) }
+.rs-series-nav a { display: grid; gap: 4px; border: 1px solid var(--rs-rule); padding: var(--rs-s2) var(--rs-s3); text-decoration: none; color: var(--rs-ink); border-radius: 3px; font-family: var(--rs-display); font-size: 1.15em }
+.rs-series-nav a:hover { border-color: var(--rs-ink) }
+.rs-series-nav small { font-family: var(--rs-ui); font-size: 11.5px; font-weight: 600; color: var(--rs-muted); letter-spacing: .08em; text-transform: uppercase }
+.rs-series-nav a:last-child { text-align: right }
+.rs-quiet { color: var(--rs-muted) }
+
+/* ---------- 10. Layout: medium (notes in the margin) ---------- */
+@container rs (min-width: 760px) {
+  .rs-wrap { --rs-margin-now: clamp(150px, 21cqi, var(--rs-margin)); --rs-gap-now: 32px }
+  .rs-bar-series { display: inline }
+  .rs-head .rs-wrap { display: grid; grid-template-columns: minmax(0, 1fr) 200px; align-items: end }
+  .rs-head h1 { font-size: 56px }
+  .rs-cover { order: 0; width: auto; margin-bottom: 0 }
+  .rs-cover figcaption { display: block }
+  .rs-body .rs-wrap { grid-template-columns: minmax(0, var(--rs-measure)) var(--rs-margin-now); column-gap: var(--rs-gap-now); justify-content: center }
+  .rs-text > * { max-width: none }
+  .rs-sn-ref { pointer-events: none }
+  .rs-sn-note { display: block; float: right; clear: right; width: var(--rs-margin-now); margin: .25em calc(-1 * (var(--rs-margin-now) + var(--rs-gap-now))) var(--rs-s2) 0; background: none; padding: 0; border: 0; font-size: 14px; line-height: 1.5 }
+  .rs-text blockquote .rs-sn-note, .rs-inbrief .rs-sn-note { margin-right: calc(-1 * (var(--rs-margin-now) + var(--rs-gap-now) + var(--rs-s3))) }
+  .rs[data-rs-theme="magazine"] .rs-text blockquote .rs-sn-note { margin-right: calc(-1 * (var(--rs-margin-now) + var(--rs-gap-now) + var(--rs-s4))) }
+  .rs[data-rs-theme="magazine"] .rs-inbrief .rs-sn-note { margin-right: calc(-1 * (var(--rs-margin-now) + var(--rs-gap-now))) }
+  .rs-text figure.rs-margin { float: right; clear: right; width: var(--rs-margin-now); margin: .25em calc(-1 * (var(--rs-margin-now) + var(--rs-gap-now))) var(--rs-s3) 0 }
+  .rs-text figure.rs-wide { margin-right: calc(-1 * (var(--rs-margin-now) + var(--rs-gap-now))) }
+  .rs-end-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: var(--rs-s5) }
+  .rs-end .rs-span { grid-column: 1 / -1 }
+}
+/* ---------- 11. Layout: wide (contents rail, unless data-rs-rail="off") ---------- */
+@container rs (min-width: 1080px) {
+  .rs-wrap { --rs-margin-now: var(--rs-margin); --rs-gap-now: var(--rs-gap) }
+  .rs-body .rs-wrap, .rs-head .rs-wrap, .rs-summary .rs-wrap, .rs-end .rs-wrap { display: grid; grid-template-columns: var(--rs-rail-w) minmax(0, var(--rs-measure)) var(--rs-margin); column-gap: var(--rs-gap); justify-content: center; max-width: none }
+  .rs-head .rs-head-text { grid-column: 2 }
+  .rs-head .rs-cover { grid-column: 3; width: 150px }
+  .rs-summary-box { grid-column: 2 / 4; max-width: none }
+  .rs-end-grid { grid-column: 2 / 4 }
+  .rs-text { grid-column: 2 }
+  .rs-rail { display: block; grid-column: 1; position: sticky; top: calc(var(--rs-sticky-top) + 76px); align-self: start; max-height: calc(100vh - 110px - var(--rs-sticky-top)); overflow: auto; padding-top: 6px }
+  .rs-rail-label { display: block; margin-bottom: var(--rs-s2) }
+  .rs-bar-toggle { display: none }
+  /* rail off: text and margin only, centred */
+  /* rail off: the rail column becomes an empty margin, so the text stays centred */
+  .rs[data-rs-rail="off"] { --rs-rail-w: var(--rs-margin) }
+  .rs[data-rs-rail="off"] .rs-rail { display: none }
+  .rs[data-rs-rail="off"] .rs-bar-toggle { display: inline-block }
+}
+/* phones: centred blocks read better left-aligned */
+@container rs (max-width: 600px) { .rs-inbrief, .rs-text blockquote, .rs-text h2, .rs-summary-box { text-align: left !important } }
+
+/* ---------- 12. Drop caps (on by default for magazine) ---------- */
+.rs[data-rs-dropcap="on"] :is(.rs-first, .rs-text h2 + p:not(.rs-inbrief), .rs-text h2 + .rs-inbrief + p)::first-letter { font-family: var(--rs-display); font-weight: 600; float: left; font-size: 5.1em; line-height: .78; padding: .08em .08em 0 0; color: var(--rs-accent) }
+@supports (initial-letter: 3) { .rs[data-rs-dropcap="on"] :is(.rs-first, .rs-text h2 + p:not(.rs-inbrief), .rs-text h2 + .rs-inbrief + p)::first-letter { initial-letter: 3; float: none; font-size: inherit; line-height: inherit; padding: 0 .14em 0 0 } }
+
+/* ================= ACADEMIC: a journal ================= */
+.rs[data-rs-theme="academic"] .rs-head h1, .rs[data-rs-theme="academic"] .rs-text h2, .rs[data-rs-theme="academic"] .rs-text h3 { font-variation-settings: "opsz" 72 }
+.rs[data-rs-theme="academic"] .rs-kicker, .rs[data-rs-theme="academic"] .rs-summary .rs-label, .rs[data-rs-theme="academic"] .rs-end h2, .rs[data-rs-theme="academic"] .rs-rail-label { font-family: var(--rs-text); font-weight: 600; font-variant: all-small-caps; text-transform: none; letter-spacing: .09em; font-size: 15.5px; color: var(--rs-ink) }
+.rs[data-rs-theme="academic"] .rs-kicker { color: var(--rs-accent); font-size: 15px }
+.rs[data-rs-theme="academic"] .rs-byline dt { font-size: 11px }
+.rs[data-rs-theme="academic"] .rs-byline dd { font-family: var(--rs-text) }
+.rs[data-rs-theme="academic"] .rs-keywords { display: block }
+.rs[data-rs-theme="academic"] .rs-keywords b { font-weight: 600; color: var(--rs-ink2); margin-right: 4px }
+.rs[data-rs-theme="academic"] .rs-sn-ref, .rs[data-rs-theme="academic"] .rs-sn-n, .rs[data-rs-theme="academic"] .rs-sn-note { font-family: var(--rs-text) }
+.rs[data-rs-theme="academic"] .rs-sn-note { font-size: 14px }
+/* run-in heads for short definitions */
+.rs[data-rs-theme="academic"] .rs-text h5 { display: inline; font-style: italic; font-weight: 600; margin: 0 .45em 0 0 }
+.rs[data-rs-theme="academic"] .rs-text h5::after { content: "." }
+.rs[data-rs-theme="academic"] .rs-text h5 + p { display: inline }
+.rs[data-rs-theme="academic"] .rs-text h5 + p::after { content: ""; display: block; height: var(--rs-s3) }
+.rs[data-rs-theme="academic"] .rs-text blockquote cite { text-align: right }
+.rs[data-rs-theme="academic"] .rs-cover figcaption { display: none }
+.rs[data-rs-theme="academic"] .rs-pull { display: none }
+@container rs (min-width: 760px) {
+  .rs[data-rs-theme="academic"] .rs-head .rs-wrap { grid-template-columns: minmax(0, 1fr) 150px; align-items: start }
+  .rs[data-rs-theme="academic"] .rs-head h1 { font-size: 50px }
+  .rs[data-rs-theme="academic"] .rs-byline { display: grid; grid-template-columns: repeat(auto-fit, minmax(10em, max-content)); gap: var(--rs-s2) var(--rs-s4); border-top: 1px solid var(--rs-rule); border-bottom: 1px solid var(--rs-rule); padding: var(--rs-s2) 0 }
+  .rs[data-rs-theme="academic"] .rs-byline div { display: grid; gap: 3px }
+}
+@container rs (min-width: 1080px) {
+  .rs[data-rs-theme="academic"] .rs-head .rs-wrap { grid-template-columns: var(--rs-rail-w) minmax(0, var(--rs-measure)) var(--rs-margin) }
+}
+
+/* ================= MAGAZINE: art-directed ================= */
+.rs[data-rs-theme="magazine"] .rs-kicker { color: var(--rs-accent); letter-spacing: .16em }
+.rs[data-rs-theme="magazine"] .rs-head h1 { font-weight: 600; font-size: 56px; line-height: .92; letter-spacing: -.015em }
+.rs[data-rs-theme="magazine"] .rs-subtitle { font-style: italic; font-size: 1.18em; line-height: 1.35 }
+.rs[data-rs-theme="magazine"] .rs-byline dt { display: none }
+.rs[data-rs-theme="magazine"] .rs-byline dd { font-family: var(--rs-ui); font-size: 14.5px }
+.rs[data-rs-theme="magazine"] .rs-byline .rs-names { font-size: 15.5px; font-weight: 600 }
+.rs[data-rs-theme="magazine"] .rs-byline div:first-child dd::before { content: "By "; font-weight: 400 }
+.rs[data-rs-theme="magazine"] .rs-btn { border-radius: 999px }
+.rs[data-rs-theme="magazine"] .rs-btn.rs-primary { background: var(--rs-accent); border-color: var(--rs-accent); color: var(--rs-on-accent) !important }
+.rs[data-rs-theme="magazine"] .rs-summary-box { border-top: 1px solid var(--rs-accent) }
+.rs[data-rs-theme="magazine"] .rs-summary .rs-label { color: var(--rs-accent) }
+.rs[data-rs-theme="magazine"] .rs-summary .rs-lead { font-size: 1.16em; line-height: 1.5 }
+.rs[data-rs-theme="magazine"] .rs-text h2 { text-align: center; font-weight: 600; font-size: 2.5em; line-height: 1.02; letter-spacing: -.01em }
+.rs[data-rs-theme="magazine"] .rs-text h3 { font-weight: 600; font-size: 1.9em; line-height: 1.08 }
+.rs[data-rs-theme="magazine"] .rs-text h4 { font-family: var(--rs-ui); font-size: 12.5px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--rs-accent); margin-top: var(--rs-s5); margin-bottom: var(--rs-s2); display: flex; align-items: center; gap: 10px }
+.rs[data-rs-theme="magazine"] .rs-text h4::before { content: ""; width: 22px; height: 1px; background: var(--rs-accent); flex: none }
+.rs[data-rs-theme="magazine"] .rs-text h5 { font-family: var(--rs-display); font-style: italic; font-weight: 600; font-size: 1.3em; line-height: 1.15; margin-top: var(--rs-s4) }
+.rs[data-rs-theme="magazine"] .rs-inbrief { background: none; border-left: 0; border-top: 2px solid var(--rs-accent); padding: var(--rs-s2) 0 0; font-size: 1.14em; line-height: 1.45 }
+.rs[data-rs-theme="magazine"] .rs-inbrief strong { font-weight: 500 }
+.rs[data-rs-theme="magazine"] .rs-text blockquote { text-align: center; padding: 0 var(--rs-s4) }
+.rs[data-rs-theme="magazine"] .rs-text blockquote p { font-size: .96em }
+.rs[data-rs-theme="magazine"] .rs-series-nav a { font-size: 1.4em; font-weight: 600 }
+.rs[data-rs-theme="magazine"] .rs-progress { height: 3px; bottom: -2px }
+.rs[data-rs-theme="magazine"] .rs-text hr { color: var(--rs-accent) }
+@container rs (min-width: 760px) {
+  .rs[data-rs-theme="magazine"] .rs-head .rs-wrap { grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); gap: var(--rs-s5); align-items: center; padding-block: var(--rs-s5) var(--rs-s4) }
+  .rs[data-rs-theme="magazine"] .rs-head h1 { font-size: 92px }
+  .rs[data-rs-theme="magazine"] .rs-cover { justify-self: end; width: min(100%, 380px) }
+  .rs[data-rs-theme="magazine"] .rs-summary-box { max-width: 36em; margin: 0 auto; text-align: center }
+}
+@container rs (min-width: 1080px) {
+  .rs[data-rs-theme="magazine"] .rs-head .rs-wrap, .rs[data-rs-theme="magazine"][data-rs-rail="off"] .rs-head .rs-wrap { grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); max-width: var(--rs-max); margin: 0 auto }
+  .rs[data-rs-theme="magazine"] .rs-head .rs-head-text, .rs[data-rs-theme="magazine"] .rs-head .rs-cover { grid-column: auto }
+  .rs[data-rs-theme="magazine"] .rs-head .rs-cover { width: min(100%, 380px) }
+}
+
+/* ================= PERSONAL: quiet, one voice ================= */
+.rs[data-rs-theme="personal"] .rs-kicker { text-transform: none; letter-spacing: 0; font-size: 12.5px; font-weight: 500 }
+.rs[data-rs-theme="personal"] .rs-head h1 { font-weight: 500; font-size: 40px; letter-spacing: -.005em; line-height: 1.08 }
+.rs[data-rs-theme="personal"] .rs-subtitle { color: var(--rs-muted); font-style: italic }
+.rs[data-rs-theme="personal"] .rs-byline dt { font-family: var(--rs-text); font-style: italic; font-size: 14px; text-transform: none; letter-spacing: 0; font-weight: 400 }
+.rs[data-rs-theme="personal"] .rs-byline dd { font-family: var(--rs-text); font-size: 15px }
+.rs[data-rs-theme="personal"] .rs-byline .rs-names { font-size: 18px }
+.rs[data-rs-theme="personal"] .rs-bar, .rs[data-rs-theme="personal"] .rs-btn, .rs[data-rs-theme="personal"] .rs-toc, .rs[data-rs-theme="personal"] .rs-cite, .rs[data-rs-theme="personal"] .rs-text figcaption, .rs[data-rs-theme="personal"] .rs-end details summary, .rs[data-rs-theme="personal"] .rs-copy { font-family: var(--rs-text); font-size: 14.5px }
+.rs[data-rs-theme="personal"] .rs-btn { border-color: var(--rs-rule); padding: 6px 11px }
+.rs[data-rs-theme="personal"] .rs-btn.rs-primary { background: transparent; color: var(--rs-accent) !important; border-color: var(--rs-accent) }
+.rs[data-rs-theme="personal"] .rs-cover figcaption, .rs[data-rs-theme="personal"] .rs-summary .rs-label, .rs[data-rs-theme="personal"] .rs-bar-series { display: none !important }
+.rs[data-rs-theme="personal"] .rs-summary-box { border-top: 1px solid var(--rs-rule); max-width: var(--rs-measure) }
+.rs[data-rs-theme="personal"] .rs-summary .rs-lead { font-style: italic }
+.rs[data-rs-theme="personal"] .rs-summary .rs-lead strong { font-weight: 600 }
+.rs[data-rs-theme="personal"] .rs-label, .rs[data-rs-theme="personal"] .rs-end h2, .rs[data-rs-theme="personal"] .rs-inbrief-label, .rs[data-rs-theme="personal"] .rs-rail-label { text-transform: none; letter-spacing: 0; font-weight: 500 }
+.rs[data-rs-theme="personal"] .rs-end h2 { font-family: var(--rs-text); font-size: 1.15em; color: var(--rs-ink) }
+.rs[data-rs-theme="personal"] .rs-text h2 { font-weight: 400; font-size: 2em }
+.rs[data-rs-theme="personal"] .rs-text h3 { font-size: 1.35em }
+.rs[data-rs-theme="personal"] .rs-text h4 { font-family: var(--rs-display); font-weight: 500; font-style: italic; font-size: 1.1em }
+.rs[data-rs-theme="personal"] .rs-text h5 { font-style: normal; font-weight: 600; font-size: .95em; font-variant: small-caps; letter-spacing: .05em; text-transform: lowercase }
+.rs[data-rs-theme="personal"] :is(.rs-first, .rs-text h2 + p:not(.rs-inbrief), .rs-text h2 + .rs-inbrief + p)::first-line { font-variant: small-caps; letter-spacing: .03em }
+.rs[data-rs-theme="personal"] .rs-inbrief { border-left-width: 2px; font-size: .98em }
+.rs[data-rs-theme="personal"] .rs-inbrief strong { font-weight: 500 }
+.rs[data-rs-theme="personal"] .rs-text blockquote { position: relative }
+.rs[data-rs-theme="personal"] .rs-text blockquote::before { content: "“"; position: absolute; left: calc(var(--rs-s4) - .55em); top: -.12em; font-size: 2em; line-height: 1; color: var(--rs-accent); font-style: normal }
+.rs[data-rs-theme="personal"] .rs-text hr::before { content: "✻"; letter-spacing: 0 }
+.rs[data-rs-theme="personal"] .rs-sn-note { font-family: var(--rs-text); font-size: 15px; line-height: 1.4 }
+.rs[data-rs-theme="personal"] .rs-sn-n, .rs[data-rs-theme="personal"] .rs-sn-ref { font-family: var(--rs-text); font-variant-numeric: oldstyle-nums }
+.rs[data-rs-theme="personal"] .rs-sn-ref { font-size: .62em }
+.rs[data-rs-theme="personal"] .rs-progress { height: 1px }
+.rs[data-rs-theme="personal"] .rs-pull { display: none }
+@container rs (min-width: 760px) {
+  .rs[data-rs-theme="personal"] .rs-head .rs-wrap { grid-template-columns: minmax(0, 1fr) }
+  .rs[data-rs-theme="personal"] .rs-head h1 { font-size: 48px }
+  .rs[data-rs-theme="personal"] .rs-cover { order: -1; width: 104px }
+  .rs[data-rs-theme="personal"] .rs-sn-note { font-size: 14.5px }
+}
+@container rs (min-width: 1080px) {
+  .rs[data-rs-theme="personal"] .rs-head .rs-wrap { grid-template-columns: var(--rs-rail-w) minmax(0, var(--rs-measure)) var(--rs-margin); row-gap: var(--rs-s3) }
+  .rs[data-rs-theme="personal"] .rs-head .rs-cover { grid-column: 2; grid-row: 1; width: 104px }
+  .rs[data-rs-theme="personal"] .rs-head .rs-head-text { grid-column: 2; grid-row: 2 }
+}
+
+@media (prefers-reduced-motion: no-preference) { .rs { scroll-behavior: smooth } }
+@media print {
+  .rs-bar, .rs-drawer, .rs-rail, .rs-actions, .rs-copy { display: none !important }
+  .rs { font-size: 11pt }
+}

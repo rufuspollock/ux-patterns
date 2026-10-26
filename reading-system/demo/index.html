@@ -1,0 +1,310 @@
+<meta charset="utf-8">
+<title>Reading System Demo</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<!-- Fonts for all three themes; a real page loads only its theme's line (see README) -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400..700;1,8..60,400..600&family=Source+Sans+3:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400..600;1,6..72,400..500&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=Instrument+Sans:wght@400;500;600&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../reading.css">
+<style>
+/* Demo only: the stage, the phone frame, the control bar, and three figures specific to this essay. Light-only by choice. */
+:root { color-scheme: light }
+html, body { margin: 0; background: #e4e3de }
+.stage { padding-block: 0 110px }
+.stage.phone { display: grid; justify-items: center; padding-block: 28px 120px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)) }
+.stage.phone .rs { width: min(390px, 100%); height: min(844px, calc(100vh - 160px)); overflow-y: auto; overflow-x: hidden; border: 10px solid #111; border-radius: 40px; box-shadow: 0 30px 60px -30px rgb(0 0 0 / .5) }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0) }
+
+/* figures specific to this essay, built from the system's tokens */
+.demo-series ol { margin: 0; padding-left: 1.4em; font-family: var(--rs-ui); font-size: 12.5px; line-height: 1.55; color: var(--rs-muted); font-variant-numeric: lining-nums }
+.demo-series li.here { color: var(--rs-accent); font-weight: 600 }
+.demo-features ul { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1px; background: var(--rs-rule); border: 1px solid var(--rs-rule); counter-reset: f }
+.demo-features li { background: var(--rs-bg); padding: var(--rs-s2) var(--rs-s3); font-size: .84em; line-height: 1.3; counter-increment: f; margin: 0 }
+.demo-features li::before { content: counter(f); display: block; font-family: var(--rs-ui); font-size: 11px; font-weight: 600; color: var(--rs-accent); margin-bottom: 2px; font-variant-numeric: lining-nums }
+.demo-shifts { display: grid; gap: var(--rs-s2) }
+.demo-shifts .shift { display: grid; grid-template-columns: minmax(0, 1fr); border: 1px solid var(--rs-rule); background: var(--rs-bg) }
+.demo-shifts .shift > div { padding: var(--rs-s2) var(--rs-s3); font-size: .86em; line-height: 1.45 }
+.demo-shifts .from { color: var(--rs-ink2) }
+.demo-shifts .to { background: var(--rs-tint) }
+.demo-shifts .rs-label { display: block; margin-bottom: 4px }
+.demo-shifts .root { display: block; font-size: .92em; font-style: italic; color: var(--rs-muted) }
+.demo-shifts .arrow { display: none }
+.rs[data-rs-theme="magazine"] .demo-shifts .to { background: var(--rs-accent); color: var(--rs-on-accent) }
+.rs[data-rs-theme="magazine"] .demo-shifts .to .rs-label { color: var(--rs-on-accent); opacity: .85 }
+@container rs (min-width: 760px) { .demo-shifts .shift { grid-template-columns: minmax(0, 1fr) 40px minmax(0, 1fr) } .demo-shifts .arrow { display: grid; place-items: center; color: var(--rs-accent); font-size: 1.3em; padding: 0 } }
+@container rs (max-width: 480px) { .demo-features ul { grid-template-columns: minmax(0, 1fr) } }
+.demo-omitted { border: 1px dashed var(--rs-rule); padding: var(--rs-s2) var(--rs-s3); margin: var(--rs-s5) 0; font-size: .85em; background: var(--rs-tint) }
+.demo-omitted p { margin: var(--rs-s1) 0 0 }
+
+/* control bar (not part of the system) */
+.ctl { position: fixed; z-index: 50; left: 50%; transform: translateX(-50%); bottom: calc(12px + env(safe-area-inset-bottom, 0px)); display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 8px 12px; background: #16171c; color: #f2f2f4; padding: 8px 12px; border-radius: 14px; font: 13px/1.2 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; box-shadow: 0 16px 40px -16px rgb(0 0 0 / .6); width: max-content; max-width: calc(100vw - 24px) }
+.ctl .t { color: #9a9cab }
+.seg { display: inline-flex; border: 1px solid #3a3c47; border-radius: 9px; overflow: hidden }
+.seg button { font: inherit; background: transparent; color: #f2f2f4; border: 0; padding: 6px 10px; cursor: pointer }
+.seg button[aria-pressed="true"] { background: #f2f2f4; color: #16171c }
+.seg button:focus-visible, .sw:focus-visible { outline: 2px solid #8fa2ff; outline-offset: -2px }
+.sws { display: inline-flex; gap: 6px; align-items: center }
+.sw { width: 20px; height: 20px; border-radius: 50%; border: 2px solid transparent; cursor: pointer; padding: 0 }
+.sw[aria-pressed="true"] { border-color: #f2f2f4; box-shadow: 0 0 0 2px #16171c inset }
+.sw.def { background: conic-gradient(#c8281e 0 33%, #2346b8 0 66%, #b23a2c 0) }
+@media (max-width: 640px) { .ctl .t { display: none } .ctl { gap: 6px 8px } }
+</style>
+
+<div class="stage" id="stage">
+<div class="rs" id="rs" data-rs-theme="magazine" data-rs-rail="on" data-rs-dropcap="on">
+
+  <div class="rs-bar">
+    <div class="rs-wrap">
+      <span class="rs-bar-series"><b>Second Renaissance</b> · Paper 5</span>
+      <span class="rs-bar-current">In Tech We Trust</span>
+      <button type="button" class="rs-bar-toggle" aria-expanded="false" aria-controls="drawer">Contents</button>
+      <a href="#cite">PDF</a>
+    </div>
+    <span class="rs-progress"></span>
+  </div>
+  <div class="rs-drawer" id="drawer" hidden><div class="rs-wrap"><ol class="rs-toc"><li class="rs-l2"><a href="#introduction">Introduction</a></li>
+<li class="rs-l2"><a href="#co-evolving-with-our-tools">1. Co-evolving with our tools</a></li>
+<li class="rs-l2"><a href="#aspects-of-the-late-modern-relationship">2. Aspects of the late-modern relationship with technology</a></li>
+<li class="rs-l3"><a href="#2-1-technology-as-god">2.1 Technology as God</a></li>
+<li class="rs-l3"><a href="#2-2-from-servant-to-master">2.2 From servant to master</a></li>
+<li class="rs-l3"><span class="rs-off">2.3 AI: the logical conclusion?</span></li>
+<li class="rs-l2"><span class="rs-off">3. Tech in a future society</span></li>
+<li class="rs-l2"><a href="#conclusion">Conclusion</a></li></ol></div></div>
+
+  <header class="rs-head">
+    <div class="rs-wrap">
+      <div class="rs-head-text">
+        <span class="rs-kicker">Second Renaissance series · Paper 5 · Essay</span>
+        <h1>In Tech We Trust</h1>
+        <p class="rs-subtitle">The god-like authority of technology in the modern age, and what it means to set a wiser course</p>
+        <dl class="rs-byline">
+          <div><dt>Authors</dt><dd class="rs-names">Rufus Pollock, Rosie Bell, Sylvie Barbier</dd></div>
+          <div><dt>From</dt><dd>Life Itself Sensemaking Studio</dd></div>
+          <div><dt>Published</dt><dd>February 2026</dd></div>
+          <div><dt>Version</dt><dd>1.0 beta · 45 min read</dd></div>
+        </dl>
+        <div class="rs-actions">
+          <a class="rs-btn rs-primary" href="#introduction">Read online</a>
+          <a class="rs-btn" href="#cite">PDF</a>
+          <a class="rs-btn" href="#cite">EPUB</a>
+          <a class="rs-btn" href="#cite">Cite</a>
+        </div>
+      </div>
+      <figure class="rs-cover"><img src="cover.jpg" alt="Cover of In Tech We Trust: the title in black capitals on a red ground"><figcaption>Cover · Paper 5</figcaption></figure>
+    </div>
+  </header>
+
+  <section class="rs-summary" aria-label="Summary">
+    <div class="rs-wrap"><div class="rs-summary-box">
+      <span class="rs-label">Summary</span>
+      <p class="rs-lead">This essay explores our late-modern relationship with technology, and asks what inner shift might help a future society find a wiser path. <strong>Modern society now relates to technology as a surrogate god; to steer a wiser course we need collective restraint grounded in a sense of interbeing, and choices guided by a fuller picture of human nature.</strong></p>
+      <p class="rs-facts rs-keywords"><b>Keywords</b> technology · modernity · cultural paradigm · collective action · interbeing · AI</p>
+      <p class="rs-facts">About 9,800 words · 43 notes · Part of a series on the Second Renaissance</p>
+    </div></div>
+  </section>
+
+  <div class="rs-body">
+    <div class="rs-wrap">
+      <nav class="rs-rail" aria-label="Contents"><span class="rs-rail-label">Contents</span><ol class="rs-toc"><li class="rs-l2"><a href="#introduction">Introduction</a></li>
+<li class="rs-l2"><a href="#co-evolving-with-our-tools">1. Co-evolving with our tools</a></li>
+<li class="rs-l2"><a href="#aspects-of-the-late-modern-relationship">2. Aspects of the late-modern relationship with technology</a></li>
+<li class="rs-l3"><a href="#2-1-technology-as-god">2.1 Technology as God</a></li>
+<li class="rs-l3"><a href="#2-2-from-servant-to-master">2.2 From servant to master</a></li>
+<li class="rs-l3"><span class="rs-off">2.3 AI: the logical conclusion?</span></li>
+<li class="rs-l2"><span class="rs-off">3. Tech in a future society</span></li>
+<li class="rs-l2"><a href="#conclusion">Conclusion</a></li></ol></nav>
+      <article class="rs-text">
+<h2 id="introduction"><span class="rs-num"></span>Introduction</h2>
+<figure class="rs-margin demo-series"><ol>
+  <li>What and Why</li><li>How</li><li>Polycrisis to Metacrisis</li><li>Developmental Spaces</li><li class="here">In Tech We Trust</li><li>Wisdom</li></ol>
+  <figcaption><span class="rs-fignum">Margin figure</span> Where this paper sits in the series.</figcaption></figure>
+<p>This essay is part of a series examining features of a globalised society in crisis, and exploring how a shift in fundamental views and values – a new cultural paradigm – might support a wiser, regenerative future.</p>
+<p>A <a href="https://secondrenaissance.net/papers">foundational paper</a> outlines the idea of a cultural paradigm shift or ‘<a href="https://secondrenaissance.net/">Second Renaissance</a>.’<sup><a href="#fn-1" id="fnref-1" data-footnote-ref>1</a></sup>  Forthcoming essays will build on this inquiry, exploring its implications for specific areas of society – such as climate, decision-making, education, and more.</p>
+<p>We first address <strong>technology</strong> because it has become a special case: a force so powerful that it has shaped not only our material conditions, but also the deepest cultural foundations of our shared world; offering a lens through which many of our wider challenges can be understood. Since prehistory, humans have created, depended upon, and been shaped by technology – enabling our lives in countless ways. Yet this complex relationship has grown increasingly problematic. In recent decades, as climate breakdown escalates and AI accelerates, it has reached a crisis point.</p>
+<p>Beneath the surface, many of today’s global challenges can be traced to particular features of our shared worldview, anchored in the cultural paradigm of modernity. The structural and cultural features of our societies – including our relationship with technology – arise from foundational systems of beliefs: shared ways of seeing ourselves, each other, and the world. Elsewhere we’ve referred to these systems of views and values as ‘cultural paradigms.’</p>
+<p>The modern paradigm is unique, however, in that unprecedented technological advancement – and its profound effect on human power dynamics – has elevated technology to a primary metaphor within the cultural paradigm itself.<sup><a href="#fn-2" id="fnref-2" data-footnote-ref>2</a></sup> Accelerated by the industrial revolution and further still in the digital age, technology is not just a tool of modernity, but one of its chief organising logics: reciprocally shaping how we view reality and imagine the human good. In what follows, we explore key features of late modernity’s increasingly dysfunctional relationship with technology, and consider the shifts in worldview and inner capacity that may be necessary to support wiser choice-making for the future.</p>
+<h4 id="key-features-of-the-modern-cultural-para">Key features of the modern cultural paradigm relating to technology</h4>
+<p>Throughout the essay we’ll discuss particular views and assumptions, core to the modern worldview, that shape or are shaped by our relationship with technology.<sup><a href="#fn-3" id="fnref-3" data-footnote-ref>3</a></sup> These include:</p>
+<figure class="rs-column demo-features"><ul>
+  <li>Material reality as paramount</li><li>The myth of progress</li><li>Technology as cosmological metaphor</li><li>Individualism</li><li>Rationalism and freedom</li><li>Homo economicus</li></ul>
+  <figcaption><span class="rs-fignum">Figure 1</span> Six features of the modern cultural paradigm that shape, and are shaped by, our relationship with technology.</figcaption></figure>
+<h5>Material reality as paramount</h5>
+<p>Since the scientific revolution, modern society has limited ‘reality’ to that which can be seen and measured – grounding truth in the material and dismissing the subjective and spiritual as secondary or unreal.</p>
+<h5>The myth of progress</h5>
+<p>Enlightenment philosophers proposed that human history follows an inevitable trajectory towards <em>improvement</em> in both cultural and material dimensions.<sup><a href="#fn-4" id="fnref-4" data-footnote-ref>4</a></sup> Influenced also by the Industrial Revolution, modern culture has particularly associated what’s better for humanity with increased comfort arising from economic growth and technological development – an ongoing teleology of improvement wherein more new technology is always better.</p>
+<h5>Technology as a primary cosmological metaphor</h5>
+<p>As increasingly powerful mechanisms have empowered humanity in countless ways, modern culture has come to view life and the cosmos as a complex machine; no more than the sum of separate material parts, and the smallest parts most fundamental. This mechanistic view has gradually supplanted older, relational and sacred views of life and reality, helping to cement reductive materialism as the dominant view.<sup><a href="#fn-5" id="fnref-5" data-footnote-ref>5</a></sup></p>
+<h5>Individualism</h5>
+<p>A related, similarly reductive model characterises modernity’s dominant view of humanity: a collection of separate individuals, in competition for resources and dominance. Within secular modernity the individual is the locus of all meaning – with autonomy, self-interest, and personal success among our guiding values.</p>
+<h5>Rationalism and freedom</h5>
+<p>Modernity elevates reason and logic as the ultimate source of knowledge – and the defining quality of human nature. Governed by rationality (in contrast to e.g. emotion or faith), human beings are seen as free to choose what is best.  Furthermore, since the advent of computer technology, the metaphor of life-as-machine has taken on a new mantle: <em>mind-as-computer</em> – reinforcing rationalism as the obvious model of human nature.</p>
+<h5>Homo economicus</h5>
+<p>Modern economics – particularly in the form of neoliberal or market fundamentalism – rests on a view of human beings as rational, self-interested individuals who make decisions based on stable preferences and free choice in competitive markets.<sup><a href="#fn-6" id="fnref-6" data-footnote-ref>6</a></sup></p>
+<h4 id="shifting-our-relationship-with-technolog">Shifting our relationship with technology for a wiser future</h4>
+<p>With these cultural views and values in mind, we’ll examine dysfunctional features of the late (post) modern relationship with technology and propose two deep shifts in this relationship that could be foundational to a healthy future society:</p>
+<figure class="rs-wide demo-shifts">
+  <div class="shift"><div class="from"><span class="rs-label">From</span>Out-of-control tech, arising from collective action problems <span class="root">rooted in modern individualism and reductivism</span></div><div class="arrow" aria-hidden="true">→</div><div class="to"><span class="rs-label">To</span>Collective restraint, supported by a worldview of <b>interbeing</b></div></div>
+  <div class="shift"><div class="from"><span class="rs-label">From</span>A tyranny of technology, arising from a rationalist illusion of human agency and freedom</div><div class="arrow" aria-hidden="true">→</div><div class="to"><span class="rs-label">To</span>Wiser choice, founded on a holistic understanding of human nature and attunement to an <b>inner compass</b></div></div>
+  <figcaption><span class="rs-fignum">Figure 2</span> The two shifts the essay proposes. Chapter 3 takes each in turn.</figcaption>
+</figure>
+<h2 id="co-evolving-with-our-tools"><span class="rs-num">1</span>Co-evolving with our tools</h2>
+<p class="rs-inbrief"><span class="rs-inbrief-label">In brief</span> Humans have co-evolved with technologies, which shape our bodies, behaviours, and societies. What feels different now is the speed, scale, and irreversibility of tech’s influence.</p>
+<p>We commonly hear the complaint that “technology has taken over our lives”. However, humans have been creating technology for millennia. More than just creating – for almost as long, we have co-evolved with and depended upon the artefacts and processes that we have developed. Genetics, culture and technology interact to constitute humanity. Hundreds of thousands of years ago for example, our use of fire altered our digestion and social habits; our clothing altered group psychology and even our bodies; tools altered our capacity for creation and adaptation to new niches.<sup><a href="#fn-7" id="fnref-7" data-footnote-ref>7</a></sup> Early communication technologies became fundamental to group dynamics, social stability and thus survival.<sup><a href="#fn-8" id="fnref-8" data-footnote-ref>8</a></sup></p>
+<p>In short, for as long as humans have used technology to enable our lives, we have to some extent been ‘cyborgs’ – technology necessarily alters our behaviours and psychology – even our bodies – becoming part of who and what we are.<sup><a href="#fn-9" id="fnref-9" data-footnote-ref>9</a></sup></p>
+<p>Likewise, significant leaps in technology have often been greeted with suspicion and ridicule, at least by some – consider attitudes to the first automated vehicles. Throughout the history of technology, radical innovations have felt improbable and dangerous, generating resistance that appears futile with the benefit of hindsight. Yet intuitively it still feels as if something is different about the current age and its relationship with tech. The scale at which technology now shapes our being, the pace at which it changes, the readiness with which such change is adopted and perhaps most importantly, the <em>irreversibility</em> of certain changes are an increasing source of concern. As we’ll discuss, tech and technological priorities have come to drive our society to an unprecedented degree – perhaps even transforming from a tool that we create to a force that creates <em>us</em>.</p>
+<h2 id="aspects-of-the-late-modern-relationship"><span class="rs-num">2</span>Aspects of the late-modern relationship with technology</h2>
+<h3 id="2-1-technology-as-god">2.1 Technology as God</h3>
+<p class="rs-inbrief"><span class="rs-inbrief-label">In brief</span> Modern society increasingly relates to technology as a surrogate god. We trust, revere, and submit to tech – while elevating technologists as cultural high priests shaping the fate of our world.</p>
+<p>From Galileo to Newton, the foundational thinkers of modern science did not set out to seed a secular worldview – seeking more to understand a divine cosmos than to erase it.<sup><a href="#fn-10" id="fnref-10" data-footnote-ref>10</a></sup> Nonetheless the march of rationalism, empirical science and industrialisation since the 17th century fundamentally redirected western epistemology: from religion as the sole origin of truth and authority, to the material world and human reason as primary loci of admissible facts and knowledge. Religion was not extinguished, but gradually lost its central status as a source of sense-making for all society.</p>
+<p>Nonetheless, the need for something-like-religion as a organising principle and locus of devotion never went away. As a source of power, transformation and significant awe and mystery, science and technology became natural successors. In our secular, late modern age, with the rise of advanced digital tech, humanity relates to technology ever more as to a god.</p>
+<p>If the suggestion that we have come to worship technology seems a little sensational, it’s worth considering the surprising number of divine functions that have found a material surrogate in late modernity. We both revere and defer to the forces unleashed by technology and capitalism; allowing them to run our world, and to shape our being.</p>
+<h4 id="tech-as-divine-mystery">Tech as divine mystery</h4>
+<p>Since the 19th century, the rise of evolutionary theory has largely supplanted creationism as a dominant narrative in secular societies. Nonetheless, even while dismissing the supernatural, modern humanity is devoted to tech as to a divine force. And tech more than lives up to the hype. After all, we fly in aeroplanes. We access a world of knowledge from the smartphones in our pockets. We navigate by satellite and look at scans of the inside of our bodies, to perform lifesaving operations using robot arms. Our computers can listen to our conversations and write us a speech. And most of us certainly can’t comprehend <em>how</em>. It’s all so mysterious, it might as well be magic.<sup><a href="#fn-11" id="fnref-11" data-footnote-ref>11</a></sup> Understandably, we are awe-struck, in ways that resemble our former relationship with the church and the power of prayer. From where I’m standing, there’s no discernible difference between the internet and an omniscient being – except that the former answers questions with a higher degree of reliability. I don’t ask how it works. I just switch it on and trust.<sup><a href="#fn-12" id="fnref-12" data-footnote-ref>12</a></sup></p>
+<aside class="rs-pull" aria-hidden="true"><p>“There’s no discernible difference between the internet and an omniscient being – except that the former answers questions with a higher degree of reliability.”</p></aside>
+<h4 id="in-tech-we-trust">In tech we trust</h4>
+<p>We allow technology God-like permission to shape our lives, psychologically and physically, often without question. Consider computerised capitalism, managing global markets – and our meek submission to digital market forces. We have normalised addiction to our smartphones; and ‘consume’ our world through social media, trusting the precious resource of our attention to aggressive, algorithmic data-driven advertising.<sup><a href="#fn-13" id="fnref-13" data-footnote-ref>13</a></sup></p>
+<p>Trust in technology extends beyond quotidian choicemaking – even shaping our collective response to existential threat. For example, at the highest levels of climate policy and planning, leading emissions scenarios increasingly rely on assumptions of future technological breakthroughs – especially in carbon removal – to meet global targets; amounting to blind faith in technology in a crisis of apocalyptic dimensions.<sup><a href="#fn-14" id="fnref-14" data-footnote-ref>14</a></sup></p>
+<h4 id="salvation-in-tech">Salvation in tech</h4>
+<p>The transcendental hopes that once energised mass worship – including the possibility of eternal life – have also acquired a new, technological basis in late modernity. Companies have begun offering cryopreservation at death, in expectation that when the tech matures, their clients’ consciousness can be electronically revived. Transhumanists consider this imagined silicon future an upgrade: go-faster life, requiring less energy. A super-human technology that replaces human being in hosting human consciousness.<sup><a href="#fn-15" id="fnref-15" data-footnote-ref>15</a></sup> Ideas that were once science fiction are drawing closer to reality: the idea of cryopreservation has evolved <a href="https://www.theguardian.com/science/article/2024/jul/10/billionaires-freezing-cryopreservation-riches-lawyers-life">“from crackpot to merely eccentric.”</a><sup><a href="#fn-16" id="fnref-16" data-footnote-ref>16</a></sup></p>
+<h4 id="the-divine-right-of-technologists">The divine right of technologists</h4>
+<p>Nothing demonstrates the priorities of a society like the profile of the people they deify – and look to for answers. For the current society, the big men of tech often fulfil this role. From Steve Jobs to Elon Musk, the most famous people in the world are tech founders and, alive or dead, their opinion is thought relevant in every matter. Prestige, respect and intellectual prowess are attached to tech like no other sector. It’s perhaps no coincidence that (High Priest) Elon Musk leans strongly towards libertarianism, disliking the suggestion of any limits being applied to power, and using that power to transform politics towards reduced state intervention.<sup><a href="#fn-17" id="fnref-17" data-footnote-ref>17</a></sup></p>
+<h3 id="2-2-from-servant-to-master">2.2 From Servant to Master</h3>
+<p class="rs-inbrief"><span class="rs-inbrief-label">In brief</span> Traditionally a powerful servant, improving comfort, health, and connection, technology has today grown into a dominant ideology – often eclipsing human values and becoming more master than servant.</p>
+<blockquote><p>“There is a Zen story about a person sitting on a horse, galloping very quickly. At a crossroads, a friend of his shouts, “Where are you going?” The man says, “I don’t know, ask the horse!” This is our situation. The horse is technology. It carries us and we cannot control it. So we have to begin with intention, asking ourselves, what do we want?</p><cite>Zen Master Thich Nhat Hanh<sup><a href="#fn-18" id="fnref-18" data-footnote-ref>18</a></sup></cite></blockquote>
+<blockquote><p>The simple fact that physicists split the atom without any hesitations the very moment they knew how to do it, although they realized full well the enormous destructive potentialities of their operation, demonstrates that the scientist qua scientist does not even care about the survival of the human race on earth or, for that matter, about the survival of the planet itself.</p><cite>Hannah Arendt (1993)</cite></blockquote>
+<p>Technology is a tremendous servant. Many of us benefit from it in myriad ways: we heat and cool our homes, have enough food and medicine, use transport, communicate at a distance, and enjoy extraordinary entertainment. As such, in the modern west, we generally expect more technology to improve our lives – a stance reflected in the choices we make at a societal level. When leaders, politicians and managers promote ‘innovation’,  the term often functions as shorthand for technological tools and fixes; effectively sidelining other the human good in a great deal of civic decision-making. Innovation agendas centre around problems amenable to technological intervention – leaving far less room for inquiries into how we might innovate in ways that deepen qualities such as kindness or empathy.</p>
+<p>Conversely, <em>restriction</em> of technology is often frowned upon in policy and in discourse. To question technological progress is still an attitude considered, if not taboo, then at least rather naïve – and futile.<sup><a href="#fn-19" id="fnref-19" data-footnote-ref>19</a></sup> ‘Capital T’ Technology has become a whole dominant ideology, often without the human dimensions essential to any desirable political programme<sup><a href="#fn-20" id="fnref-20" data-footnote-ref>20</a></sup> – increasingly crossing the line from servant to master.</p>
+<p>The flaws in this attitude are writ large in current planetary crises. Technological capitalism is pushing ecological systems towards collapse, virtually unchecked. The solutions deemed acceptable within high-level climate policymaking (such as at COP) anticipate more technology that can reverse the harm that existing technology creates.<sup><a href="#fn-21" id="fnref-21" data-footnote-ref>21</a></sup> From climate to AI, nuclear proliferation and more, even as the disastrous consequences become clearly visible, we still allow technology and technologists above all others to make our decisions.</p>
+<div class="demo-omitted" role="note"><span class="rs-label">Not in this demo</span><p>The rest of 2.2, section 2.3 and chapter 3 (about 6,000 words) are left out to keep the demo light.</p></div>
+<h2 id="conclusion"><span class="rs-num"></span>Conclusion</h2>
+<p>The godlike status of technology has become a vicious circle throughout the modern age. The more machines empowers us, the more willingly we defer to them; reducing ourselves, our values and our world to a mechanistic, material logic and thereby rendering ourselves less and less capable of resisting technological momentum. So confident have we felt in our own rational agency that we have gradually outsourced responsibility for our decision-making to an unconscious entity. So firmly have we believed that more technology is the best thing for us, that we have dismissed warnings of excess and destroyed much of real value in our world. As such, restoring wise relationship with technology first requires transforming our impoverished, computational view of what it means to be human.</p>
+<p>If humanity is to avoid self-annihilation, we must urgently reassess our capacity to choose the technologies we adopt – on the basis of a more fully dimensional understanding of ourselves: unpredictable, emotional, and rarely strictly rational in the reductive sense. But this assessment need not lead us to despair. In fact, it directs us toward the very root of wiser choice: by restoring value to the subtle, intuitive and unmeasurable dimensions of human knowing – long sidelined by reductive rationalism – we begin to resuscitate neglected capacities essential to wise decision-making.</p>
+<p>The revolution that we require does not begin and end with inner capacities. At their root, the tech-entangled rivalries that threaten us with annihilation point to a fundamental misunderstanding of reality – and of our relationship to one another and the living world. Among renewed ethical, spiritual, and philosophical views that can re-humanise our sense of what matters and restore neglected dimensions of value, a worldview alive to interbeing appears indispensable if we are to survive collective action problems. For people living isolated lives in a hyper-individualised, fragmented modern society, this may well sound like a distant ideal. However, understanding of radical interdependency will be foundational to any future culture that can escape today’s existential dilemmas –  and restore technology as a servant to that which is most human, most relational, and most conducive to life.</p>
+<section class="footnotes" data-footnotes><ol>
+<li id="fn-1" value="1"><p><a href="https://secondrenaissance.net/papers">Barbier et al. (2024)</a> <a href="#fnref-1" data-footnote-backref>↩</a></p></li>
+<li id="fn-2" value="2"><p>Machine metaphors for life appeared before the modern age (see e.g. Riskin (2013)) however their dominance was entrenched by the industrial revolution, proliferating with each new wave of empowering tech (e.g. mind as computer.) See e.g. Mumford (1967). <a href="#fnref-2" data-footnote-backref>↩</a></p></li>
+<li id="fn-3" value="3"><p><a href="https://drive.google.com/file/d/1GjJBXhS2hyvAf-uM9DbUTwE5Slh6MJel/view">Barbier et al. (2024)</a> offers a more general summary of views and values core to the modern cultural paradigm. See also <a href="https://www.ebsco.com/research-starters/social-sciences-and-humanities/characteristics-modernity">Walker (2021)</a>. <a href="#fnref-3" data-footnote-backref>↩</a></p></li>
+<li id="fn-4" value="4"><p>See e.g. <a href="https://philpapers.org/archive/KLEKHA.pdf">Kleingeld (1999)</a> on Kant <a href="#fnref-4" data-footnote-backref>↩</a></p></li>
+<li id="fn-5" value="5"><p>For expansion see Merchant (1980) <a href="#fnref-5" data-footnote-backref>↩</a></p></li>
+<li id="fn-6" value="6"><p>Kahneman (1979) is one early work that undermines the idea of Homo Economicus, the rational, self-interested decision-maker. <a href="#fnref-6" data-footnote-backref>↩</a></p></li>
+<li id="fn-10" value="10"><p>Noble (1997) argues that religion and technology were never separate – technology in the secular age bearing imprints of a time when science and technology were seen as vessels of and routes to divine knowledge. <a href="#fnref-10" data-footnote-backref>↩</a></p></li>
+<li id="fn-11" value="11"><p>As Clarke’s third law has it, “Any sufficiently advanced technology is indistinguishable from magic.” See also Davis (1998) <a href="#fnref-11" data-footnote-backref>↩</a></p></li>
+<li id="fn-12" value="12"><p>Harari, (2016) suggests that humanism is being replaced by ‘dataism’ – a new religion  that treats life as information processing and algorithms as objects of faith. <a href="#fnref-12" data-footnote-backref>↩</a></p></li>
+<li id="fn-13" value="13"><p>See e.g. Howard (2021) <a href="#fnref-13" data-footnote-backref>↩</a></p></li>
+<li id="fn-14" value="14"><p>See e.g. <a href="https://theconversation.com/why-we-cant-rely-on-negative-emissions-technologies-to-save-the-climate-158747">Dyke et. al (2021)</a> <a href="#fnref-14" data-footnote-backref>↩</a></p></li>
+<li id="fn-15" value="15"><p>Well before AI or cryonics became an imminent prospect, Noble (1997) drew links between a tech obsessed society and a religious transcendence of mortal life.  <a href="https://news.lifeitself.org/p/zak-stein-on-reconstructing-value">Zak Stein (2024)</a>  discusses the alarming implications of transhumanism. <a href="#fnref-15" data-footnote-backref>↩</a></p></li>
+<li id="fn-16" value="16"><p><a href="https://www.theguardian.com/science/article/2024/jul/10/billionaires-freezing-cryopreservation-riches-lawyers-life">Howard (2024)</a> <a href="#fnref-16" data-footnote-backref>↩</a></p></li>
+<li id="fn-17" value="17"><p>This essay was drafted several months before the second Trump Administration appointed Musk to lead ‘DOGE’ (Department of Government Efficiency), handing the technologist unfettered access to agency computer systems and significant control over federal government spending. <a href="#fnref-17" data-footnote-backref>↩</a></p></li>
+<li id="fn-7" value="7"><p>See e.g. Wrangham (2009), Gilligan (2010) <a href="#fnref-7" data-footnote-backref>↩</a></p></li>
+<li id="fn-8" value="8"><p>See e.g. Lent (2017) <a href="#fnref-8" data-footnote-backref>↩</a></p></li>
+<li id="fn-9" value="9"><p>See e.g. Haraway (1991) <a href="#fnref-9" data-footnote-backref>↩</a></p></li>
+<li id="fn-18" value="18"><p><a href="https://www.youtube.com/watch?v=a9GG4JtX8t4">Thich nhat Hanh (2013)</a> <a href="#fnref-18" data-footnote-backref>↩</a></p></li>
+<li id="fn-19" value="19"><p>See e.g. Zuboff (2019). <a href="#fnref-19" data-footnote-backref>↩</a></p></li>
+<li id="fn-20" value="20"><p>As Hannah Arendt (1993) observed, modern politics increasingly treats factual–scientific truth as authoritative while displacing the value-laden realm of human judgement, with profound consequences for political responsibility and freedom. <a href="#fnref-20" data-footnote-backref>↩</a></p></li>
+<li id="fn-21" value="21"><p>See e.g. <a href="https://theconversation.com/why-we-cant-rely-on-negative-emissions-technologies-to-save-the-climate-158747">Dyke et. al (2021).</a> <a href="#fnref-21" data-footnote-backref>↩</a></p></li>
+</ol></section>
+      </article>
+    </div>
+  </div>
+
+  <footer class="rs-end">
+    <div class="rs-wrap"><div class="rs-end-grid">
+      <section class="rs-span">
+        <h2>Notes</h2>
+        <details open><summary>Notes in this demo, in order</summary><div data-rs-notes-slot></div></details>
+      </section>
+      <section id="cite">
+        <h2>Cite this paper</h2>
+        <p class="rs-cite" id="cite-text">Pollock, R., Bell, R. and Barbier, S. (2026) ‘In Tech We Trust: The god-like authority of technology in the modern age, and what it means to set a wiser course’. Second Renaissance series, Paper 5, version 1.0 beta. Life Itself Sensemaking Studio.</p>
+        <button type="button" class="rs-copy" data-rs-copy="#cite-text">Copy citation</button>
+      </section>
+      <section>
+        <h2>Versions</h2>
+        <ul><li>First draft · July 2024</li><li>First full draft · October 2024</li><li>1.0 alpha · June 2025</li><li>1.0 beta · February 2026 (this version)</li></ul>
+      </section>
+      <section>
+        <h2>Responses and discussion</h2>
+        <ul><li><a href="https://www.youtube.com/watch?v=NgIjGn3fWDU&amp;t=10s">In Tech We Trust launch webinar</a> (recording)</li></ul>
+        <p class="rs-quiet">Talks, reviews and responses gather here as the paper lives on.</p>
+      </section>
+      <section>
+        <h2>Read it your way</h2>
+        <ul><li>PDF, for print and offline</li><li>EPUB, for e-readers</li></ul>
+        <p class="rs-quiet">Links are placeholders in this demo.</p>
+      </section>
+      <section class="rs-span">
+        <h2>References</h2>
+        <ul class="rs-refs"><li>Amodei, D. (2026) <em>The Adolescence of Technology: Confronting and Overcoming the Risks of Powerful AI</em>. Available at <a href="https://www.darioamodei.com/essay/the-adolescence-of-technology?utm_source=chatgpt.com">https://www.darioamodei.com/essay/the-adolescence-of-technology</a></li>
+<li>Arendt, H. (1993). <em>Truth and Politics. In Between Past and Future: Eight Exercises in Political Thought.</em> Penguin Books.</li>
+<li>Bostrom, N. (2014) <em>Superintelligence: Paths, Dangers, Strategies.</em> Oxford: Oxford University Press.</li>
+<li>Barbier, S.  Pollock, R, Bell, R. (2024) ‘Second Renaissance; A time of civilizational crisis and awakening.’ Life Itself. Available at: <a href="https://drive.google.com/file/d/1GjJBXhS2hyvAf-uM9DbUTwE5Slh6MJel/view">https://drive.google.com/file/d/1GjJBXhS2hyvAf-uM9DbUTwE5Slh6MJel/view</a></li>
+<li>Cadwallr, Carol (2025) ‘The Great AI Bubble’. <em>Substack.</em> Available at: <a href="https://broligarchy.substack.com/p/the-great-ai-bubble">https://broligarchy.substack.com/p/the-great-ai-bubble</a></li>
+<li>Carr, N. (2011) <em>The Shallows.</em> New York, NY: WW Norton.</li>
+<li>Darwin, C. (1871) The Descent of Man, and Selection in Relation to Sex. London: John Murray.</li>
+<li>Davis, E. (1998) <em>TechGnosis: Myth, Magic and Mysticism in the Age of Information</em>. New York: Harmony Books.</li></ul>
+        <p class="rs-quiet">8 of 43 references shown in this demo.</p>
+      </section>
+      <section class="rs-span">
+        <h2>In the series</h2>
+        <div class="rs-series-nav">
+          <a href="#introduction"><small>Previous · Paper 4</small>Developmental Spaces</a>
+          <a href="#introduction"><small>Next · Paper 6</small>Wisdom</a>
+        </div>
+      </section>
+    </div></div>
+  </footer>
+</div>
+</div>
+
+<div class="ctl" role="toolbar" aria-label="Demo controls">
+  <span class="t">Theme</span>
+  <span class="seg" role="group" aria-label="Theme">
+    <button type="button" data-theme-btn="academic" aria-pressed="false">Academic</button>
+    <button type="button" data-theme-btn="magazine" aria-pressed="true">Magazine</button>
+    <button type="button" data-theme-btn="personal" aria-pressed="false">Personal</button>
+  </span>
+  <span class="sws" role="group" aria-label="Accent colour">
+    <button type="button" class="sw def" data-accent="" aria-pressed="true" aria-label="Theme default accent"></button>
+    <button type="button" class="sw" data-accent="#c8281e" style="background:#c8281e" aria-pressed="false" aria-label="Red accent"></button>
+    <button type="button" class="sw" data-accent="#1f5aa6" style="background:#1f5aa6" aria-pressed="false" aria-label="Blue accent"></button>
+    <button type="button" class="sw" data-accent="#b5762a" style="background:#b5762a" aria-pressed="false" aria-label="Ochre accent"></button>
+    <button type="button" class="sw" data-accent="#1a1a1a" style="background:#1a1a1a" aria-pressed="false" aria-label="Ink accent"></button>
+  </span>
+  <span class="seg" role="group" aria-label="Options">
+    <button type="button" data-opt="rail" aria-pressed="true">Contents rail</button>
+    <button type="button" data-opt="dropcap" aria-pressed="true">Drop caps</button>
+  </span>
+  <span class="seg" role="group" aria-label="View">
+    <button type="button" data-view="desktop" aria-pressed="true">Desktop</button>
+    <button type="button" data-view="phone" aria-pressed="false">Phone</button>
+  </span>
+</div>
+
+<script src="../reading.js"></script>
+<script>
+(function () {
+  var rs = document.getElementById('rs'), stage = document.getElementById('stage');
+  var DEFAULTS = { academic: { rail: 'on', dropcap: 'off' }, magazine: { rail: 'on', dropcap: 'on' }, personal: { rail: 'off', dropcap: 'off' } };
+  function press(sel, test) { document.querySelectorAll(sel).forEach(function (b) { b.setAttribute('aria-pressed', String(test(b))); }); }
+  function setOpt(k, v) { rs.setAttribute('data-rs-' + k, v); press('[data-opt="' + k + '"]', function () { return v === 'on'; }); }
+  function setTheme(t) {
+    rs.setAttribute('data-rs-theme', t);
+    press('[data-theme-btn]', function (b) { return b.dataset.themeBtn === t; });
+    setOpt('rail', DEFAULTS[t].rail); setOpt('dropcap', DEFAULTS[t].dropcap);
+  }
+  document.querySelectorAll('[data-theme-btn]').forEach(function (b) { b.addEventListener('click', function () { setTheme(b.dataset.themeBtn); }); });
+  document.querySelectorAll('[data-opt]').forEach(function (b) { b.addEventListener('click', function () { var k = b.dataset.opt; setOpt(k, rs.getAttribute('data-rs-' + k) === 'on' ? 'off' : 'on'); }); });
+  document.querySelectorAll('[data-accent]').forEach(function (b) { b.addEventListener('click', function () {
+    if (b.dataset.accent) rs.style.setProperty('--rs-accent', b.dataset.accent); else rs.style.removeProperty('--rs-accent');
+    press('[data-accent]', function (x) { return x === b; });
+  }); });
+  document.querySelectorAll('[data-view]').forEach(function (b) { b.addEventListener('click', function () {
+    stage.classList.toggle('phone', b.dataset.view === 'phone');
+    press('[data-view]', function (x) { return x === b; });
+    rs.scrollTop = 0; window.ReadingSystem && ReadingSystem.refresh();
+  }); });
+  var h = (location.hash || '').slice(1);
+  setTheme(DEFAULTS[h] ? h : 'magazine');
+})();
+</script>

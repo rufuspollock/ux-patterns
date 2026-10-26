@@ -1,5 +1,5 @@
 import re, html, os
-SRC = os.path.expanduser("~/src/life-itself/2rbook/tech/essay.md")
+SRC = os.path.expanduser("~/src/life-itself/publications/tech/essay.md")
 L = open(SRC).read().split("\n")
 
 # footnotes
