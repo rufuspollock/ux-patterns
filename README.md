@@ -10,7 +10,7 @@ My working notes and knowledge base on design — patterns, typography, fonts, a
 * **[Archive](./archive/)** — individual sites worth noting for design, UX, or aesthetic quality, one file each
 * **Moodboards** — themed collections of sites (e.g. [Essay and Paper Pages](./essay-pages/), [Docs and Explainer Sites](./docs-and-explainer-sites/)), same idea as the archive but grouped by theme
 * **[Essay and Paper Pages](./essay-pages/)** — map of content on long-form essay, paper and report pages (absorbed Report Inspirations), with a [board of picks and insights](https://claude.ai/artifact/PVtWUxMDeaWh8bi15bBeW9)
-* **[SEO Preview Images](./seo-preview-images/)** — map of content on link previews (`og:image`): good examples, tags, sizes
+* **[SEO Preview Images](./seo-preview-images/)** — map of content on link previews (`og:image`): a moodboard of examples, a [per-page study of 26 sites](./seo-preview-images/per-page-variation.md), and a reusable [design brief](./seo-preview-images/design-brief.md)
 * **[Typography](./typography.md)** and **[Themes](./themes.md)** — notes on fonts and visual style
 
 New patterns, archive entries, and moodboards follow set formats — see [AGENTS.md](./AGENTS.md).
