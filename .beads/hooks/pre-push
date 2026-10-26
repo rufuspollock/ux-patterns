@@ -57,3 +57,13 @@ if command -v bd >/dev/null 2>&1; then
   if [ "$_bd_exit" -ne 0 ]; then exit "$_bd_exit"; fi
 fi
 # --- END BEADS INTEGRATION v1.3.0 ---
+
+# --- Dolt sync on git push (local addition, outside the managed block) ---
+# bd's managed pre-push hook does not push the Beads Dolt data, so push it here. Never blocks git push; the env guard prevents
+# recursion if bd's git-backed remote triggers this hook itself.
+if command -v bd >/dev/null 2>&1 && [ -z "$BD_DOLT_PUSH_IN_HOOK" ]; then
+  export BD_DOLT_PUSH_IN_HOOK=1
+  if ! bd dolt push >&2; then
+    echo >&2 "beads: 'bd dolt push' failed; git push continues. Run 'bd dolt push' by hand."
+  fi
+fi

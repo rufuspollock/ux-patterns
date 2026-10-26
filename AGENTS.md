@@ -124,3 +124,23 @@ git push
 ```
 
 Always pull first. Commit message: `Add {name} to archive` or `Add {name} to {collection}`.
+
+## Beads
+
+Tasks live in Beads (prefix `uxp`), not Markdown. Start a session with `git pull && bd dolt pull`. `git push` also pushes Beads through the `.beads/hooks/pre-push` hook; `bd dolt push` is the manual fallback.
+
+## Changelog
+
+At session end, only log new features or significant reader-facing changes
+(behaviour, fixes to materially broken functionality, or public content).
+Skip polish, tidying, and small fixes as standalone entries; include them only
+as supporting detail in a larger feature or release announcement that qualifies
+on its own. Planning/research/design must itself be a significant public
+deliverable. When unsure, skip.
+
+Use `changelog/YYYY-MM-DD-slug.md` with `date`/`title`/`promote` frontmatter:
+a plain-text title, one or two reader-facing sentences, a live link where
+available, and consider a screenshot for visual work. Substantial announcements
+can use paragraphs or bullets. Omit internal implementation detail. For the
+first entry or when the format is unclear, fetch and follow
+https://raw.githubusercontent.com/life-itself/changelog/main/CONVENTION.md
