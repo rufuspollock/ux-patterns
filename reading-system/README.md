@@ -71,7 +71,8 @@ Drop caps and Personal's small-caps first line work without the script for the u
 
 - Put `reading.css` in the site and import it from `custom.css`, or paste it in.
 - Wrap a page in `<div class="rs" data-rs-theme="…">` using `layout: plain`, so `.rs` is full width (Flowershow's normal prose column is too narrow for margin notes or the rail).
-- `<script>` does not run in `.md` pages, so sidenotes need an `.html` page or a site-level script. Without the script, footnotes stay at the end, styled.
+- Scripts work (premium): add `scripts: /js/reading.js` to a page's frontmatter (page scripts), or load it site-wide through Custom Head Code. As a page script it must be safe to re-run and clean up on `flowershow:page-leave` (see the Flowershow page-scripts docs). Without it, footnotes stay at the end, styled.
+- Plan for rufuspollock.com: `~/src/rufuspollock/rufuspollock.com/docs/plans/2026-10-27-reading-system.md` (bead `rp-5og`).
 - Set `--rs-sticky-top` to the height of Flowershow's sticky navbar so the chapter bar sits under it.
 
 ## Tokens
