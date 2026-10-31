@@ -1,62 +1,71 @@
 ---
-title: Why the Claude Markdown previewer reads so well
-description: A teardown of the document viewer in the Claude desktop app (fonts, sizes, colours, contents rail, footnote cards) with open-font equivalents and what to borrow for Flowershow research sites.
+title: "Claude Markdown previewer: an admiring teardown"
+description: Why the document viewer in the Claude desktop app reads so well (fonts, sizes, colours, frontmatter, contents rail, footnote cards), with open-font equivalents and what to borrow for Flowershow research sites.
 date: 2026-10-31
 ---
 
-The Markdown previewer in the Claude desktop app (the Files pane in the Code tab) reads better than almost any docs or research site. This page works out why, from the app's own stylesheet, and rebuilds it with open fonts so we can borrow it for our [[Flowershow]] research and knowledge-base sites.
+An admiring teardown. The Markdown previewer in the Claude desktop app (the Files pane in the Code tab) reads better than almost any docs or research site. This page works out why, from the app's own stylesheet, and rebuilds it with open fonts so we can borrow it for our [[Flowershow]] research and knowledge-base sites.
 
-**Demo:** [claude-md-previewer/demo.html](claude-md-previewer/demo.html), a rebuild with open fonts. Switch the body font (Literata, Source Serif 4, Inter), hover the ticks on the left for the contents, click a footnote number.
+![The previewer in the Claude app: frontmatter as a quiet table, then the title, sans body text, and the tick rail on the left](assets/claude-md-previewer-app-page.png)
 
-![The rebuild with Literata: one column, serif body, tick rail on the left](assets/claude-md-previewer-demo.jpg)
+**Demo:** [claude-md-previewer/demo.html](claude-md-previewer/demo.html), a rebuild with open fonts. Switch the body font (Inter, Geist, or Literata for a serif), hover the ticks on the left for the contents, click a footnote number.
 
 ## TL;DR
 
 It isn't one clever trick. A dozen small choices all favour the text:
 
-- a sturdy serif at **15px on a 24px line** (1.6)
+- a plain, even sans at **15px on a 24px line** (1.6)
 - a **540px column** (36 × body size, about 70 characters)
 - headings in the **same face at medium weight**, with space above that grows with rank
 - **every border and fill is the ink colour at 5, 10 or 20% opacity**
-- contents and footnotes that **stay out of sight until you reach for them**
+- frontmatter, contents and footnotes that **stay quiet until you reach for them**
 
 ## How I found this
 
-Everything below comes from the app's own CSS, read in place from `/Applications/Claude.app/Contents/Resources/ion-dist.asar` (the Code tab UI). The previewer is the `epitaxy-document-*` component, built on a shared `.prose` stylesheet. Colours come from the app's design tokens (`--cds-gray-*`, `--cds-blue-*`). The fonts ship in `Contents/Resources/fonts/`. Sizes are for the default "Medium" text size.
+Everything below comes from the app's own CSS, read in place from `/Applications/Claude.app/Contents/Resources/ion-dist.asar` (the Code tab UI). The previewer is the `epitaxy-document-*` component, built on a shared `.prose` stylesheet. Colours come from the app's design tokens (`--cds-gray-*`, `--cds-blue-*`). The fonts ship in `Contents/Resources/fonts/`. Sizes are for the default "Medium" text size. The app screenshots are Rufus's course drafts open in the previewer.
 
 ## Fonts
 
 **What it uses**
 
-- **Body and headings: Anthropic Serif**, a variable face with weights 300 to 800. The document view uses serif by default, with Sans as a setting. Body weight is 400.
-- **UI (contents panel, buttons): Anthropic Sans.**
+- **Body, headings, frontmatter and UI: Anthropic Sans**, a variable grotesque with weights 300 to 800. Body weight is 400, headings 500.
+- **Serif option: Anthropic Serif.** The code can set documents in serif instead (a font setting), but the default view, as in the screenshots, is sans.
 - **Code:** the system mono (SF Mono, then Menlo).
 
-Anthropic Serif appears to be the house successor to the Copernicus-style serif noted in [[Copernicus font alternatives]]. It has the same character: Plantin-like, wide, a big x-height, low contrast and sturdy strokes. That is why it holds up at 15px on screen. Neither Anthropic face can be reused.
+Anthropic Sans is a plain, even grotesque: open shapes, moderate x-height, no quirks. It is neutral enough to disappear at reading size, which is the point. Neither Anthropic face can be reused.
 
-**Why it works:** a big x-height makes 15px read like 17px in a book face. Low contrast stays crisp on ordinary screens. Using one family for headings and body keeps the page calm.
+**Why it works:** the face never draws attention to itself, and one family for headings, body and labels keeps the page calm. By contrast, Bricolage Grotesque's quirks (ink traps, wide rounds) are lovely at display sizes but noticeable in long text.
 
-**Open equivalents** (same paragraph, same size and leading):
+**Open equivalents for the sans** (same paragraph, same size and leading):
 
-![Anthropic Serif and Sans from the app compared with open serifs](assets/claude-md-previewer-fonts.jpg)
+![Anthropic Sans compared with open sans faces and Bricolage Grotesque](assets/claude-md-previewer-sans.jpg)
 
 | Rank | Face | Licence | Verdict |
 |---|---|---|---|
-| 1 | **[Literata](https://fonts.google.com/specimen/Literata)** | OFL, Google Fonts | Closest in feel: big x-height, sturdy, made for long screen reading, optical sizes. Runs about 5% wider, so lines hold a few fewer words |
-| 2 | **[Source Serif 4](https://fonts.google.com/specimen/Source+Serif+4)** | OFL, Google Fonts | Closest in width. Slightly crisper and more "book". Already the body face in our [Reading System](reading-system/) Academic theme |
-| 3 | [Charis SIL](https://fonts.google.com/specimen/Charis+SIL) (Charter) | OFL | Sturdy and plain. Good fallback, less warm |
-| 4 | [Gelasio](https://fonts.google.com/specimen/Gelasio) | OFL | Georgia's metrics. Fine, but more old-fashioned |
-| – | [Young Serif](https://fonts.google.com/specimen/Young+Serif) | OFL | Right shapes for Copernicus *headings*, too heavy for body text (single weight) |
-| – | Newsreader, Spectral, Crimson Pro | OFL | Too small an x-height or too delicate at 15px |
+| 1 | **[Inter](https://fonts.google.com/specimen/Inter)** | OFL, Google Fonts | Closest overall: same width (same line breaks), neutral, built for screens, has optical sizes and tabular figures. The safe choice |
+| 2 | **[Geist](https://fonts.google.com/specimen/Geist)** | OFL, Google Fonts | Same width again, a touch more geometric and "tech" |
+| 3 | [Public Sans](https://fonts.google.com/specimen/Public+Sans) | OFL | Close in rhythm, a little warmer; from the US Web Design System |
+| – | Instrument Sans, Hanken Grotesk, Figtree, IBM Plex Sans | OFL | Good faces, but narrower or more characterful than the app's |
 
-For the sans (UI, and a sans option for body text): **[Inter](https://fonts.google.com/specimen/Inter)** is the safe match, and [Instrument Sans](https://fonts.google.com/specimen/Instrument+Sans) has a bit more character. Both are steadier for reading than Bricolage Grotesque, whose quirks are better suited to display sizes. For code, **JetBrains Mono** or IBM Plex Mono.
+For code: **JetBrains Mono** or IBM Plex Mono.
+
+**If you want the serif option.** Anthropic Serif appears to be the house successor to the Copernicus-style serif noted in [[Copernicus font alternatives]]: Plantin-like, wide, big x-height, low contrast. The closest open serifs:
+
+![Anthropic Serif and Sans from the app compared with open serifs](assets/claude-md-previewer-fonts.jpg)
+
+| Rank | Face | Verdict |
+|---|---|---|
+| 1 | **[Literata](https://fonts.google.com/specimen/Literata)** | Closest in feel: big x-height, sturdy, made for screen reading. About 5% wider |
+| 2 | **[Source Serif 4](https://fonts.google.com/specimen/Source+Serif+4)** | Closest in width, a little crisper. Already in our [Reading System](reading-system/) |
+| 3 | [Charis SIL](https://fonts.google.com/specimen/Charis+SIL) / [Gelasio](https://fonts.google.com/specimen/Gelasio) | Sturdy fallbacks, less warm |
+| – | [Young Serif](https://fonts.google.com/specimen/Young+Serif) | Right for Copernicus-style *headings*, too heavy for body text |
 
 ## Size, measure, line height
 
 | | App value | Notes |
 |---|---|---|
 | Body | `0.9375rem` (15px) | 14px and 16px with the text-size setting |
-| Line height | body × 1.6 = 24px | generous for a serif, and the main source of the calm |
+| Line height | body × 1.6 = 24px | generous, and the main source of the calm |
 | Measure | body × 36 = 540px | scales with text size; about 70 characters |
 | Side padding | `clamp(1.25rem, 6cqi, 4rem)` | container query units, so it adapts to the pane, not the window |
 | Top / bottom padding | `clamp(2rem, 6cqi, 3.5rem)` / `6rem` | room to finish the last paragraph mid-screen |
@@ -64,14 +73,41 @@ For the sans (UI, and a sans option for body text): **[Inter](https://fonts.goog
 
 **Why it works:** a short measure and tall leading do most of the work. The extra bottom padding means the last lines aren't stuck at the bottom edge.
 
+## Frontmatter
+
+![YAML frontmatter shown as a two-column list: grey labels, plain values, list values as small chips](assets/claude-md-previewer-app-frontmatter.png)
+
+The previewer doesn't hide YAML frontmatter or dump it as code. It shows it as a **quiet two-column list** above the title:
+
+- Keys are humanised: `target_minutes` becomes "Target minutes", first letter capitalised.
+- Labels are small and grey; values are plain body text. The label column is as wide as the longest key.
+- List values (`sessions: [1]`) become small **mono chips** with a hairline border and a 5% fill.
+- A hairline rule underneath, 1em padding and 2em before the title.
+
+**Why it works:** metadata is visible and readable, but clearly not part of the document. Flowershow uses frontmatter for title and description and drops the rest.
+
 ## Headings and vertical rhythm
 
-| | Size | Line | Weight | Space above |
-|---|---|---|---|---|
-| H1 | 1.75em (26px) | 1.15 | 500, tracking −0.012em | 3em |
-| H2 | 1.35em (20px) | 1.25 | 500 | 2.5em |
-| H3 | 1.125em (17px) | 1.3 | 600 | 2em |
-| H4 | 1em | 1.3 | 600 | 1.667em |
+Exact values, at the default 15px body. Sizes are in `em` of the body, so the whole scale moves with the 14/15/16px text-size setting.
+
+| | Ratio to body | px | Step from the one below | Line height | Weight (nominal / variable axis) | Space above |
+|---|---|---|---|---|---|---|
+| H1 | **1.75** | 26.25 | 1.296 × H2 | 1.15 (30.2px) | 500 / `wght` 460, tracking −0.012em | 3em |
+| H2 | **1.35** | 20.25 | 1.2 × H3 | 1.25 (25.3px) | 500 / `wght` 460 | 2.5em |
+| H3 | **1.125** | 16.875 | 1.125 × H4 | 1.3 (21.9px) | 600 / `wght` 540 | 2em |
+| H4 | **1** | 15 | – | 1.3 (19.5px) | 600 / `wght` 540 | 1.667em |
+| Body | **1** | 15 | – | **1.6** (24px) | 400 | 1em between blocks |
+| Table text | 0.9375 | 14.06 | | 1.5 | 400, headers 600 | 2em after |
+| Footnotes | 0.875 | 13.1 | | inherits | 400, secondary colour | 3em above the section |
+| Code (inline and block) | body − 2px | 13 | | 1.54 (20px) in blocks | 400 | |
+| Superscripts | 0.75 | 11.25 | | 0 | | |
+
+Notes on the scale:
+
+- It is **not a modular scale**. The steps shrink as you go down (1.3, 1.2, 1.125), so the top heading is clearly a title and the lower ones are barely bigger than the text. H4 is body size, set apart only by weight.
+- Line height tightens as size grows: 1.6 for body, 1.3 for small headings, 1.25 for H2, 1.15 for H1.
+- Weights are set through the variable font's axis: headings use `wght` 460 (medium) and 540 (semibold), lighter than the nominal 500 and 600. That is part of why the headings feel soft.
+- Ratio of body line to body size: 24/15 = 1.6. Measure: 36 × 15 = 540px.
 
 - The flow unit is **1em between blocks**. After a heading the gap is **0.667em**, so a heading clearly belongs to the text under it. Two headings in a row sit 0.9em apart.
 - After a table or list the gap grows to 2em, and so does the space before an H3, table or rule. A rule carries its own 2.75em margins.
@@ -117,7 +153,9 @@ Links are always underlined, but the underline is lighter than the text (about 6
 
 - Thin outer border (10%), 6px corners, rows divided by hairlines, a **5% tint on the header**, which **sticks** when you scroll a long table.
 - 0.9375em text on a 1.5 line, `tabular-nums lining-nums` so figures line up, cells padded 0.5em × 0.875em, headers weight 600 and bottom-aligned.
-- Tables size to their content (`width: auto`). Wide ones scroll sideways and can bleed into the margins.
+- Tables size to their content (`width: auto`). Wide ones **bleed out into the margins** rather than squeeze the columns, and scroll sideways only when they still don't fit.
+
+![A wide table bleeding past the text column](assets/claude-md-previewer-app-table.png)
 
 ## Code
 
@@ -126,7 +164,7 @@ Links are always underlined, but the underline is lighter than the text (about 6
 
 ## Table of contents: the tick rail
 
-![Hovering the rail opens the outline; the blue tick marks where you are](assets/claude-md-previewer-outline.jpg)
+![Hovering the rail opens the outline: titles truncate with an ellipsis, the blue tick marks where you are](assets/claude-md-previewer-app-outline.png)
 
 The contents is the most distinctive piece:
 
@@ -142,11 +180,11 @@ The contents is the most distinctive piece:
 
 ## Footnotes: card, then jump
 
-![Clicking a footnote number opens the note in a card with a Jump to note button](assets/claude-md-previewer-footnote.jpg)
+![Clicking a footnote number opens the note in a card below it, with a Jump to note button](assets/claude-md-previewer-app-footnote.png)
 
 The card opens on **click**, not hover. That works on touch screens and avoids cards popping up as the pointer passes.
 
-- Markers are small superscripts in the accent colour.
+- Markers are small grey superscripts with a faint underline, so they read as links without shouting.
 - **Click the number** and the note opens in a **20rem card just below it**, in the body font at a smaller size, with its back-link removed.
 - The card has one button, **"Jump to note ↓"**. It scrolls to the note, which flashes a pale blue for 1.6 seconds (`data-landed`) so your eye finds it.
 - Click the number again, click outside, press Escape, or **scroll more than a third of a screen away**, and the card closes.
@@ -167,17 +205,18 @@ The card opens on **click**, not hover. That works on touch screens and avoids c
 
 Ranked by gain to reading for the effort. The Flowershow change is what each would need on our sites. Flowershow takes fonts and colours through `custom.css` (`--font-body`, `--font-heading`, `--color-l-*`, `--font-size-base`). Site-wide scripts go in the `head` config key (premium, which we have). Per-page scripts use the `scripts` frontmatter.
 
-1. **Body type: a sturdy serif at 15–16px on a 1.6 line.** Use Literata (or Source Serif 4) instead of Bricolage Grotesque for body text. *Flowershow:* `@import` the Google Fonts line, set `--font-body` and `--font-size-base`, and set `line-height: 1.6` on `.prose` (or the theme's content class) in `custom.css`.
+1. **Body type: a plain sans at 15–16px on a 1.6 line.** Use Inter (or Geist) instead of Bricolage Grotesque for body text, headings and labels. *Flowershow:* `@import` the Google Fonts line, set `--font-body` and `--font-size-base`, and set `line-height: 1.6` on `.prose` (or the theme's content class) in `custom.css`.
 2. **A 36em measure (about 540–580px).** *Flowershow:* check the theme's column width; set `max-width: 36em` on the article body in `custom.css` (or use `layout: plain` with our own wrapper).
 3. **Footnote card: click to open, "Jump to note", flash on landing.** The biggest UX gain for research pages. *Flowershow:* Flowershow renders GFM footnotes as plain links to the end of the page. Add [Littlefoot](https://littlefoot.js.org/) or the demo's ~60-line script through `head`, plus its CSS. This would also be a good upstream feature for Flowershow itself.
 4. **Quiet headings with rank-based spacing.** Same family, weight 500/600, sizes 1.75/1.35/1.125em, space above 3/2.5/2em and 0.667em below. *Flowershow:* about 15 lines of `custom.css`. Set `--font-heading` to the body face.
-5. **Ink-derived colour: warm near-black, warm greys, one accent, borders and fills as 5/10/20% of the ink.** *Flowershow:* set `--color-l-foreground`, `--color-l-accent` and the dark equivalents, then restyle borders in `custom.css` with `color-mix()`.
-6. **Light underlined links** (about 65% underline, 3px offset, full on hover). *Flowershow:* five lines of `custom.css`.
-7. **Calm tables and code:** tinted sticky header, hairline rows, tabular figures; inline code in body colour with a faint box. *Flowershow:* `custom.css` only.
-8. **Tick-rail contents** with current and read states, outline on hover. The most distinctive piece, and the most work. *Flowershow:* turn off the built-in contents (`showToc: false`) and add the demo's rail script and CSS through `head`. Show it only on pages with three or more headings. Try it on one long page first. On phones, keep Flowershow's own contents or none.
-9. **Finishing touches:** `text-wrap: pretty/balance`, heading anchors on hover, 6rem bottom padding, print rules. *Flowershow:* `custom.css`. Anchors need a small script, or a check whether Flowershow already adds them.
+5. **Frontmatter as a quiet field list** above the title, with list values as chips. *Flowershow:* not possible in CSS, as Flowershow doesn't render other frontmatter fields. Either a small script reading a data block, or ask Flowershow for a `showFrontmatter` option. Most useful for knowledge-base and project pages.
+6. **Ink-derived colour: warm near-black, warm greys, one accent, borders and fills as 5/10/20% of the ink.** *Flowershow:* set `--color-l-foreground`, `--color-l-accent` and the dark equivalents, then restyle borders in `custom.css` with `color-mix()`.
+7. **Light underlined links** (about 65% underline, 3px offset, full on hover). *Flowershow:* five lines of `custom.css`.
+8. **Calm tables and code:** tinted sticky header, hairline rows, tabular figures; inline code in body colour with a faint box. *Flowershow:* `custom.css` only.
+9. **Tick-rail contents** with current and read states, outline on hover. The most distinctive piece, and the most work. *Flowershow:* turn off the built-in contents (`showToc: false`) and add the demo's rail script and CSS through `head`. Show it only on pages with three or more headings. Try it on one long page first. On phones, keep Flowershow's own contents or none.
+10. **Finishing touches:** `text-wrap: pretty/balance`, heading anchors on hover, 6rem bottom padding, print rules. *Flowershow:* `custom.css`. Anchors need a small script, or a check whether Flowershow already adds them.
 
-Items 1, 2 and 4–7 and 9 are pure CSS and could become one `custom.css` for the research-site house style. Items 3 and 8 need one shared script. The brief for that house style is in the design repo: `projects/2640-research-site-style.md`.
+Items 1, 2, 4, 6–8 and 10 are pure CSS and could become one `custom.css` for the research-site house style. Items 3, 5 and 9 need a script. The brief for that house style is in the design repo: `projects/2640-research-site-style.md`.
 
 ## See also
 

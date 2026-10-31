@@ -6,7 +6,7 @@
 <title>Previewer Reading Demo</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Literata:ital,opsz,wght@0,7..72,300..700;1,7..72,300..700&family=Source+Serif+4:ital,opsz,wght@0,8..60,300..700;1,8..60,300..700&family=Inter:wght@400..600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Literata:ital,opsz,wght@0,7..72,300..700;1,7..72,300..700&family=Source+Serif+4:ital,opsz,wght@0,8..60,300..700;1,8..60,300..700&family=Inter:ital,opsz,wght@0,14..32,400..600;1,14..32,400..600&family=Geist:wght@400..600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 /* A study of the Claude desktop app's Markdown document viewer, rebuilt with open fonts.
    Values come from the app's own stylesheet (epitaxy-document-*, .prose). See ../Claude Markdown previewer.md */
@@ -28,7 +28,7 @@
   --tint: hsl(0 0% 4% / 5%);          /* alpha-1, code and table-head fill */
   --tick: hsl(0 0% 4% / 25%);
   --paper: #fff;
-  --body-font: var(--serif);
+  --body-font: var(--sans);
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
@@ -42,8 +42,8 @@
   --line: hsl(40 8% 94% / 10%); --line-2: hsl(40 8% 94% / 20%); --line-3: hsl(40 8% 94% / 40%);
   --tint: hsl(40 8% 94% / 5%); --tick: hsl(40 8% 94% / 25%); --paper: #1e1e1d;
 }
-[data-font="source"] { --body-font: "Source Serif 4", Georgia, serif; }
-[data-font="sans"] { --body-font: var(--sans); }
+[data-font="geist"] { --body-font: "Geist", system-ui, sans-serif; }
+[data-font="serif"] { --body-font: var(--serif); }
 
 * { box-sizing: border-box; }
 html { background: var(--paper); }
@@ -138,9 +138,20 @@ body { margin: 0; background: var(--paper); color: var(--ink); }
 
 .prose hr { border: 0; border-top: 1px solid var(--line); margin-block: 2.75em; }
 
+/* Frontmatter: a quiet two-column list of fields above the title */
+.meta {
+  display: grid; grid-template-columns: minmax(0, max-content) 1fr; align-items: baseline;
+  column-gap: 1.75rem; row-gap: 0.5rem; margin: 0 0 2em; padding-bottom: 1em; border-bottom: 1px solid var(--line);
+  font-family: var(--sans); font-size: var(--body); line-height: 1.6;
+}
+.meta dt { color: var(--ink-2); font-size: 0.87em; }
+.meta dd { margin: 0; min-width: 0; overflow-wrap: break-word; }
+.meta ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 4px; }
+.meta li { font-family: var(--mono); font-size: 0.8em; padding: 0 6px; border: 1px solid var(--line); border-radius: 4px; background: var(--tint); }
+
 /* Footnotes: small markers, a quiet section at the end */
 .prose sup { font-size: 0.75em; line-height: 0; }
-.prose sup a { text-decoration: none; padding-inline: 0.1em; border-radius: 3px; }
+.prose sup a { color: var(--ink-2); text-decoration-color: var(--line-3); padding-inline: 0.1em; border-radius: 3px; }
 .prose sup a[aria-expanded="true"] { background: var(--accent-bg); }
 .prose .footnotes { margin-block-start: 3em; padding-block-start: 1em; border-top: 1px solid var(--line); font-size: 0.875em; color: var(--ink-2); }
 .prose .footnotes ol { margin: 0; }
@@ -199,9 +210,9 @@ body { margin: 0; background: var(--paper); color: var(--ink); }
 </head>
 <body>
 <div class="switch" role="group" aria-label="Body font">
-  <button data-set="literata" aria-pressed="true">Literata</button>
-  <button data-set="source" aria-pressed="false">Source Serif 4</button>
-  <button data-set="sans" aria-pressed="false">Inter</button>
+  <button data-set="inter" aria-pressed="true">Inter</button>
+  <button data-set="geist" aria-pressed="false">Geist</button>
+  <button data-set="serif" aria-pressed="false">Literata</button>
 </div>
 
 <nav class="rail" aria-label="Contents" hidden>
@@ -211,21 +222,27 @@ body { margin: 0; background: var(--paper); color: var(--ink); }
 
 <div class="page">
 <div class="column">
+<dl class="meta" aria-label="Page details">
+  <dt>Title</dt><dd>Why the previewer reads well</dd>
+  <dt>Description</dt><dd>A teardown of the Claude app's Markdown viewer, rebuilt with open fonts.</dd>
+  <dt>Tags</dt><dd><ul><li>typography</li><li>reading</li><li>teardown</li></ul></dd>
+  <dt>Status</dt><dd>draft</dd>
+</dl>
 <article class="prose">
 
 <h1 id="why-it-reads-well">Why the previewer reads well</h1>
 
-<p>The Markdown viewer in the Claude desktop app is quiet by design. It sets one column of serif text at fifteen pixels, gives every line room to breathe, and keeps everything else (contents, notes, links) out of the way until you reach for it.<sup><a href="#fn-1" id="fnref-1">1</a></sup> This page rebuilds it with open fonts so the parts can be copied.</p>
+<p>The Markdown viewer in the Claude desktop app is quiet by design. It sets one column of text at fifteen pixels, gives every line room to breathe, and keeps everything else (contents, notes, links) out of the way until you reach for it.<sup><a href="#fn-1" id="fnref-1">1</a></sup> This page rebuilds it with open fonts so the parts can be copied.</p>
 
 <p>Nothing here is clever on its own. What makes it work is that a dozen small decisions all point the same way: towards the text.</p>
 
 <h2 id="type">Type</h2>
 
-<p>The body face is a sturdy, large x-height serif with low contrast, the kind that holds up at small sizes on screen. Headings use the same family at a medium weight rather than bold, so a heading reads as a change of voice, not a shout. <a href="https://fonts.google.com/specimen/Literata">Literata</a> is the closest open match; <a href="https://fonts.google.com/specimen/Source+Serif+4">Source Serif 4</a> is a close second.</p>
+<p>The body face is Anthropic Sans, a plain, even grotesque that holds up at small sizes on screen. Headings use the same family at a medium weight rather than bold, so a heading reads as a change of voice, not a shout. <a href="https://fonts.google.com/specimen/Inter">Inter</a> is the closest open match; <a href="https://fonts.google.com/specimen/Geist">Geist</a> is a close second. The app can also set documents in a serif, matched here by Literata.</p>
 
 <h3 id="size-and-leading">Size and leading</h3>
 
-<p>Body text is 15px on a 24px line (1.6). That is generous for a serif, and it is the single biggest reason long documents feel calm. The column stops at 36 times the body size, about 540px or seventy characters a line.</p>
+<p>Body text is 15px on a 24px line (1.6). That is generous, and it is the single biggest reason long documents feel calm. The column stops at 36 times the body size, about 540px or seventy characters a line.</p>
 
 <table>
 <thead><tr><th>Element</th><th class="num">Size</th><th class="num">Line</th><th class="num">Weight</th></tr></thead>
