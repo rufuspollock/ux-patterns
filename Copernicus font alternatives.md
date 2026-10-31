@@ -25,3 +25,7 @@ So let's look for open Google Fonts based on Plantin ...
 And hey presto 🚀 we find [Young Serif](https://fonts.google.com/specimen/Young+Serif), which doesn't look too far off from Copernicus:
 
 ![image](https://github.com/user-attachments/assets/ac00ec1b-60af-4ea6-a8b9-109b93d14af6)
+
+## Update 2026-10-31
+
+The Claude desktop app now uses its own Anthropic Serif, in the same Plantin-like vein. For the body text we found Literata and Source Serif 4 closer than Young Serif, which is too heavy below heading sizes. See [[Claude Markdown previewer]].

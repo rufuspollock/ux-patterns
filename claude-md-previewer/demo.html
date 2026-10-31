@@ -1,0 +1,386 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Previewer Reading Demo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Literata:ital,opsz,wght@0,7..72,300..700;1,7..72,300..700&family=Source+Serif+4:ital,opsz,wght@0,8..60,300..700;1,8..60,300..700&family=Inter:wght@400..600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* A study of the Claude desktop app's Markdown document viewer, rebuilt with open fonts.
+   Values come from the app's own stylesheet (epitaxy-document-*, .prose). See ../Claude Markdown previewer.md */
+:root {
+  --body: 15px;                       /* app: 0.9375rem; 14px / 16px with the text-size setting */
+  --leading: 1.6;                     /* app: body x 1.6 = 24px */
+  --measure: calc(var(--body) * 36);  /* app: 36 x body = 540px, about 70 characters */
+  --serif: "Literata", "Source Serif 4", Georgia, serif;
+  --sans: "Inter", system-ui, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  --ink: #0b0b0b;                     /* text-primary (warm near-black) */
+  --ink-2: #52514e;                   /* text-secondary (warm grey 600) */
+  --ink-3: #898781;                   /* text-muted (warm grey 400) */
+  --accent: #184f95;                  /* text-accent in light mode (blue 600) */
+  --accent-bg: #e7f1fb;               /* bg-accent, used for the "landed" flash */
+  --line: hsl(0 0% 4% / 10%);         /* border = 10% of the ink */
+  --line-2: hsl(0 0% 4% / 20%);       /* border-strong */
+  --line-3: hsl(0 0% 4% / 40%);       /* border-stronger, blockquote rule */
+  --tint: hsl(0 0% 4% / 5%);          /* alpha-1, code and table-head fill */
+  --tick: hsl(0 0% 4% / 25%);
+  --paper: #fff;
+  --body-font: var(--serif);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --ink: #f0efec; --ink-2: #c3c2b7; --ink-3: #898781; --accent: #6da7ec; --accent-bg: #0d366b;
+    --line: hsl(40 8% 94% / 10%); --line-2: hsl(40 8% 94% / 20%); --line-3: hsl(40 8% 94% / 40%);
+    --tint: hsl(40 8% 94% / 5%); --tick: hsl(40 8% 94% / 25%); --paper: #1e1e1d;
+  }
+}
+:root[data-theme="dark"] {
+  --ink: #f0efec; --ink-2: #c3c2b7; --ink-3: #898781; --accent: #6da7ec; --accent-bg: #0d366b;
+  --line: hsl(40 8% 94% / 10%); --line-2: hsl(40 8% 94% / 20%); --line-3: hsl(40 8% 94% / 40%);
+  --tint: hsl(40 8% 94% / 5%); --tick: hsl(40 8% 94% / 25%); --paper: #1e1e1d;
+}
+[data-font="source"] { --body-font: "Source Serif 4", Georgia, serif; }
+[data-font="sans"] { --body-font: var(--sans); }
+
+* { box-sizing: border-box; }
+html { background: var(--paper); }
+body { margin: 0; background: var(--paper); color: var(--ink); }
+
+/* Switcher (not part of the pattern) */
+.switch { position: fixed; top: 10px; right: 12px; z-index: 10; display: flex; gap: 4px; font: 12px/1 var(--sans); }
+.switch button { font: inherit; color: var(--ink-2); background: var(--tint); border: 0; border-radius: 6px; padding: 6px 8px; cursor: pointer; }
+.switch button[aria-pressed="true"] { color: var(--ink); background: var(--line-2); }
+
+/* Column: one measure, centred, padding scales with the pane */
+.page { container-type: inline-size; }
+.column {
+  max-width: var(--measure);
+  margin-inline: auto;
+  padding: clamp(2rem, 6cqi, 3.5rem) clamp(1.25rem, 6cqi, 4rem) 6rem;
+  box-sizing: content-box;
+}
+
+/* Prose */
+.prose {
+  font-family: var(--body-font);
+  font-size: var(--body);
+  line-height: var(--leading);
+  font-optical-sizing: auto;
+  overflow-wrap: break-word;
+}
+.prose :is(p, li, blockquote, figcaption) { text-wrap: pretty; }
+.prose :is(h1, h2, h3, h4) { text-wrap: balance; }
+.prose > * { margin-block: 0; }
+.prose > * + * { margin-block-start: 1em; }          /* the flow unit */
+
+.prose h1 { font-size: 1.75em; line-height: 1.15; font-weight: 500; letter-spacing: -0.012em; }
+.prose h2 { font-size: 1.35em; line-height: 1.25; font-weight: 500; }
+.prose h3 { font-size: 1.125em; line-height: 1.3; font-weight: 600; }
+.prose h4 { font-size: 1em; line-height: 1.3; font-weight: 600; }
+/* Space above a heading grows with its rank; space after is two thirds of a line */
+.prose * + h1 { margin-block-start: 3em; }
+.prose * + h2 { margin-block-start: 2.5em; }
+.prose * + h3 { margin-block-start: 2em; }
+.prose * + h4 { margin-block-start: 1.667em; }
+.prose :is(h1, h2, h3, h4) + * { margin-block-start: 0.667em; }
+.prose :is(h1, h2, h3, h4) + :is(h2, h3, h4) { margin-block-start: 0.9em; }
+
+/* Heading anchor: appears on hover, sits just after the text */
+.prose .anchor {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 1.25rem; height: 1.25rem; margin-inline: 0.25rem -1.5rem; vertical-align: middle;
+  color: var(--ink-3); text-decoration: none; border-radius: 4px; opacity: 0; font: 500 0.8em/1 var(--sans);
+}
+.prose :is(h1, h2, h3, h4):hover .anchor, .prose .anchor:focus-visible { opacity: 1; }
+.prose .anchor:hover { color: var(--ink); }
+@media (hover: none) { .prose .anchor { display: none; } }
+
+.prose a {
+  color: var(--accent);
+  text-decoration-line: underline;
+  text-underline-offset: 3px;
+  text-decoration-color: color-mix(in srgb, currentColor 65%, transparent);
+  transition: text-decoration-color 60ms ease-out;
+}
+.prose a:hover { text-decoration-color: currentColor; }
+.prose strong { font-weight: 600; }
+
+.prose :is(ul, ol) { padding-inline-start: 2em; }
+.prose li { padding-inline-start: 0.5em; }
+.prose li + li { margin-block-start: 0.333em; }
+.prose li::marker { color: var(--ink-2); }
+
+.prose blockquote { margin-inline: 0; padding-inline-start: 1.1em; border-inline-start: 2px solid var(--line-3); }
+
+.prose :not(pre) > code {
+  font-family: var(--mono); font-size: calc(var(--body) - 2px);
+  background: var(--tint); border: 0.5px solid var(--line-2); border-radius: 4px; padding: 0.12em 0.36em;
+  box-decoration-break: clone; -webkit-box-decoration-break: clone;
+}
+.prose pre {
+  font-family: var(--mono); font-size: calc(var(--body) - 2px); line-height: 1.54;
+  background: var(--tint); border: 0.5px solid var(--line-2); border-radius: 9px;
+  padding: 0.875rem; overflow-x: auto; tab-size: 2;
+}
+
+.prose .table { overflow-x: auto; }
+.prose table {
+  border-collapse: separate; border-spacing: 0; border: 1px solid var(--line); border-radius: 6px;
+  font-size: 0.9375em; line-height: 1.5; font-variant-numeric: tabular-nums lining-nums;
+}
+.prose :is(th, td) { padding: 0.5em 0.875em; text-align: start; vertical-align: top; }
+.prose th { font-weight: 600; line-height: 1.3; vertical-align: bottom; background: var(--tint); box-shadow: inset 0 -1px var(--line); }
+.prose tbody tr + tr td { border-top: 1px solid var(--line); }
+.prose td.num, .prose th.num { text-align: end; }
+
+.prose hr { border: 0; border-top: 1px solid var(--line); margin-block: 2.75em; }
+
+/* Footnotes: small markers, a quiet section at the end */
+.prose sup { font-size: 0.75em; line-height: 0; }
+.prose sup a { text-decoration: none; padding-inline: 0.1em; border-radius: 3px; }
+.prose sup a[aria-expanded="true"] { background: var(--accent-bg); }
+.prose .footnotes { margin-block-start: 3em; padding-block-start: 1em; border-top: 1px solid var(--line); font-size: 0.875em; color: var(--ink-2); }
+.prose .footnotes ol { margin: 0; }
+.prose .landed { animation: landed 1.6s ease-out; border-radius: 3px; }
+@keyframes landed { from { background: var(--accent-bg); } to { background: transparent; } }
+@media (prefers-reduced-motion: reduce) { .prose .landed { animation: none; } }
+
+.fn-pop {
+  position: absolute; z-index: 20; width: 20rem; max-width: calc(100vw - 2rem);
+  padding: 1rem; display: flex; flex-direction: column; align-items: flex-start; gap: 0.5rem;
+  background: var(--paper); color: var(--ink); border: 0.5px solid var(--line-2); border-radius: 10px;
+  box-shadow: 0 4px 20px hsl(0 0% 0% / 10%), 0 1px 3px hsl(0 0% 0% / 8%);
+  font-family: var(--body-font); font-size: calc(var(--body) - 1px); line-height: 1.55;
+}
+.fn-pop p { margin: 0; }
+.fn-pop button {
+  font: 500 13px/1 var(--sans); color: var(--ink-2); background: none; border: 0; border-radius: 6px;
+  padding: 6px 8px; margin: 0 -8px -6px; cursor: pointer;
+}
+.fn-pop button:hover { background: var(--tint); color: var(--ink); }
+
+/* Contents: a rail of ticks in the left gutter; hover opens the outline */
+.rail { position: fixed; top: 0.75rem; z-index: 5; font-family: var(--sans); }
+.rail[hidden] { display: none; }
+.ticks { list-style: none; margin: 0; padding: 6px 0 6px 6px; width: 2rem; display: flex; flex-direction: column; }
+.ticks li { flex: 0 0 8px; display: flex; align-items: center; }
+.ticks span { display: block; width: 18px; height: 2px; border-radius: 2px; background: var(--tick); transform-origin: 0; scale: 0.78 1; }
+.ticks li[data-level="1"] span { translate: 3px; scale: 0.5 1; }
+.ticks li[data-level="2"] span { translate: 6px; scale: 0.33 1; }
+.ticks li[data-read] span { background: var(--ink-3); }
+.ticks li[data-current] span { background: var(--accent); translate: 0; scale: 1 1.5; }
+.outline {
+  position: absolute; top: 0; left: -4px; width: 16rem; max-height: calc(100vh - 2rem); overflow-y: auto;
+  padding: 5px 4px; border-radius: 8px; background: var(--paper);
+  border: 0.5px solid var(--line-2); box-shadow: 0 4px 20px hsl(0 0% 0% / 10%);
+  opacity: 0; visibility: hidden; transition: opacity 0.15s ease-out, visibility 0.15s;
+}
+.rail:hover .outline, .rail:focus-within .outline { opacity: 1; visibility: visible; }
+.outline ol { list-style: none; margin: 0; padding: 0; }
+.outline button {
+  width: 100%; height: 1.375rem; display: flex; align-items: center; gap: 8px; padding: 0 8px 0 6px;
+  font: 13px/1rem var(--sans); color: var(--ink-2); background: none; border: 0; border-radius: 6px; text-align: start; cursor: pointer;
+}
+.outline button:hover { background: var(--tint); color: var(--ink); }
+.outline .t { flex: none; width: 18px; display: flex; align-items: center; }
+.outline .t::before { content: ""; display: block; width: 14px; height: 2px; border-radius: 2px; background: var(--tick); }
+.outline li[data-level="1"] .t::before { width: 9px; margin-inline-start: 3px; }
+.outline li[data-level="2"] .t::before { width: 6px; margin-inline-start: 6px; }
+.outline li[data-read] .t::before { background: var(--ink-3); }
+.outline li[data-current] .t::before { background: var(--accent); width: 18px; height: 3px; margin: 0; }
+.outline li[data-current] button { color: var(--ink); font-weight: 500; }
+.outline .x { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.outline li[data-level="1"] .x { padding-inline-start: 0.625rem; }
+.outline li[data-level="2"] .x { padding-inline-start: 1.25rem; }
+</style>
+</head>
+<body>
+<div class="switch" role="group" aria-label="Body font">
+  <button data-set="literata" aria-pressed="true">Literata</button>
+  <button data-set="source" aria-pressed="false">Source Serif 4</button>
+  <button data-set="sans" aria-pressed="false">Inter</button>
+</div>
+
+<nav class="rail" aria-label="Contents" hidden>
+  <ol class="ticks" aria-hidden="true"></ol>
+  <div class="outline"><ol></ol></div>
+</nav>
+
+<div class="page">
+<div class="column">
+<article class="prose">
+
+<h1 id="why-it-reads-well">Why the previewer reads well</h1>
+
+<p>The Markdown viewer in the Claude desktop app is quiet by design. It sets one column of serif text at fifteen pixels, gives every line room to breathe, and keeps everything else (contents, notes, links) out of the way until you reach for it.<sup><a href="#fn-1" id="fnref-1">1</a></sup> This page rebuilds it with open fonts so the parts can be copied.</p>
+
+<p>Nothing here is clever on its own. What makes it work is that a dozen small decisions all point the same way: towards the text.</p>
+
+<h2 id="type">Type</h2>
+
+<p>The body face is a sturdy, large x-height serif with low contrast, the kind that holds up at small sizes on screen. Headings use the same family at a medium weight rather than bold, so a heading reads as a change of voice, not a shout. <a href="https://fonts.google.com/specimen/Literata">Literata</a> is the closest open match; <a href="https://fonts.google.com/specimen/Source+Serif+4">Source Serif 4</a> is a close second.</p>
+
+<h3 id="size-and-leading">Size and leading</h3>
+
+<p>Body text is 15px on a 24px line (1.6). That is generous for a serif, and it is the single biggest reason long documents feel calm. The column stops at 36 times the body size, about 540px or seventy characters a line.</p>
+
+<table>
+<thead><tr><th>Element</th><th class="num">Size</th><th class="num">Line</th><th class="num">Weight</th></tr></thead>
+<tbody>
+<tr><td>Body</td><td class="num">15px</td><td class="num">24px</td><td class="num">400</td></tr>
+<tr><td>Heading 1</td><td class="num">26px</td><td class="num">1.15</td><td class="num">500</td></tr>
+<tr><td>Heading 2</td><td class="num">20px</td><td class="num">1.25</td><td class="num">500</td></tr>
+<tr><td>Heading 3</td><td class="num">17px</td><td class="num">1.3</td><td class="num">600</td></tr>
+<tr><td>Code</td><td class="num">13px</td><td class="num">1.54</td><td class="num">400</td></tr>
+</tbody>
+</table>
+
+<h3 id="colour">Colour</h3>
+
+<p>Text is a warm near-black on white, secondary text a warm grey. Links are a deep blue with an underline at 40% strength that firms up on hover. Every border and fill is the ink colour at 5, 10 or 20% opacity, which is why the page never looks busy.<sup><a href="#fn-2" id="fnref-2">2</a></sup></p>
+
+<h2 id="structure">Structure</h2>
+
+<p>Space above a heading grows with its rank: three lines before a top heading, two and a half before a second-level one, two before a third. Space after a heading is only two thirds of a line, so each heading clearly belongs to the text below it.</p>
+
+<blockquote><p>A blockquote keeps the body colour and size, marked only by a thin rule. It stays part of the argument instead of fading into grey.</p></blockquote>
+
+<ul>
+<li>Lists indent by two ems, with grey markers.</li>
+<li>Items are a third of a line apart, so a list reads as one block.</li>
+<li>Nested lists change marker: disc, circle, square.</li>
+</ul>
+
+<h3 id="code">Code</h3>
+
+<p>Inline code such as <code>config.json</code> sits in a faint tinted box two pixels smaller than the text, in the body colour rather than red. Blocks get a soft border and a 9px radius.</p>
+
+<pre><code>.prose {
+  font-size: 15px;
+  line-height: 1.6;
+  max-width: calc(15px * 36);
+}</code></pre>
+
+<h2 id="navigation">Navigation</h2>
+
+<p>On the left, in the gutter, is a rail of short ticks, one per heading. Ticks are longer for higher-level headings, darker once you have read past them, and blue for where you are. Move the pointer onto the rail and the full outline opens; click a heading to go there.</p>
+
+<h3 id="footnotes">Footnotes</h3>
+
+<p>Click a footnote number and the note opens in a small card under it, so you can read it without losing your place.<sup><a href="#fn-3" id="fnref-3">3</a></sup> The card has one button, "Jump to note", which scrolls down to the notes and briefly highlights the one you came for.</p>
+
+<h2 id="what-to-borrow">What to borrow</h2>
+
+<p>The measure, the leading, the heading scale and the footnote card are the parts worth copying first. The tick rail is the most distinctive, and the most work.</p>
+
+<section class="footnotes">
+<ol>
+<li id="fn-1"><p>The app calls this the document view. It renders Markdown, CSV and plain text files from the Files pane. <a href="#fnref-1" aria-label="Back to reference 1">↩</a></p></li>
+<li id="fn-2"><p>The greys are slightly warm (a hint of yellow), matching the app's paper-like palette. <a href="#fnref-2" aria-label="Back to reference 2">↩</a></p></li>
+<li id="fn-3"><p>The card is 20rem wide, opens below the number, and closes if you scroll more than a third of a screen away. It shows the note without its back-link. <a href="#fnref-3" aria-label="Back to reference 3">↩</a></p></li>
+</ol>
+</section>
+
+</article>
+</div>
+</div>
+
+<script>
+(() => {
+  const prose = document.querySelector('.prose');
+
+  // Font switcher (demo only)
+  document.querySelectorAll('.switch button').forEach(b => b.addEventListener('click', () => {
+    document.documentElement.dataset.font = b.dataset.set;
+    document.querySelectorAll('.switch button').forEach(x => x.setAttribute('aria-pressed', x === b));
+    place();
+  }));
+
+  // Heading anchors
+  prose.querySelectorAll('h1[id], h2[id], h3[id], h4[id]').forEach(h => {
+    const a = document.createElement('a');
+    a.className = 'anchor'; a.href = '#' + h.id; a.textContent = '#';
+    a.setAttribute('aria-label', 'Link to this section');
+    h.append(a);
+  });
+
+  // Footnote card: click the number to open, click again or press Escape to close
+  let pop = null, ref = null, scrollStart = 0;
+  const close = () => {
+    if (!pop) return;
+    pop.remove(); pop = null;
+    ref?.setAttribute('aria-expanded', 'false'); ref = null;
+  };
+  const jump = id => {
+    const li = document.getElementById(id);
+    li.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'center' });
+    li.classList.remove('landed'); void li.offsetWidth; li.classList.add('landed');
+  };
+  prose.addEventListener('click', e => {
+    const a = e.target.closest('sup a[href^="#fn-"]');
+    if (!a) return;
+    e.preventDefault();
+    if (ref === a) return close();
+    close();
+    const id = a.hash.slice(1);
+    const note = document.getElementById(id).cloneNode(true);
+    note.querySelectorAll('a[href^="#fnref-"]').forEach(x => x.remove());
+    pop = document.createElement('div');
+    pop.className = 'fn-pop'; pop.setAttribute('role', 'dialog'); pop.setAttribute('aria-label', 'Footnote');
+    pop.append(...note.childNodes);
+    const btn = document.createElement('button');
+    btn.textContent = 'Jump to note ↓';
+    btn.addEventListener('click', () => { close(); jump(id); });
+    pop.append(btn);
+    document.body.append(pop);
+    const r = a.getBoundingClientRect();
+    const left = Math.min(Math.max(8, r.left + scrollX - 16), innerWidth - pop.offsetWidth - 8);
+    pop.style.left = left + 'px';
+    pop.style.top = (r.bottom + scrollY + 6) + 'px';
+    ref = a; a.setAttribute('aria-expanded', 'true');
+    scrollStart = scrollY;
+  });
+  document.addEventListener('click', e => { if (pop && !pop.contains(e.target) && !e.target.closest('sup a')) close(); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') { const r = ref; close(); r?.focus(); } });
+  addEventListener('scroll', () => { if (pop && Math.abs(scrollY - scrollStart) > innerHeight / 3) close(); }, { passive: true });
+
+  // Contents rail: needs three or more headings and room in the gutter
+  const rail = document.querySelector('.rail');
+  const heads = [...prose.querySelectorAll('h1[id], h2[id], h3[id]')];
+  const level = h => ({ H1: 0, H2: 1, H3: 2 })[h.tagName];
+  const ticks = rail.querySelector('.ticks'), list = rail.querySelector('.outline ol');
+  heads.forEach(h => {
+    const t = document.createElement('li'); t.dataset.level = level(h); t.append(document.createElement('span')); ticks.append(t);
+    const li = document.createElement('li'); li.dataset.level = level(h);
+    const b = document.createElement('button');
+    b.innerHTML = '<span class="t"></span><span class="x"></span>';
+    b.querySelector('.x').textContent = h.firstChild.textContent;
+    b.addEventListener('click', () => h.scrollIntoView({ behavior: 'smooth' }));
+    li.append(b); list.append(li);
+  });
+  const column = document.querySelector('.column');
+  function place() {
+    const gutter = column.getBoundingClientRect().left + parseFloat(getComputedStyle(column).paddingLeft);
+    rail.hidden = heads.length < 3 || gutter < 76;
+    rail.style.left = Math.max(12, gutter - 76 + 20) + 'px';
+  }
+  function update() {
+    const y = 80;
+    let current = 0;
+    heads.forEach((h, i) => { if (h.getBoundingClientRect().top <= y) current = i; });
+    if (innerHeight + scrollY >= document.documentElement.scrollHeight - 8) current = heads.length - 1;
+    [ticks.children, list.children].forEach(items => [...items].forEach((li, i) => {
+      li.toggleAttribute('data-current', i === current);
+      li.toggleAttribute('data-read', i < current);
+    }));
+  }
+  addEventListener('scroll', update, { passive: true });
+  addEventListener('resize', () => { place(); update(); });
+  place(); update();
+})();
+</script>
+</body>
+</html>
