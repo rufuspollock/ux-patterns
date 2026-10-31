@@ -28,4 +28,4 @@ And hey presto 🚀 we find [Young Serif](https://fonts.google.com/specimen/Youn
 
 ## Update 2026-10-31
 
-The Claude desktop app now uses its own Anthropic Serif, in the same Plantin-like vein. For the body text we found Literata and Source Serif 4 closer than Young Serif, which is too heavy below heading sizes. See [[Claude Markdown previewer]].
+The Claude desktop app now ships its own Anthropic Serif, in the same Plantin-like vein (its Markdown previewer defaults to Anthropic Sans, with the serif as an option). For serif body text, Literata and Source Serif 4 are closer than Young Serif, which is too heavy below heading sizes. See [[Claude Markdown previewer]].
